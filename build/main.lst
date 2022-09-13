@@ -1,0 +1,1985 @@
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"main.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text._write,"ax",%progbits
+  18              		.align	1
+  19              		.global	_write
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	_write:
+  27              	.LVL0:
+  28              	.LFB316:
+  29              		.file 1 "Src/main.c"
+   1:Src/main.c    **** /* USER CODE BEGIN Header */
+   2:Src/main.c    **** /**
+   3:Src/main.c    ****   ******************************************************************************
+   4:Src/main.c    ****   * @file           : main.c
+   5:Src/main.c    ****   * @brief          : Main program body
+   6:Src/main.c    ****   ******************************************************************************
+   7:Src/main.c    ****   * @attention
+   8:Src/main.c    ****   *
+   9:Src/main.c    ****   * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
+  10:Src/main.c    ****   * All rights reserved.</center></h2>
+  11:Src/main.c    ****   *
+  12:Src/main.c    ****   * This software component is licensed by ST under BSD 3-Clause license,
+  13:Src/main.c    ****   * the "License"; You may not use this file except in compliance with the
+  14:Src/main.c    ****   * License. You may obtain a copy of the License at:
+  15:Src/main.c    ****   *                        opensource.org/licenses/BSD-3-Clause
+  16:Src/main.c    ****   *
+  17:Src/main.c    ****   ******************************************************************************
+  18:Src/main.c    ****   */
+  19:Src/main.c    **** /* USER CODE END Header */
+  20:Src/main.c    **** 
+  21:Src/main.c    **** /* Includes ------------------------------------------------------------------*/
+  22:Src/main.c    **** #include "main.h"
+  23:Src/main.c    **** #include "adc.h"
+  24:Src/main.c    **** #include "dma.h"
+  25:Src/main.c    **** #include "i2c.h"
+  26:Src/main.c    **** #include "spi.h"
+  27:Src/main.c    **** #include "tim.h"
+  28:Src/main.c    **** #include "usart.h"
+  29:Src/main.c    **** #include "gpio.h"
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 2
+
+
+  30:Src/main.c    **** #include "user_gpio.h"
+  31:Src/main.c    **** #include "ble_e95.h"
+  32:Src/main.c    **** #include "pcf85263.h"
+  33:Src/main.c    **** #include "iot.h"
+  34:Src/main.c    **** #include "aes.h"
+  35:Src/main.c    **** #include <stdio.h>
+  36:Src/main.c    **** #include <errno.h>
+  37:Src/main.c    **** #include <sys/unistd.h>
+  38:Src/main.c    **** 
+  39:Src/main.c    **** /* Private includes ----------------------------------------------------------*/
+  40:Src/main.c    **** /* USER CODE BEGIN Includes */
+  41:Src/main.c    **** 
+  42:Src/main.c    **** /* USER CODE END Includes */
+  43:Src/main.c    **** 
+  44:Src/main.c    **** /* Private typedef -----------------------------------------------------------*/
+  45:Src/main.c    **** /* USER CODE BEGIN PTD */
+  46:Src/main.c    **** 
+  47:Src/main.c    **** /* USER CODE END PTD */
+  48:Src/main.c    **** 
+  49:Src/main.c    **** /* Private define ------------------------------------------------------------*/
+  50:Src/main.c    **** /* USER CODE BEGIN PD */
+  51:Src/main.c    **** /* USER CODE END PD */
+  52:Src/main.c    **** 
+  53:Src/main.c    **** /* Private macro -------------------------------------------------------------*/
+  54:Src/main.c    **** /* USER CODE BEGIN PM */
+  55:Src/main.c    **** 
+  56:Src/main.c    **** /* USER CODE END PM */
+  57:Src/main.c    **** 
+  58:Src/main.c    **** /* Private variables ---------------------------------------------------------*/
+  59:Src/main.c    **** 
+  60:Src/main.c    **** /* USER CODE BEGIN PV */
+  61:Src/main.c    **** uint8_t g_reset_flag = V_ONE;
+  62:Src/main.c    **** RTC_DATE_TIME_T rtc_alarm_time = {0,0,59,23,1,1,2021};
+  63:Src/main.c    **** RTC_COUNT_TIME_T default_rtc_alarm_time = {0,0,0,0,0,0};
+  64:Src/main.c    **** RTC_COUNT_TIME_T rtc_read_time;
+  65:Src/main.c    **** RTC_COUNT_TIME_T rtc_set_time = {0,0,0,1,0,0};
+  66:Src/main.c    **** 
+  67:Src/main.c    **** /*iot唤醒标志*/
+  68:Src/main.c    **** uint8_t g_iot_wakeup_flag = V_ZERO;
+  69:Src/main.c    **** uint16_t g_iot_power_on_delay_cnt = V_ZERO;
+  70:Src/main.c    **** uint8_t g_iot_power_on_delay = V_ZERO;
+  71:Src/main.c    **** uint8_t g_iot_first_send_cmd = V_ZERO;     /*iot开机后板子会收到一些数据，所以发at�
+  72:Src/main.c    **** 
+  73:Src/main.c    **** /*iot测试结果返回协议数据*/
+  74:Src/main.c    **** const uint8_t ar_resp_iot_test_success[27] = {0xC5, 0xAA, 0x1B, 0x00, 0x03, 0x10, 0x10, 0x5E, 0x3E,
+  75:Src/main.c    ****                                             0x0F, 0x4B, 0xAC, 0xA0, 0x2B, 0x7F, 0x75, 0xD2, 0x42, 0
+  76:Src/main.c    ****                                             0x07, 0x40, 0x5A, 0x00, 0x00, 0xD1, 0xAA};
+  77:Src/main.c    **** const uint8_t ar_resp_iot_test_fail[27] = {0xC5,0xAA,0x1B,0x00,0x03,0x10,0x10,0xE3,0xA0,0xCB,0xF6,0
+  78:Src/main.c    ****                                          0x74,0x91,0x93,0x81,0xE9,0xDF,0x43,0x11,0x3B,0x33,0x62,0x0
+  79:Src/main.c    ****                                          0x00,0x84,0xAA};
+  80:Src/main.c    **** /*闹钟中断设置小时数计数*/
+  81:Src/main.c    **** uint8_t g_alarm_cnt = V_ZERO;
+  82:Src/main.c    **** /* USER CODE END PV */
+  83:Src/main.c    **** 
+  84:Src/main.c    **** /* Private function prototypes -----------------------------------------------*/
+  85:Src/main.c    **** void SystemClock_Config(void);
+  86:Src/main.c    **** /* USER CODE BEGIN PFP */
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 3
+
+
+  87:Src/main.c    **** /*重新定义__write函数*/
+  88:Src/main.c    **** 
+  89:Src/main.c    **** int _write(int fd, char *ptr, int len)
+  90:Src/main.c    **** {
+  30              		.loc 1 90 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 0
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		.loc 1 90 1 is_stmt 0 view .LVU1
+  35 0000 10B5     		push	{r4, lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 8
+  38              		.cfi_offset 4, -8
+  39              		.cfi_offset 14, -4
+  40 0002 1446     		mov	r4, r2
+  91:Src/main.c    ****     HAL_UART_Transmit(&huart2, (uint8_t *)ptr, len, 0xFFFF);
+  41              		.loc 1 91 5 is_stmt 1 view .LVU2
+  42 0004 4FF6FF73 		movw	r3, #65535
+  43 0008 92B2     		uxth	r2, r2
+  44              	.LVL1:
+  45              		.loc 1 91 5 is_stmt 0 view .LVU3
+  46 000a 0248     		ldr	r0, .L3
+  47              	.LVL2:
+  48              		.loc 1 91 5 view .LVU4
+  49 000c FFF7FEFF 		bl	HAL_UART_Transmit
+  50              	.LVL3:
+  92:Src/main.c    ****     return len;
+  51              		.loc 1 92 5 is_stmt 1 view .LVU5
+  93:Src/main.c    **** }
+  52              		.loc 1 93 1 is_stmt 0 view .LVU6
+  53 0010 2046     		mov	r0, r4
+  54 0012 10BD     		pop	{r4, pc}
+  55              	.LVL4:
+  56              	.L4:
+  57              		.loc 1 93 1 view .LVU7
+  58              		.align	2
+  59              	.L3:
+  60 0014 00000000 		.word	huart2
+  61              		.cfi_endproc
+  62              	.LFE316:
+  64              		.section	.rodata.low_voltage_check.str1.4,"aMS",%progbits,1
+  65              		.align	2
+  66              	.LC0:
+  67 0000 766F6C74 		.ascii	"voltage: %d\012\000"
+  67      6167653A 
+  67      2025640A 
+  67      00
+  68              		.section	.text.low_voltage_check,"ax",%progbits
+  69              		.align	1
+  70              		.global	low_voltage_check
+  71              		.syntax unified
+  72              		.thumb
+  73              		.thumb_func
+  74              		.fpu fpv4-sp-d16
+  76              	low_voltage_check:
+  77              	.LFB317:
+  94:Src/main.c    **** #if 0
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 4
+
+
+  95:Src/main.c    **** int _write(int file, char *data, int len)
+  96:Src/main.c    **** {
+  97:Src/main.c    ****     if ((file != STDOUT_FILENO) && (file != STDERR_FILENO))
+  98:Src/main.c    ****     {
+  99:Src/main.c    ****         errno = EBADF;
+ 100:Src/main.c    ****         return -1;
+ 101:Src/main.c    ****     }
+ 102:Src/main.c    ****     HAL_StatusTypeDef status = HAL_UART_Transmit(&huart2, (uint8_t *)data, len, 1000);
+ 103:Src/main.c    ****     return (status == HAL_OK ? len : 0);
+ 104:Src/main.c    **** }
+ 105:Src/main.c    **** #endif
+ 106:Src/main.c    **** /*iot上电联、网标志位*/
+ 107:Src/main.c    **** volatile uint8_t g_start_http_flag = I_ZERO;
+ 108:Src/main.c    **** /*iot联网失败次数，大于三次判断失败*/
+ 109:Src/main.c    **** uint8_t g_iot_power_on_cnt = I_ZERO;
+ 110:Src/main.c    **** 
+ 111:Src/main.c    **** void low_voltage_check(void)
+ 112:Src/main.c    **** {
+  78              		.loc 1 112 1 is_stmt 1 view -0
+  79              		.cfi_startproc
+  80              		@ args = 0, pretend = 0, frame = 0
+  81              		@ frame_needed = 0, uses_anonymous_args = 0
+ 113:Src/main.c    ****     if(g_voltage_check_flag)
+  82              		.loc 1 113 5 view .LVU9
+  83              		.loc 1 113 8 is_stmt 0 view .LVU10
+  84 0000 184B     		ldr	r3, .L14
+  85 0002 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+  86              		.loc 1 113 7 view .LVU11
+  87 0004 03B9     		cbnz	r3, .L12
+  88 0006 7047     		bx	lr
+  89              	.L12:
+ 112:Src/main.c    ****     if(g_voltage_check_flag)
+  90              		.loc 1 112 1 view .LVU12
+  91 0008 10B5     		push	{r4, lr}
+  92              	.LCFI1:
+  93              		.cfi_def_cfa_offset 8
+  94              		.cfi_offset 4, -8
+  95              		.cfi_offset 14, -4
+ 114:Src/main.c    ****     {
+ 115:Src/main.c    ****         pcf85263_query_time(&rtc_read_time);
+  96              		.loc 1 115 9 is_stmt 1 view .LVU13
+  97 000a 1748     		ldr	r0, .L14+4
+  98 000c FFF7FEFF 		bl	pcf85263_query_time
+  99              	.LVL5:
+ 116:Src/main.c    ****         g_voltage_check_flag = I_ZERO;
+ 100              		.loc 1 116 9 view .LVU14
+ 101              		.loc 1 116 30 is_stmt 0 view .LVU15
+ 102 0010 144B     		ldr	r3, .L14
+ 103 0012 0022     		movs	r2, #0
+ 104 0014 1A70     		strb	r2, [r3]
+ 117:Src/main.c    ****         if(LOCK_POWER_SOURCE == PIN_LEVEL_HIGH)    /*判读供电方式：市电或者电池包*/
+ 105              		.loc 1 117 9 is_stmt 1 view .LVU16
+ 106              		.loc 1 117 12 is_stmt 0 view .LVU17
+ 107 0016 0421     		movs	r1, #4
+ 108 0018 1448     		ldr	r0, .L14+8
+ 109 001a FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 110              	.LVL6:
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 5
+
+
+ 111              		.loc 1 117 11 view .LVU18
+ 112 001e 0128     		cmp	r0, #1
+ 113 0020 00D0     		beq	.L13
+ 114              	.L5:
+ 118:Src/main.c    ****         {
+ 119:Src/main.c    ****             BAT_ADC_EN;    /*使能电池包电压读取*/
+ 120:Src/main.c    ****             HAL_Delay(10);
+ 121:Src/main.c    ****             get_adc3_value();    /*电池包供电的话就读取adc值*/;        
+ 122:Src/main.c    ****             printf("voltage: %d\n", ar_get_voltage_value[V_ZERO]);                    
+ 123:Src/main.c    ****             if(ar_get_voltage_value[V_ZERO] < (MIN_VOLTAGE - DEVICE_VOLTAGE_DROP))/*电压低于6V�
+ 124:Src/main.c    ****             {         
+ 125:Src/main.c    ****                 g_min_voltage_flag = V_ONE;    
+ 126:Src/main.c    ****                 g_start_http_flag = V_ONE;
+ 127:Src/main.c    ****             } 
+ 128:Src/main.c    ****             BAT_ADC_DIS;                    
+ 129:Src/main.c    ****         }         
+ 130:Src/main.c    ****     }  
+ 131:Src/main.c    **** }
+ 115              		.loc 1 131 1 view .LVU19
+ 116 0022 10BD     		pop	{r4, pc}
+ 117              	.L13:
+ 119:Src/main.c    ****             HAL_Delay(10);
+ 118              		.loc 1 119 13 is_stmt 1 view .LVU20
+ 119 0024 0122     		movs	r2, #1
+ 120 0026 1146     		mov	r1, r2
+ 121 0028 1048     		ldr	r0, .L14+8
+ 122 002a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 123              	.LVL7:
+ 120:Src/main.c    ****             get_adc3_value();    /*电池包供电的话就读取adc值*/;        
+ 124              		.loc 1 120 13 view .LVU21
+ 125 002e 0A20     		movs	r0, #10
+ 126 0030 FFF7FEFF 		bl	HAL_Delay
+ 127              	.LVL8:
+ 121:Src/main.c    ****             printf("voltage: %d\n", ar_get_voltage_value[V_ZERO]);                    
+ 128              		.loc 1 121 13 view .LVU22
+ 129 0034 FFF7FEFF 		bl	get_adc3_value
+ 130              	.LVL9:
+ 121:Src/main.c    ****             printf("voltage: %d\n", ar_get_voltage_value[V_ZERO]);                    
+ 131              		.loc 1 121 74 view .LVU23
+ 122:Src/main.c    ****             if(ar_get_voltage_value[V_ZERO] < (MIN_VOLTAGE - DEVICE_VOLTAGE_DROP))/*电压低于6V�
+ 132              		.loc 1 122 13 view .LVU24
+ 122:Src/main.c    ****             if(ar_get_voltage_value[V_ZERO] < (MIN_VOLTAGE - DEVICE_VOLTAGE_DROP))/*电压低于6V�
+ 133              		.loc 1 122 57 is_stmt 0 view .LVU25
+ 134 0038 0D4C     		ldr	r4, .L14+12
+ 122:Src/main.c    ****             if(ar_get_voltage_value[V_ZERO] < (MIN_VOLTAGE - DEVICE_VOLTAGE_DROP))/*电压低于6V�
+ 135              		.loc 1 122 13 view .LVU26
+ 136 003a 2188     		ldrh	r1, [r4]
+ 137 003c 0D48     		ldr	r0, .L14+16
+ 138 003e FFF7FEFF 		bl	printf
+ 139              	.LVL10:
+ 123:Src/main.c    ****             {         
+ 140              		.loc 1 123 13 is_stmt 1 view .LVU27
+ 123:Src/main.c    ****             {         
+ 141              		.loc 1 123 36 is_stmt 0 view .LVU28
+ 142 0042 2288     		ldrh	r2, [r4]
+ 123:Src/main.c    ****             {         
+ 143              		.loc 1 123 15 view .LVU29
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 6
+
+
+ 144 0044 40F20D23 		movw	r3, #525
+ 145 0048 9A42     		cmp	r2, r3
+ 146 004a 04D8     		bhi	.L7
+ 125:Src/main.c    ****                 g_start_http_flag = V_ONE;
+ 147              		.loc 1 125 17 is_stmt 1 view .LVU30
+ 125:Src/main.c    ****                 g_start_http_flag = V_ONE;
+ 148              		.loc 1 125 36 is_stmt 0 view .LVU31
+ 149 004c 0123     		movs	r3, #1
+ 150 004e 0A4A     		ldr	r2, .L14+20
+ 151 0050 1370     		strb	r3, [r2]
+ 126:Src/main.c    ****             } 
+ 152              		.loc 1 126 17 is_stmt 1 view .LVU32
+ 126:Src/main.c    ****             } 
+ 153              		.loc 1 126 35 is_stmt 0 view .LVU33
+ 154 0052 0A4A     		ldr	r2, .L14+24
+ 155 0054 1370     		strb	r3, [r2]
+ 156              	.L7:
+ 128:Src/main.c    ****         }         
+ 157              		.loc 1 128 13 is_stmt 1 view .LVU34
+ 158 0056 0022     		movs	r2, #0
+ 159 0058 0121     		movs	r1, #1
+ 160 005a 0448     		ldr	r0, .L14+8
+ 161 005c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 162              	.LVL11:
+ 163              		.loc 1 131 1 is_stmt 0 view .LVU35
+ 164 0060 DFE7     		b	.L5
+ 165              	.L15:
+ 166 0062 00BF     		.align	2
+ 167              	.L14:
+ 168 0064 00000000 		.word	g_voltage_check_flag
+ 169 0068 00000000 		.word	rtc_read_time
+ 170 006c 00040048 		.word	1207960576
+ 171 0070 00000000 		.word	ar_get_voltage_value
+ 172 0074 00000000 		.word	.LC0
+ 173 0078 00000000 		.word	g_min_voltage_flag
+ 174 007c 00000000 		.word	.LANCHOR0
+ 175              		.cfi_endproc
+ 176              	.LFE317:
+ 178              		.section	.rodata.iot_http_get_process.str1.4,"aMS",%progbits,1
+ 179              		.align	2
+ 180              	.LC1:
+ 181 0000 675F696F 		.ascii	"g_iot_power_on_cnt %d\015\012\000"
+ 181      745F706F 
+ 181      7765725F 
+ 181      6F6E5F63 
+ 181      6E742025 
+ 182              		.align	2
+ 183              	.LC2:
+ 184 0018 696F7420 		.ascii	"iot power on!\015\000"
+ 184      706F7765 
+ 184      72206F6E 
+ 184      210D00
+ 185 0027 00       		.align	2
+ 186              	.LC3:
+ 187 0028 494F5420 		.ascii	"IOT TEST FAILED!\015\000"
+ 187      54455354 
+ 187      20464149 
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 7
+
+
+ 187      4C454421 
+ 187      0D00
+ 188 003a 0000     		.align	2
+ 189              	.LC4:
+ 190 003c 696F7420 		.ascii	"iot networking failed!\015\000"
+ 190      6E657477 
+ 190      6F726B69 
+ 190      6E672066 
+ 190      61696C65 
+ 191              		.section	.text.iot_http_get_process,"ax",%progbits
+ 192              		.align	1
+ 193              		.global	iot_http_get_process
+ 194              		.syntax unified
+ 195              		.thumb
+ 196              		.thumb_func
+ 197              		.fpu fpv4-sp-d16
+ 199              	iot_http_get_process:
+ 200              	.LFB318:
+ 132:Src/main.c    **** 
+ 133:Src/main.c    **** void iot_http_get_process(void)
+ 134:Src/main.c    **** {
+ 201              		.loc 1 134 1 is_stmt 1 view -0
+ 202              		.cfi_startproc
+ 203              		@ args = 0, pretend = 0, frame = 0
+ 204              		@ frame_needed = 0, uses_anonymous_args = 0
+ 205 0000 10B5     		push	{r4, lr}
+ 206              	.LCFI2:
+ 207              		.cfi_def_cfa_offset 8
+ 208              		.cfi_offset 4, -8
+ 209              		.cfi_offset 14, -4
+ 135:Src/main.c    ****     if(g_start_http_flag == V_ONE)
+ 210              		.loc 1 135 5 view .LVU37
+ 211              		.loc 1 135 26 is_stmt 0 view .LVU38
+ 212 0002 304B     		ldr	r3, .L29
+ 213 0004 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 214 0006 DBB2     		uxtb	r3, r3
+ 215              		.loc 1 135 7 view .LVU39
+ 216 0008 012B     		cmp	r3, #1
+ 217 000a 13D0     		beq	.L24
+ 218              	.L17:
+ 136:Src/main.c    ****     {  
+ 137:Src/main.c    ****         printf("g_iot_power_on_cnt %d\r\n", g_iot_power_on_cnt);
+ 138:Src/main.c    ****         if(g_iot_power_on_cnt <= IOT_POWER_ON_CNT)
+ 139:Src/main.c    ****         {
+ 140:Src/main.c    ****             g_start_http_flag = V_ZERO;
+ 141:Src/main.c    ****             printf("iot power on!\r\n");
+ 142:Src/main.c    ****             iot_power_on_ctrl();
+ 143:Src/main.c    ****             g_iot_power_on_delay = V_ONE;
+ 144:Src/main.c    ****             g_iot_power_on_delay_cnt = V_ZERO;
+ 145:Src/main.c    ****             g_iot_first_send_cmd = V_ONE;
+ 146:Src/main.c    ****         }
+ 147:Src/main.c    ****         else
+ 148:Src/main.c    ****         {
+ 149:Src/main.c    ****             if(g_iot_start_test == V_ONE)
+ 150:Src/main.c    ****             {
+ 151:Src/main.c    ****                 g_iot_start_test = V_ZERO;
+ 152:Src/main.c    ****                 HAL_UART_Transmit(&hlpuart1, ar_resp_iot_test_fail, 0x1B, 0xffffff);
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 8
+
+
+ 153:Src/main.c    ****                 printf("IOT TEST FAILED!\r\n");
+ 154:Src/main.c    ****             }
+ 155:Src/main.c    ****             g_start_http_flag = V_ZERO;
+ 156:Src/main.c    ****             g_iot_power_on_cnt = V_ZERO;
+ 157:Src/main.c    ****             printf("iot networking failed!\r\n");
+ 158:Src/main.c    ****         }
+ 159:Src/main.c    ****     }
+ 160:Src/main.c    ****     if(g_iot_wakeup_flag)
+ 219              		.loc 1 160 5 is_stmt 1 view .LVU40
+ 220              		.loc 1 160 8 is_stmt 0 view .LVU41
+ 221 000c 2E4B     		ldr	r3, .L29+4
+ 222 000e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 223              		.loc 1 160 7 view .LVU42
+ 224 0010 4BB1     		cbz	r3, .L20
+ 161:Src/main.c    ****     {
+ 162:Src/main.c    ****         if(g_iot_first_send_cmd == V_ONE)
+ 225              		.loc 1 162 9 is_stmt 1 view .LVU43
+ 226              		.loc 1 162 33 is_stmt 0 view .LVU44
+ 227 0012 2E4B     		ldr	r3, .L29+8
+ 228 0014 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 229              		.loc 1 162 11 view .LVU45
+ 230 0016 012B     		cmp	r3, #1
+ 231 0018 3FD0     		beq	.L25
+ 232              	.L21:
+ 163:Src/main.c    ****         {
+ 164:Src/main.c    ****             g_iot_first_send_cmd = V_ZERO;
+ 165:Src/main.c    ****             g_usart5_rx_finish = V_ZERO;
+ 166:Src/main.c    ****         }
+ 167:Src/main.c    ****         g_nb_ctrl_step = IOT_TEST_UART;
+ 233              		.loc 1 167 9 is_stmt 1 view .LVU46
+ 234              		.loc 1 167 24 is_stmt 0 view .LVU47
+ 235 001a 2D4B     		ldr	r3, .L29+12
+ 236 001c 0122     		movs	r2, #1
+ 237 001e 1A70     		strb	r2, [r3]
+ 168:Src/main.c    ****         g_iot_wakeup_flag = V_ZERO;
+ 238              		.loc 1 168 9 is_stmt 1 view .LVU48
+ 239              		.loc 1 168 27 is_stmt 0 view .LVU49
+ 240 0020 294B     		ldr	r3, .L29+4
+ 241 0022 0022     		movs	r2, #0
+ 242 0024 1A70     		strb	r2, [r3]
+ 243              	.L20:
+ 169:Src/main.c    ****     }
+ 170:Src/main.c    ****     if((g_uart5_receive_finish == V_ONE) && (g_uart5_tick == V_ZERO))
+ 244              		.loc 1 170 5 is_stmt 1 view .LVU50
+ 245              		.loc 1 170 32 is_stmt 0 view .LVU51
+ 246 0026 2B4B     		ldr	r3, .L29+16
+ 247 0028 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 248              		.loc 1 170 7 view .LVU52
+ 249 002a 012B     		cmp	r3, #1
+ 250 002c 3BD0     		beq	.L26
+ 251              	.L22:
+ 171:Src/main.c    ****     {
+ 172:Src/main.c    ****         uart5_recv_data_fun();
+ 173:Src/main.c    ****         receive_nb_data_handle();
+ 174:Src/main.c    ****         g_uart5_receive_finish = V_ZERO;
+ 175:Src/main.c    ****         g_uart_tmp5.readpos = g_uart_tmp5.writepos;
+ 176:Src/main.c    ****     }
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 9
+
+
+ 177:Src/main.c    ****     nb_http_set_param();
+ 252              		.loc 1 177 5 is_stmt 1 view .LVU53
+ 253 002e FFF7FEFF 		bl	nb_http_set_param
+ 254              	.LVL12:
+ 178:Src/main.c    **** }
+ 255              		.loc 1 178 1 is_stmt 0 view .LVU54
+ 256 0032 10BD     		pop	{r4, pc}
+ 257              	.L24:
+ 137:Src/main.c    ****         if(g_iot_power_on_cnt <= IOT_POWER_ON_CNT)
+ 258              		.loc 1 137 9 is_stmt 1 view .LVU55
+ 259 0034 284C     		ldr	r4, .L29+20
+ 260 0036 2178     		ldrb	r1, [r4]	@ zero_extendqisi2
+ 261 0038 2848     		ldr	r0, .L29+24
+ 262 003a FFF7FEFF 		bl	printf
+ 263              	.LVL13:
+ 138:Src/main.c    ****         {
+ 264              		.loc 1 138 9 view .LVU56
+ 138:Src/main.c    ****         {
+ 265              		.loc 1 138 31 is_stmt 0 view .LVU57
+ 266 003e 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 138:Src/main.c    ****         {
+ 267              		.loc 1 138 11 view .LVU58
+ 268 0040 032B     		cmp	r3, #3
+ 269 0042 0CD9     		bls	.L27
+ 149:Src/main.c    ****             {
+ 270              		.loc 1 149 13 is_stmt 1 view .LVU59
+ 149:Src/main.c    ****             {
+ 271              		.loc 1 149 33 is_stmt 0 view .LVU60
+ 272 0044 264B     		ldr	r3, .L29+28
+ 273 0046 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 149:Src/main.c    ****             {
+ 274              		.loc 1 149 15 view .LVU61
+ 275 0048 012B     		cmp	r3, #1
+ 276 004a 18D0     		beq	.L28
+ 277              	.L19:
+ 155:Src/main.c    ****             g_iot_power_on_cnt = V_ZERO;
+ 278              		.loc 1 155 13 is_stmt 1 view .LVU62
+ 155:Src/main.c    ****             g_iot_power_on_cnt = V_ZERO;
+ 279              		.loc 1 155 31 is_stmt 0 view .LVU63
+ 280 004c 0023     		movs	r3, #0
+ 281 004e 1D4A     		ldr	r2, .L29
+ 282 0050 1370     		strb	r3, [r2]
+ 156:Src/main.c    ****             printf("iot networking failed!\r\n");
+ 283              		.loc 1 156 13 is_stmt 1 view .LVU64
+ 156:Src/main.c    ****             printf("iot networking failed!\r\n");
+ 284              		.loc 1 156 32 is_stmt 0 view .LVU65
+ 285 0052 214A     		ldr	r2, .L29+20
+ 286 0054 1370     		strb	r3, [r2]
+ 157:Src/main.c    ****         }
+ 287              		.loc 1 157 13 is_stmt 1 view .LVU66
+ 288 0056 2348     		ldr	r0, .L29+32
+ 289 0058 FFF7FEFF 		bl	puts
+ 290              	.LVL14:
+ 291 005c D6E7     		b	.L17
+ 292              	.L27:
+ 140:Src/main.c    ****             printf("iot power on!\r\n");
+ 293              		.loc 1 140 13 view .LVU67
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 10
+
+
+ 140:Src/main.c    ****             printf("iot power on!\r\n");
+ 294              		.loc 1 140 31 is_stmt 0 view .LVU68
+ 295 005e 0024     		movs	r4, #0
+ 296 0060 184B     		ldr	r3, .L29
+ 297 0062 1C70     		strb	r4, [r3]
+ 141:Src/main.c    ****             iot_power_on_ctrl();
+ 298              		.loc 1 141 13 is_stmt 1 view .LVU69
+ 299 0064 2048     		ldr	r0, .L29+36
+ 300 0066 FFF7FEFF 		bl	puts
+ 301              	.LVL15:
+ 142:Src/main.c    ****             g_iot_power_on_delay = V_ONE;
+ 302              		.loc 1 142 13 view .LVU70
+ 303 006a FFF7FEFF 		bl	iot_power_on_ctrl
+ 304              	.LVL16:
+ 143:Src/main.c    ****             g_iot_power_on_delay_cnt = V_ZERO;
+ 305              		.loc 1 143 13 view .LVU71
+ 143:Src/main.c    ****             g_iot_power_on_delay_cnt = V_ZERO;
+ 306              		.loc 1 143 34 is_stmt 0 view .LVU72
+ 307 006e 0123     		movs	r3, #1
+ 308 0070 1E4A     		ldr	r2, .L29+40
+ 309 0072 1370     		strb	r3, [r2]
+ 144:Src/main.c    ****             g_iot_first_send_cmd = V_ONE;
+ 310              		.loc 1 144 13 is_stmt 1 view .LVU73
+ 144:Src/main.c    ****             g_iot_first_send_cmd = V_ONE;
+ 311              		.loc 1 144 38 is_stmt 0 view .LVU74
+ 312 0074 1E4A     		ldr	r2, .L29+44
+ 313 0076 1480     		strh	r4, [r2]	@ movhi
+ 145:Src/main.c    ****         }
+ 314              		.loc 1 145 13 is_stmt 1 view .LVU75
+ 145:Src/main.c    ****         }
+ 315              		.loc 1 145 34 is_stmt 0 view .LVU76
+ 316 0078 144A     		ldr	r2, .L29+8
+ 317 007a 1370     		strb	r3, [r2]
+ 318 007c C6E7     		b	.L17
+ 319              	.L28:
+ 151:Src/main.c    ****                 HAL_UART_Transmit(&hlpuart1, ar_resp_iot_test_fail, 0x1B, 0xffffff);
+ 320              		.loc 1 151 17 is_stmt 1 view .LVU77
+ 151:Src/main.c    ****                 HAL_UART_Transmit(&hlpuart1, ar_resp_iot_test_fail, 0x1B, 0xffffff);
+ 321              		.loc 1 151 34 is_stmt 0 view .LVU78
+ 322 007e 184B     		ldr	r3, .L29+28
+ 323 0080 0022     		movs	r2, #0
+ 324 0082 1A70     		strb	r2, [r3]
+ 152:Src/main.c    ****                 printf("IOT TEST FAILED!\r\n");
+ 325              		.loc 1 152 17 is_stmt 1 view .LVU79
+ 326 0084 6FF07F43 		mvn	r3, #-16777216
+ 327 0088 1B22     		movs	r2, #27
+ 328 008a 1A49     		ldr	r1, .L29+48
+ 329 008c 1A48     		ldr	r0, .L29+52
+ 330 008e FFF7FEFF 		bl	HAL_UART_Transmit
+ 331              	.LVL17:
+ 153:Src/main.c    ****             }
+ 332              		.loc 1 153 17 view .LVU80
+ 333 0092 1A48     		ldr	r0, .L29+56
+ 334 0094 FFF7FEFF 		bl	puts
+ 335              	.LVL18:
+ 336 0098 D8E7     		b	.L19
+ 337              	.L25:
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 11
+
+
+ 164:Src/main.c    ****             g_usart5_rx_finish = V_ZERO;
+ 338              		.loc 1 164 13 view .LVU81
+ 164:Src/main.c    ****             g_usart5_rx_finish = V_ZERO;
+ 339              		.loc 1 164 34 is_stmt 0 view .LVU82
+ 340 009a 0023     		movs	r3, #0
+ 341 009c 0B4A     		ldr	r2, .L29+8
+ 342 009e 1370     		strb	r3, [r2]
+ 165:Src/main.c    ****         }
+ 343              		.loc 1 165 13 is_stmt 1 view .LVU83
+ 165:Src/main.c    ****         }
+ 344              		.loc 1 165 32 is_stmt 0 view .LVU84
+ 345 00a0 174A     		ldr	r2, .L29+60
+ 346 00a2 1370     		strb	r3, [r2]
+ 347 00a4 B9E7     		b	.L21
+ 348              	.L26:
+ 170:Src/main.c    ****     {
+ 349              		.loc 1 170 59 discriminator 1 view .LVU85
+ 350 00a6 174B     		ldr	r3, .L29+64
+ 351 00a8 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 170:Src/main.c    ****     {
+ 352              		.loc 1 170 42 discriminator 1 view .LVU86
+ 353 00aa 002B     		cmp	r3, #0
+ 354 00ac BFD1     		bne	.L22
+ 172:Src/main.c    ****         receive_nb_data_handle();
+ 355              		.loc 1 172 9 is_stmt 1 view .LVU87
+ 356 00ae FFF7FEFF 		bl	uart5_recv_data_fun
+ 357              	.LVL19:
+ 173:Src/main.c    ****         g_uart5_receive_finish = V_ZERO;
+ 358              		.loc 1 173 9 view .LVU88
+ 359 00b2 FFF7FEFF 		bl	receive_nb_data_handle
+ 360              	.LVL20:
+ 174:Src/main.c    ****         g_uart_tmp5.readpos = g_uart_tmp5.writepos;
+ 361              		.loc 1 174 9 view .LVU89
+ 174:Src/main.c    ****         g_uart_tmp5.readpos = g_uart_tmp5.writepos;
+ 362              		.loc 1 174 32 is_stmt 0 view .LVU90
+ 363 00b6 074B     		ldr	r3, .L29+16
+ 364 00b8 0022     		movs	r2, #0
+ 365 00ba 1A70     		strb	r2, [r3]
+ 175:Src/main.c    ****     }
+ 366              		.loc 1 175 9 is_stmt 1 view .LVU91
+ 175:Src/main.c    ****     }
+ 367              		.loc 1 175 42 is_stmt 0 view .LVU92
+ 368 00bc 124B     		ldr	r3, .L29+68
+ 369 00be 1A78     		ldrb	r2, [r3]	@ zero_extendqisi2
+ 175:Src/main.c    ****     }
+ 370              		.loc 1 175 29 view .LVU93
+ 371 00c0 5A70     		strb	r2, [r3, #1]
+ 372 00c2 B4E7     		b	.L22
+ 373              	.L30:
+ 374              		.align	2
+ 375              	.L29:
+ 376 00c4 00000000 		.word	.LANCHOR0
+ 377 00c8 00000000 		.word	.LANCHOR6
+ 378 00cc 00000000 		.word	.LANCHOR4
+ 379 00d0 00000000 		.word	g_nb_ctrl_step
+ 380 00d4 00000000 		.word	g_uart5_receive_finish
+ 381 00d8 00000000 		.word	.LANCHOR1
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 12
+
+
+ 382 00dc 00000000 		.word	.LC1
+ 383 00e0 00000000 		.word	g_iot_start_test
+ 384 00e4 3C000000 		.word	.LC4
+ 385 00e8 18000000 		.word	.LC2
+ 386 00ec 00000000 		.word	.LANCHOR2
+ 387 00f0 00000000 		.word	.LANCHOR3
+ 388 00f4 00000000 		.word	.LANCHOR5
+ 389 00f8 00000000 		.word	hlpuart1
+ 390 00fc 28000000 		.word	.LC3
+ 391 0100 00000000 		.word	g_usart5_rx_finish
+ 392 0104 00000000 		.word	g_uart5_tick
+ 393 0108 00000000 		.word	g_uart_tmp5
+ 394              		.cfi_endproc
+ 395              	.LFE318:
+ 397              		.section	.text._sys_exit,"ax",%progbits
+ 398              		.align	1
+ 399              		.global	_sys_exit
+ 400              		.syntax unified
+ 401              		.thumb
+ 402              		.thumb_func
+ 403              		.fpu fpv4-sp-d16
+ 405              	_sys_exit:
+ 406              	.LVL21:
+ 407              	.LFB319:
+ 179:Src/main.c    **** 
+ 180:Src/main.c    **** /*定义_sys_exit()以避免使用半主机模式*/
+ 181:Src/main.c    **** void _sys_exit(int x)
+ 182:Src/main.c    **** {
+ 408              		.loc 1 182 1 is_stmt 1 view -0
+ 409              		.cfi_startproc
+ 410              		@ args = 0, pretend = 0, frame = 0
+ 411              		@ frame_needed = 0, uses_anonymous_args = 0
+ 412              		@ link register save eliminated.
+ 183:Src/main.c    ****     x = x;
+ 413              		.loc 1 183 5 view .LVU95
+ 184:Src/main.c    **** }
+ 414              		.loc 1 184 1 is_stmt 0 view .LVU96
+ 415 0000 7047     		bx	lr
+ 416              		.cfi_endproc
+ 417              	.LFE319:
+ 419              		.section	.text.SystemClock_Config,"ax",%progbits
+ 420              		.align	1
+ 421              		.global	SystemClock_Config
+ 422              		.syntax unified
+ 423              		.thumb
+ 424              		.thumb_func
+ 425              		.fpu fpv4-sp-d16
+ 427              	SystemClock_Config:
+ 428              	.LFB321:
+ 185:Src/main.c    **** uint8_t rtc_read_alarm = V_ZERO;
+ 186:Src/main.c    **** /* USER CODE END PFP */
+ 187:Src/main.c    **** 
+ 188:Src/main.c    **** /* Private user code ---------------------------------------------------------*/
+ 189:Src/main.c    **** /* USER CODE BEGIN 0 */
+ 190:Src/main.c    **** /* USER CODE END 0 */
+ 191:Src/main.c    **** 
+ 192:Src/main.c    **** /**
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 13
+
+
+ 193:Src/main.c    ****   * @brief  The application entry point.
+ 194:Src/main.c    ****   * @retval int
+ 195:Src/main.c    ****   */
+ 196:Src/main.c    **** int main(void)
+ 197:Src/main.c    **** {
+ 198:Src/main.c    ****   /* USER CODE BEGIN 1 */
+ 199:Src/main.c    **** 
+ 200:Src/main.c    ****   /* USER CODE END 1 */
+ 201:Src/main.c    ****   
+ 202:Src/main.c    **** 
+ 203:Src/main.c    ****   /* MCU Configuration--------------------------------------------------------*/
+ 204:Src/main.c    **** 
+ 205:Src/main.c    ****   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+ 206:Src/main.c    ****   HAL_Init();
+ 207:Src/main.c    **** 
+ 208:Src/main.c    ****   /* USER CODE BEGIN Init */
+ 209:Src/main.c    **** 
+ 210:Src/main.c    ****   /* USER CODE END Init */
+ 211:Src/main.c    **** 
+ 212:Src/main.c    ****   /* Configure the system clock */
+ 213:Src/main.c    ****   SystemClock_Config();
+ 214:Src/main.c    **** 
+ 215:Src/main.c    ****   /* USER CODE BEGIN SysInit */
+ 216:Src/main.c    **** 
+ 217:Src/main.c    ****   /* USER CODE END SysInit */
+ 218:Src/main.c    **** 
+ 219:Src/main.c    ****   /* Initialize all configured peripherals */
+ 220:Src/main.c    ****   MX_GPIO_Init();
+ 221:Src/main.c    ****   MX_DMA_Init();
+ 222:Src/main.c    ****   MX_ADC3_Init();
+ 223:Src/main.c    ****   MX_I2C3_Init();
+ 224:Src/main.c    ****   MX_SPI1_Init();
+ 225:Src/main.c    ****   MX_TIM5_Init();
+ 226:Src/main.c    ****   MX_UART5_Init();
+ 227:Src/main.c    ****   MX_USART2_UART_Init();
+ 228:Src/main.c    ****   MX_LPUART1_UART_Init();
+ 229:Src/main.c    ****   MX_TIM6_Init();
+ 230:Src/main.c    ****   AES_init_ctx(&aes_test, aes_key);
+ 231:Src/main.c    ****   pcf85263_check_inta();
+ 232:Src/main.c    ****   init_pcf85263_interrupt();
+ 233:Src/main.c    ****   //pcf85263_set_time(rtc_set_time); 
+ 234:Src/main.c    ****   pcf85263_set_sw_mode_alarm(V_ONE, default_rtc_alarm_time);
+ 235:Src/main.c    ****   pcf85263_query_time(&rtc_read_time);
+ 236:Src/main.c    ****   lis2dh_init();
+ 237:Src/main.c    ****   /* USER CODE BEGIN 2 */
+ 238:Src/main.c    ****   if(HAL_TIM_Base_Start_IT(&htim5) != HAL_OK)
+ 239:Src/main.c    ****   {
+ 240:Src/main.c    ****       Error_Handler();
+ 241:Src/main.c    ****   }
+ 242:Src/main.c    ****   if(HAL_TIM_Base_Start_IT(&htim6) != HAL_OK)
+ 243:Src/main.c    ****   {
+ 244:Src/main.c    ****       Error_Handler();
+ 245:Src/main.c    ****   }
+ 246:Src/main.c    ****   /* USER CODE END 2 */
+ 247:Src/main.c    ****   HAL_UART_Receive_DMA(&hlpuart1, ar_usart1_rx_buffer, MAX_RECEIVE_DATA);
+ 248:Src/main.c    ****   __HAL_UART_ENABLE_IT(&hlpuart1, UART_IT_IDLE); 
+ 249:Src/main.c    **** 
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 14
+
+
+ 250:Src/main.c    ****   if (HAL_UART_Receive_IT(&huart5, ar_usart5_rx_buffer, 1) != HAL_OK)
+ 251:Src/main.c    ****   {
+ 252:Src/main.c    ****       Error_Handler();
+ 253:Src/main.c    ****   }
+ 254:Src/main.c    ****   /* Infinite loop */
+ 255:Src/main.c    ****   ble_load_name();
+ 256:Src/main.c    ****   ble_e95_reset();
+ 257:Src/main.c    ****   printf("ctrl board start!");
+ 258:Src/main.c    ****   //g_start_http_flag = V_ONE;
+ 259:Src/main.c    ****   /* USER CODE BEGIN WHILE */
+ 260:Src/main.c    ****   SENSOR_POWER_EN;
+ 261:Src/main.c    ****   while (1)
+ 262:Src/main.c    ****   {
+ 263:Src/main.c    ****     /* USER CODE END WHILE */
+ 264:Src/main.c    ****       if(g_unlock_flag == DOOR_UNLOCK_EN)
+ 265:Src/main.c    ****       {
+ 266:Src/main.c    ****           g_unlock_flag = V_ZERO;
+ 267:Src/main.c    ****           door_control_index(g_lock_number, OPEN_DOOR_TIME, CLOSE_DOOR);
+ 268:Src/main.c    ****           g_lock_number = V_ZERO;
+ 269:Src/main.c    ****           OPAMP_POWER_EN;
+ 270:Src/main.c    ****           start_pwm_buzzer();
+ 271:Src/main.c    ****       }
+ 272:Src/main.c    ****       /*BLE DISCONNECTED*/
+ 273:Src/main.c    ****       if(g_ble_disconnect_flag)
+ 274:Src/main.c    ****       {
+ 275:Src/main.c    ****           E95_BROADCAST_DIS;
+ 276:Src/main.c    ****           HAL_Delay(50);
+ 277:Src/main.c    ****           E95_BROADCAST_EN;
+ 278:Src/main.c    ****           g_ble_disconnect_flag = V_ZERO;
+ 279:Src/main.c    ****           //g_ble_connect_flag = BLE_E95_DISCONNECTED;
+ 280:Src/main.c    ****           g_ble_connect_count = V_ZERO;
+ 281:Src/main.c    ****       }
+ 282:Src/main.c    ****       if(g_usart1_rx_finish == 1)
+ 283:Src/main.c    ****       {
+ 284:Src/main.c    ****           usart1_protocol_handle();
+ 285:Src/main.c    ****       }
+ 286:Src/main.c    ****       if(g_open_one_door_flag)
+ 287:Src/main.c    ****       {
+ 288:Src/main.c    ****           open_multiple_doors_fun();
+ 289:Src/main.c    ****       }
+ 290:Src/main.c    ****       ble_e92_set_fun();
+ 291:Src/main.c    ****       if(g_rtc_alarm_flag)
+ 292:Src/main.c    ****       {
+ 293:Src/main.c    ****           pcf85263_read_data(PCF8563_ADDR_FLAGS, &rtc_read_alarm, V_ONE);
+ 294:Src/main.c    ****           printf("alarm flag = %d\n",rtc_read_alarm);
+ 295:Src/main.c    ****           pcf85263_clear_alarm_flag();
+ 296:Src/main.c    ****           g_rtc_alarm_flag = V_ZERO;
+ 297:Src/main.c    ****           pcf85263_query_time(&rtc_read_time);
+ 298:Src/main.c    ****           if(rtc_read_time.minute == default_rtc_alarm_time.minute)
+ 299:Src/main.c    ****           {
+ 300:Src/main.c    ****               printf("alarm\r\n");            
+ 301:Src/main.c    ****               g_alarm_cnt++;
+ 302:Src/main.c    ****               printf("g_alarm_cnt = %d\r\n", g_alarm_cnt);  
+ 303:Src/main.c    ****               printf("g_alarm_set_num = %d\r\n", g_alarm_set_num); 
+ 304:Src/main.c    ****               if(g_alarm_set_num >= V_SIX)
+ 305:Src/main.c    ****               {
+ 306:Src/main.c    ****                   if(g_alarm_cnt == g_alarm_set_num)
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 15
+
+
+ 307:Src/main.c    ****                   {
+ 308:Src/main.c    ****                       g_start_http_flag = V_ONE; 
+ 309:Src/main.c    ****                       g_alarm_cnt = V_ZERO;
+ 310:Src/main.c    ****                       printf("start http\r\n");
+ 311:Src/main.c    ****                   }                  
+ 312:Src/main.c    ****               }
+ 313:Src/main.c    ****               else
+ 314:Src/main.c    ****               {
+ 315:Src/main.c    ****                   if(g_alarm_cnt == V_SIX)
+ 316:Src/main.c    ****                   {
+ 317:Src/main.c    ****                       g_start_http_flag = V_ONE; 
+ 318:Src/main.c    ****                       g_alarm_cnt = V_ZERO;
+ 319:Src/main.c    ****                       printf("start http\r\n");
+ 320:Src/main.c    ****                   }                   
+ 321:Src/main.c    ****               }            
+ 322:Src/main.c    ****           }
+ 323:Src/main.c    ****           pcf85263_set_sw_mode_alarm(V_ONE, default_rtc_alarm_time);         
+ 324:Src/main.c    ****       }
+ 325:Src/main.c    ****       low_voltage_check();
+ 326:Src/main.c    ****       iot_http_get_process();
+ 327:Src/main.c    ****     /* USER CODE BEGIN 3 */
+ 328:Src/main.c    ****   }
+ 329:Src/main.c    ****   /* USER CODE END 3 */
+ 330:Src/main.c    **** }
+ 331:Src/main.c    **** 
+ 332:Src/main.c    **** /**
+ 333:Src/main.c    ****   * @brief System Clock Configuration
+ 334:Src/main.c    ****   * @retval None
+ 335:Src/main.c    ****   */
+ 336:Src/main.c    **** void SystemClock_Config(void)
+ 337:Src/main.c    **** {
+ 429              		.loc 1 337 1 is_stmt 1 view -0
+ 430              		.cfi_startproc
+ 431              		@ args = 0, pretend = 0, frame = 224
+ 432              		@ frame_needed = 0, uses_anonymous_args = 0
+ 433 0000 2DE9F043 		push	{r4, r5, r6, r7, r8, r9, lr}
+ 434              	.LCFI3:
+ 435              		.cfi_def_cfa_offset 28
+ 436              		.cfi_offset 4, -28
+ 437              		.cfi_offset 5, -24
+ 438              		.cfi_offset 6, -20
+ 439              		.cfi_offset 7, -16
+ 440              		.cfi_offset 8, -12
+ 441              		.cfi_offset 9, -8
+ 442              		.cfi_offset 14, -4
+ 443 0004 B9B0     		sub	sp, sp, #228
+ 444              	.LCFI4:
+ 445              		.cfi_def_cfa_offset 256
+ 338:Src/main.c    ****   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+ 446              		.loc 1 338 3 view .LVU98
+ 447              		.loc 1 338 22 is_stmt 0 view .LVU99
+ 448 0006 2022     		movs	r2, #32
+ 449 0008 0021     		movs	r1, #0
+ 450 000a 29A8     		add	r0, sp, #164
+ 451 000c FFF7FEFF 		bl	memset
+ 452              	.LVL22:
+ 339:Src/main.c    ****   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 16
+
+
+ 453              		.loc 1 339 3 is_stmt 1 view .LVU100
+ 454              		.loc 1 339 22 is_stmt 0 view .LVU101
+ 455 0010 0024     		movs	r4, #0
+ 456 0012 2294     		str	r4, [sp, #136]
+ 457 0014 2394     		str	r4, [sp, #140]
+ 458 0016 2494     		str	r4, [sp, #144]
+ 459 0018 2594     		str	r4, [sp, #148]
+ 460 001a 2694     		str	r4, [sp, #152]
+ 340:Src/main.c    ****   RCC_PeriphCLKInitTypeDef PeriphClkInit = {0};
+ 461              		.loc 1 340 3 is_stmt 1 view .LVU102
+ 462              		.loc 1 340 28 is_stmt 0 view .LVU103
+ 463 001c 8422     		movs	r2, #132
+ 464 001e 2146     		mov	r1, r4
+ 465 0020 01A8     		add	r0, sp, #4
+ 466 0022 FFF7FEFF 		bl	memset
+ 467              	.LVL23:
+ 341:Src/main.c    **** 
+ 342:Src/main.c    ****   /** Initializes the CPU, AHB and APB busses clocks 
+ 343:Src/main.c    ****   */
+ 344:Src/main.c    ****   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+ 468              		.loc 1 344 3 is_stmt 1 view .LVU104
+ 469              		.loc 1 344 36 is_stmt 0 view .LVU105
+ 470 0026 0126     		movs	r6, #1
+ 471 0028 2796     		str	r6, [sp, #156]
+ 345:Src/main.c    ****   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+ 472              		.loc 1 345 3 is_stmt 1 view .LVU106
+ 473              		.loc 1 345 30 is_stmt 0 view .LVU107
+ 474 002a 4FF48033 		mov	r3, #65536
+ 475 002e 2893     		str	r3, [sp, #160]
+ 346:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+ 476              		.loc 1 346 3 is_stmt 1 view .LVU108
+ 477              		.loc 1 346 34 is_stmt 0 view .LVU109
+ 478 0030 0225     		movs	r5, #2
+ 479 0032 3195     		str	r5, [sp, #196]
+ 347:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+ 480              		.loc 1 347 3 is_stmt 1 view .LVU110
+ 481              		.loc 1 347 35 is_stmt 0 view .LVU111
+ 482 0034 0327     		movs	r7, #3
+ 483 0036 3297     		str	r7, [sp, #200]
+ 348:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLM = 1;
+ 484              		.loc 1 348 3 is_stmt 1 view .LVU112
+ 485              		.loc 1 348 30 is_stmt 0 view .LVU113
+ 486 0038 3396     		str	r6, [sp, #204]
+ 349:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLN = 10;
+ 487              		.loc 1 349 3 is_stmt 1 view .LVU114
+ 488              		.loc 1 349 30 is_stmt 0 view .LVU115
+ 489 003a 0A23     		movs	r3, #10
+ 490 003c 3493     		str	r3, [sp, #208]
+ 350:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV7;
+ 491              		.loc 1 350 3 is_stmt 1 view .LVU116
+ 492              		.loc 1 350 30 is_stmt 0 view .LVU117
+ 493 003e 4FF00708 		mov	r8, #7
+ 494 0042 CDF8D480 		str	r8, [sp, #212]
+ 351:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
+ 495              		.loc 1 351 3 is_stmt 1 view .LVU118
+ 496              		.loc 1 351 30 is_stmt 0 view .LVU119
+ 497 0046 3695     		str	r5, [sp, #216]
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 17
+
+
+ 352:Src/main.c    ****   RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV8;  /*system clock 5M*/
+ 498              		.loc 1 352 3 is_stmt 1 view .LVU120
+ 499              		.loc 1 352 30 is_stmt 0 view .LVU121
+ 500 0048 4FF00809 		mov	r9, #8
+ 501 004c CDF8DC90 		str	r9, [sp, #220]
+ 353:Src/main.c    ****   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+ 502              		.loc 1 353 3 is_stmt 1 view .LVU122
+ 503              		.loc 1 353 7 is_stmt 0 view .LVU123
+ 504 0050 27A8     		add	r0, sp, #156
+ 505 0052 FFF7FEFF 		bl	HAL_RCC_OscConfig
+ 506              	.LVL24:
+ 354:Src/main.c    ****   {
+ 355:Src/main.c    ****     Error_Handler();
+ 356:Src/main.c    ****   }
+ 357:Src/main.c    ****   /** Initializes the CPU, AHB and APB busses clocks 
+ 358:Src/main.c    ****   */
+ 359:Src/main.c    ****   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+ 507              		.loc 1 359 3 is_stmt 1 view .LVU124
+ 508              		.loc 1 359 31 is_stmt 0 view .LVU125
+ 509 0056 0F23     		movs	r3, #15
+ 510 0058 2293     		str	r3, [sp, #136]
+ 360:Src/main.c    ****                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+ 361:Src/main.c    ****   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+ 511              		.loc 1 361 3 is_stmt 1 view .LVU126
+ 512              		.loc 1 361 34 is_stmt 0 view .LVU127
+ 513 005a 2397     		str	r7, [sp, #140]
+ 362:Src/main.c    ****   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+ 514              		.loc 1 362 3 is_stmt 1 view .LVU128
+ 515              		.loc 1 362 35 is_stmt 0 view .LVU129
+ 516 005c 2494     		str	r4, [sp, #144]
+ 363:Src/main.c    ****   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+ 517              		.loc 1 363 3 is_stmt 1 view .LVU130
+ 518              		.loc 1 363 36 is_stmt 0 view .LVU131
+ 519 005e 2594     		str	r4, [sp, #148]
+ 364:Src/main.c    ****   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+ 520              		.loc 1 364 3 is_stmt 1 view .LVU132
+ 521              		.loc 1 364 36 is_stmt 0 view .LVU133
+ 522 0060 2694     		str	r4, [sp, #152]
+ 365:Src/main.c    **** 
+ 366:Src/main.c    ****   if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
+ 523              		.loc 1 366 3 is_stmt 1 view .LVU134
+ 524              		.loc 1 366 7 is_stmt 0 view .LVU135
+ 525 0062 2946     		mov	r1, r5
+ 526 0064 22A8     		add	r0, sp, #136
+ 527 0066 FFF7FEFF 		bl	HAL_RCC_ClockConfig
+ 528              	.LVL25:
+ 367:Src/main.c    ****   {
+ 368:Src/main.c    ****     Error_Handler();
+ 369:Src/main.c    ****   }
+ 370:Src/main.c    ****   PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART2|RCC_PERIPHCLK_USART3
+ 529              		.loc 1 370 3 is_stmt 1 view .LVU136
+ 530              		.loc 1 370 38 is_stmt 0 view .LVU137
+ 531 006a 44F21613 		movw	r3, #16662
+ 532 006e 0193     		str	r3, [sp, #4]
+ 371:Src/main.c    ****                               |RCC_PERIPHCLK_UART5|RCC_PERIPHCLK_I2C3
+ 372:Src/main.c    ****                               |RCC_PERIPHCLK_ADC;
+ 373:Src/main.c    ****   PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_PCLK1;
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 18
+
+
+ 533              		.loc 1 373 3 is_stmt 1 view .LVU138
+ 534              		.loc 1 373 38 is_stmt 0 view .LVU139
+ 535 0070 1094     		str	r4, [sp, #64]
+ 374:Src/main.c    ****   PeriphClkInit.Usart3ClockSelection = RCC_USART3CLKSOURCE_PCLK1;
+ 536              		.loc 1 374 3 is_stmt 1 view .LVU140
+ 537              		.loc 1 374 38 is_stmt 0 view .LVU141
+ 538 0072 1194     		str	r4, [sp, #68]
+ 375:Src/main.c    ****   PeriphClkInit.Uart5ClockSelection = RCC_UART5CLKSOURCE_PCLK1;
+ 539              		.loc 1 375 3 is_stmt 1 view .LVU142
+ 540              		.loc 1 375 37 is_stmt 0 view .LVU143
+ 541 0074 1394     		str	r4, [sp, #76]
+ 376:Src/main.c    ****   PeriphClkInit.I2c3ClockSelection = RCC_I2C3CLKSOURCE_PCLK1;
+ 542              		.loc 1 376 3 is_stmt 1 view .LVU144
+ 543              		.loc 1 376 36 is_stmt 0 view .LVU145
+ 544 0076 1794     		str	r4, [sp, #92]
+ 377:Src/main.c    ****   PeriphClkInit.AdcClockSelection = RCC_ADCCLKSOURCE_PLLSAI1;
+ 545              		.loc 1 377 3 is_stmt 1 view .LVU146
+ 546              		.loc 1 377 35 is_stmt 0 view .LVU147
+ 547 0078 4FF08053 		mov	r3, #268435456
+ 548 007c 1E93     		str	r3, [sp, #120]
+ 378:Src/main.c    ****   PeriphClkInit.PLLSAI1.PLLSAI1Source = RCC_PLLSOURCE_HSE;
+ 549              		.loc 1 378 3 is_stmt 1 view .LVU148
+ 550              		.loc 1 378 39 is_stmt 0 view .LVU149
+ 551 007e 0297     		str	r7, [sp, #8]
+ 379:Src/main.c    ****   PeriphClkInit.PLLSAI1.PLLSAI1M = 1;
+ 552              		.loc 1 379 3 is_stmt 1 view .LVU150
+ 553              		.loc 1 379 34 is_stmt 0 view .LVU151
+ 554 0080 0396     		str	r6, [sp, #12]
+ 380:Src/main.c    ****   PeriphClkInit.PLLSAI1.PLLSAI1N = 8;
+ 555              		.loc 1 380 3 is_stmt 1 view .LVU152
+ 556              		.loc 1 380 34 is_stmt 0 view .LVU153
+ 557 0082 CDF81090 		str	r9, [sp, #16]
+ 381:Src/main.c    ****   PeriphClkInit.PLLSAI1.PLLSAI1P = RCC_PLLP_DIV7;
+ 558              		.loc 1 381 3 is_stmt 1 view .LVU154
+ 559              		.loc 1 381 34 is_stmt 0 view .LVU155
+ 560 0086 CDF81480 		str	r8, [sp, #20]
+ 382:Src/main.c    ****   PeriphClkInit.PLLSAI1.PLLSAI1Q = RCC_PLLQ_DIV2;
+ 561              		.loc 1 382 3 is_stmt 1 view .LVU156
+ 562              		.loc 1 382 34 is_stmt 0 view .LVU157
+ 563 008a 0695     		str	r5, [sp, #24]
+ 383:Src/main.c    ****   PeriphClkInit.PLLSAI1.PLLSAI1R = RCC_PLLR_DIV2;
+ 564              		.loc 1 383 3 is_stmt 1 view .LVU158
+ 565              		.loc 1 383 34 is_stmt 0 view .LVU159
+ 566 008c 0795     		str	r5, [sp, #28]
+ 384:Src/main.c    ****   PeriphClkInit.PLLSAI1.PLLSAI1ClockOut = RCC_PLLSAI1_ADC1CLK;
+ 567              		.loc 1 384 3 is_stmt 1 view .LVU160
+ 568              		.loc 1 384 41 is_stmt 0 view .LVU161
+ 569 008e 4FF08073 		mov	r3, #16777216
+ 570 0092 0893     		str	r3, [sp, #32]
+ 385:Src/main.c    ****   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
+ 571              		.loc 1 385 3 is_stmt 1 view .LVU162
+ 572              		.loc 1 385 7 is_stmt 0 view .LVU163
+ 573 0094 01A8     		add	r0, sp, #4
+ 574 0096 FFF7FEFF 		bl	HAL_RCCEx_PeriphCLKConfig
+ 575              	.LVL26:
+ 386:Src/main.c    ****   {
+ 387:Src/main.c    ****     Error_Handler();
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 19
+
+
+ 388:Src/main.c    ****   }
+ 389:Src/main.c    ****   /** Configure the main internal regulator output voltage 
+ 390:Src/main.c    ****   */
+ 391:Src/main.c    ****   if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1) != HAL_OK)
+ 576              		.loc 1 391 3 is_stmt 1 view .LVU164
+ 577              		.loc 1 391 7 is_stmt 0 view .LVU165
+ 578 009a 4FF40070 		mov	r0, #512
+ 579 009e FFF7FEFF 		bl	HAL_PWREx_ControlVoltageScaling
+ 580              	.LVL27:
+ 392:Src/main.c    ****   {
+ 393:Src/main.c    ****     Error_Handler();
+ 394:Src/main.c    ****   }
+ 395:Src/main.c    **** }
+ 581              		.loc 1 395 1 view .LVU166
+ 582 00a2 39B0     		add	sp, sp, #228
+ 583              	.LCFI5:
+ 584              		.cfi_def_cfa_offset 28
+ 585              		@ sp needed
+ 586 00a4 BDE8F083 		pop	{r4, r5, r6, r7, r8, r9, pc}
+ 587              		.cfi_endproc
+ 588              	.LFE321:
+ 590              		.section	.rodata.main.str1.4,"aMS",%progbits,1
+ 591              		.align	2
+ 592              	.LC5:
+ 593 0000 6374726C 		.ascii	"ctrl board start!\000"
+ 593      20626F61 
+ 593      72642073 
+ 593      74617274 
+ 593      2100
+ 594 0012 0000     		.align	2
+ 595              	.LC6:
+ 596 0014 616C6172 		.ascii	"alarm flag = %d\012\000"
+ 596      6D20666C 
+ 596      6167203D 
+ 596      2025640A 
+ 596      00
+ 597 0025 000000   		.align	2
+ 598              	.LC7:
+ 599 0028 616C6172 		.ascii	"alarm\015\000"
+ 599      6D0D00
+ 600 002f 00       		.align	2
+ 601              	.LC8:
+ 602 0030 675F616C 		.ascii	"g_alarm_cnt = %d\015\012\000"
+ 602      61726D5F 
+ 602      636E7420 
+ 602      3D202564 
+ 602      0D0A00
+ 603 0043 00       		.align	2
+ 604              	.LC9:
+ 605 0044 675F616C 		.ascii	"g_alarm_set_num = %d\015\012\000"
+ 605      61726D5F 
+ 605      7365745F 
+ 605      6E756D20 
+ 605      3D202564 
+ 606 005b 00       		.align	2
+ 607              	.LC10:
+ 608 005c 73746172 		.ascii	"start http\015\000"
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 20
+
+
+ 608      74206874 
+ 608      74700D00 
+ 609              		.section	.text.main,"ax",%progbits
+ 610              		.align	1
+ 611              		.global	main
+ 612              		.syntax unified
+ 613              		.thumb
+ 614              		.thumb_func
+ 615              		.fpu fpv4-sp-d16
+ 617              	main:
+ 618              	.LFB320:
+ 197:Src/main.c    ****   /* USER CODE BEGIN 1 */
+ 619              		.loc 1 197 1 is_stmt 1 view -0
+ 620              		.cfi_startproc
+ 621              		@ Volatile: function does not return.
+ 622              		@ args = 0, pretend = 0, frame = 0
+ 623              		@ frame_needed = 0, uses_anonymous_args = 0
+ 624 0000 08B5     		push	{r3, lr}
+ 625              	.LCFI6:
+ 626              		.cfi_def_cfa_offset 8
+ 627              		.cfi_offset 3, -8
+ 628              		.cfi_offset 14, -4
+ 206:Src/main.c    **** 
+ 629              		.loc 1 206 3 view .LVU168
+ 630 0002 FFF7FEFF 		bl	HAL_Init
+ 631              	.LVL28:
+ 213:Src/main.c    **** 
+ 632              		.loc 1 213 3 view .LVU169
+ 633 0006 FFF7FEFF 		bl	SystemClock_Config
+ 634              	.LVL29:
+ 220:Src/main.c    ****   MX_DMA_Init();
+ 635              		.loc 1 220 3 view .LVU170
+ 636 000a FFF7FEFF 		bl	MX_GPIO_Init
+ 637              	.LVL30:
+ 221:Src/main.c    ****   MX_ADC3_Init();
+ 638              		.loc 1 221 3 view .LVU171
+ 639 000e FFF7FEFF 		bl	MX_DMA_Init
+ 640              	.LVL31:
+ 222:Src/main.c    ****   MX_I2C3_Init();
+ 641              		.loc 1 222 3 view .LVU172
+ 642 0012 FFF7FEFF 		bl	MX_ADC3_Init
+ 643              	.LVL32:
+ 223:Src/main.c    ****   MX_SPI1_Init();
+ 644              		.loc 1 223 3 view .LVU173
+ 645 0016 FFF7FEFF 		bl	MX_I2C3_Init
+ 646              	.LVL33:
+ 224:Src/main.c    ****   MX_TIM5_Init();
+ 647              		.loc 1 224 3 view .LVU174
+ 648 001a FFF7FEFF 		bl	MX_SPI1_Init
+ 649              	.LVL34:
+ 225:Src/main.c    ****   MX_UART5_Init();
+ 650              		.loc 1 225 3 view .LVU175
+ 651 001e FFF7FEFF 		bl	MX_TIM5_Init
+ 652              	.LVL35:
+ 226:Src/main.c    ****   MX_USART2_UART_Init();
+ 653              		.loc 1 226 3 view .LVU176
+ 654 0022 FFF7FEFF 		bl	MX_UART5_Init
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 21
+
+
+ 655              	.LVL36:
+ 227:Src/main.c    ****   MX_LPUART1_UART_Init();
+ 656              		.loc 1 227 3 view .LVU177
+ 657 0026 FFF7FEFF 		bl	MX_USART2_UART_Init
+ 658              	.LVL37:
+ 228:Src/main.c    ****   MX_TIM6_Init();
+ 659              		.loc 1 228 3 view .LVU178
+ 660 002a FFF7FEFF 		bl	MX_LPUART1_UART_Init
+ 661              	.LVL38:
+ 229:Src/main.c    ****   AES_init_ctx(&aes_test, aes_key);
+ 662              		.loc 1 229 3 view .LVU179
+ 663 002e FFF7FEFF 		bl	MX_TIM6_Init
+ 664              	.LVL39:
+ 230:Src/main.c    ****   pcf85263_check_inta();
+ 665              		.loc 1 230 3 view .LVU180
+ 666 0032 6649     		ldr	r1, .L49
+ 667 0034 6648     		ldr	r0, .L49+4
+ 668 0036 FFF7FEFF 		bl	AES_init_ctx
+ 669              	.LVL40:
+ 231:Src/main.c    ****   init_pcf85263_interrupt();
+ 670              		.loc 1 231 3 view .LVU181
+ 671 003a FFF7FEFF 		bl	pcf85263_check_inta
+ 672              	.LVL41:
+ 232:Src/main.c    ****   //pcf85263_set_time(rtc_set_time); 
+ 673              		.loc 1 232 3 view .LVU182
+ 674 003e FFF7FEFF 		bl	init_pcf85263_interrupt
+ 675              	.LVL42:
+ 234:Src/main.c    ****   pcf85263_query_time(&rtc_read_time);
+ 676              		.loc 1 234 3 view .LVU183
+ 677 0042 644B     		ldr	r3, .L49+8
+ 678 0044 93E80600 		ldm	r3, {r1, r2}
+ 679 0048 0120     		movs	r0, #1
+ 680 004a FFF7FEFF 		bl	pcf85263_set_sw_mode_alarm
+ 681              	.LVL43:
+ 235:Src/main.c    ****   lis2dh_init();
+ 682              		.loc 1 235 3 view .LVU184
+ 683 004e 6248     		ldr	r0, .L49+12
+ 684 0050 FFF7FEFF 		bl	pcf85263_query_time
+ 685              	.LVL44:
+ 236:Src/main.c    ****   /* USER CODE BEGIN 2 */
+ 686              		.loc 1 236 3 view .LVU185
+ 687 0054 FFF7FEFF 		bl	lis2dh_init
+ 688              	.LVL45:
+ 238:Src/main.c    ****   {
+ 689              		.loc 1 238 3 view .LVU186
+ 238:Src/main.c    ****   {
+ 690              		.loc 1 238 6 is_stmt 0 view .LVU187
+ 691 0058 6048     		ldr	r0, .L49+16
+ 692 005a FFF7FEFF 		bl	HAL_TIM_Base_Start_IT
+ 693              	.LVL46:
+ 242:Src/main.c    ****   {
+ 694              		.loc 1 242 3 is_stmt 1 view .LVU188
+ 242:Src/main.c    ****   {
+ 695              		.loc 1 242 6 is_stmt 0 view .LVU189
+ 696 005e 6048     		ldr	r0, .L49+20
+ 697 0060 FFF7FEFF 		bl	HAL_TIM_Base_Start_IT
+ 698              	.LVL47:
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 22
+
+
+ 247:Src/main.c    ****   __HAL_UART_ENABLE_IT(&hlpuart1, UART_IT_IDLE); 
+ 699              		.loc 1 247 3 is_stmt 1 view .LVU190
+ 700 0064 5F4C     		ldr	r4, .L49+24
+ 701 0066 FF22     		movs	r2, #255
+ 702 0068 5F49     		ldr	r1, .L49+28
+ 703 006a 2046     		mov	r0, r4
+ 704 006c FFF7FEFF 		bl	HAL_UART_Receive_DMA
+ 705              	.LVL48:
+ 248:Src/main.c    **** 
+ 706              		.loc 1 248 3 view .LVU191
+ 707 0070 2268     		ldr	r2, [r4]
+ 708 0072 1368     		ldr	r3, [r2]
+ 709 0074 43F01003 		orr	r3, r3, #16
+ 710 0078 1360     		str	r3, [r2]
+ 250:Src/main.c    ****   {
+ 711              		.loc 1 250 3 view .LVU192
+ 250:Src/main.c    ****   {
+ 712              		.loc 1 250 7 is_stmt 0 view .LVU193
+ 713 007a 0122     		movs	r2, #1
+ 714 007c 5B49     		ldr	r1, .L49+32
+ 715 007e 5C48     		ldr	r0, .L49+36
+ 716 0080 FFF7FEFF 		bl	HAL_UART_Receive_IT
+ 717              	.LVL49:
+ 255:Src/main.c    ****   ble_e95_reset();
+ 718              		.loc 1 255 3 is_stmt 1 view .LVU194
+ 719 0084 FFF7FEFF 		bl	ble_load_name
+ 720              	.LVL50:
+ 256:Src/main.c    ****   printf("ctrl board start!");
+ 721              		.loc 1 256 3 view .LVU195
+ 722 0088 FFF7FEFF 		bl	ble_e95_reset
+ 723              	.LVL51:
+ 257:Src/main.c    ****   //g_start_http_flag = V_ONE;
+ 724              		.loc 1 257 3 view .LVU196
+ 725 008c 5948     		ldr	r0, .L49+40
+ 726 008e FFF7FEFF 		bl	printf
+ 727              	.LVL52:
+ 260:Src/main.c    ****   while (1)
+ 728              		.loc 1 260 3 view .LVU197
+ 729 0092 0022     		movs	r2, #0
+ 730 0094 0821     		movs	r1, #8
+ 731 0096 5848     		ldr	r0, .L49+44
+ 732 0098 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 733              	.LVL53:
+ 734 009c 3BE0     		b	.L42
+ 735              	.L45:
+ 266:Src/main.c    ****           door_control_index(g_lock_number, OPEN_DOOR_TIME, CLOSE_DOOR);
+ 736              		.loc 1 266 11 view .LVU198
+ 266:Src/main.c    ****           door_control_index(g_lock_number, OPEN_DOOR_TIME, CLOSE_DOOR);
+ 737              		.loc 1 266 25 is_stmt 0 view .LVU199
+ 738 009e 0024     		movs	r4, #0
+ 739 00a0 564B     		ldr	r3, .L49+48
+ 740 00a2 1C70     		strb	r4, [r3]
+ 267:Src/main.c    ****           g_lock_number = V_ZERO;
+ 741              		.loc 1 267 11 is_stmt 1 view .LVU200
+ 742 00a4 564D     		ldr	r5, .L49+52
+ 743 00a6 2878     		ldrb	r0, [r5]	@ zero_extendqisi2
+ 744 00a8 2246     		mov	r2, r4
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 23
+
+
+ 745 00aa 4FF4FA71 		mov	r1, #500
+ 746 00ae FFF7FEFF 		bl	door_control_index
+ 747              	.LVL54:
+ 268:Src/main.c    ****           OPAMP_POWER_EN;
+ 748              		.loc 1 268 11 view .LVU201
+ 268:Src/main.c    ****           OPAMP_POWER_EN;
+ 749              		.loc 1 268 25 is_stmt 0 view .LVU202
+ 750 00b2 2C70     		strb	r4, [r5]
+ 269:Src/main.c    ****           start_pwm_buzzer();
+ 751              		.loc 1 269 11 is_stmt 1 view .LVU203
+ 752 00b4 0122     		movs	r2, #1
+ 753 00b6 4FF48061 		mov	r1, #1024
+ 754 00ba 5248     		ldr	r0, .L49+56
+ 755 00bc FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 756              	.LVL55:
+ 270:Src/main.c    ****       }
+ 757              		.loc 1 270 11 view .LVU204
+ 758 00c0 FFF7FEFF 		bl	start_pwm_buzzer
+ 759              	.LVL56:
+ 760 00c4 2CE0     		b	.L35
+ 761              	.L46:
+ 275:Src/main.c    ****           HAL_Delay(50);
+ 762              		.loc 1 275 11 view .LVU205
+ 763 00c6 4C4C     		ldr	r4, .L49+44
+ 764 00c8 0122     		movs	r2, #1
+ 765 00ca 2021     		movs	r1, #32
+ 766 00cc 2046     		mov	r0, r4
+ 767 00ce FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 768              	.LVL57:
+ 276:Src/main.c    ****           E95_BROADCAST_EN;
+ 769              		.loc 1 276 11 view .LVU206
+ 770 00d2 3220     		movs	r0, #50
+ 771 00d4 FFF7FEFF 		bl	HAL_Delay
+ 772              	.LVL58:
+ 277:Src/main.c    ****           g_ble_disconnect_flag = V_ZERO;
+ 773              		.loc 1 277 11 view .LVU207
+ 774 00d8 0022     		movs	r2, #0
+ 775 00da 2021     		movs	r1, #32
+ 776 00dc 2046     		mov	r0, r4
+ 777 00de FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 778              	.LVL59:
+ 278:Src/main.c    ****           //g_ble_connect_flag = BLE_E95_DISCONNECTED;
+ 779              		.loc 1 278 11 view .LVU208
+ 278:Src/main.c    ****           //g_ble_connect_flag = BLE_E95_DISCONNECTED;
+ 780              		.loc 1 278 33 is_stmt 0 view .LVU209
+ 781 00e2 0023     		movs	r3, #0
+ 782 00e4 484A     		ldr	r2, .L49+60
+ 783 00e6 1370     		strb	r3, [r2]
+ 280:Src/main.c    ****       }
+ 784              		.loc 1 280 11 is_stmt 1 view .LVU210
+ 280:Src/main.c    ****       }
+ 785              		.loc 1 280 31 is_stmt 0 view .LVU211
+ 786 00e8 484A     		ldr	r2, .L49+64
+ 787 00ea 1360     		str	r3, [r2]
+ 788 00ec 1CE0     		b	.L36
+ 789              	.L47:
+ 284:Src/main.c    ****       }
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 24
+
+
+ 790              		.loc 1 284 11 is_stmt 1 view .LVU212
+ 791 00ee FFF7FEFF 		bl	usart1_protocol_handle
+ 792              	.LVL60:
+ 793 00f2 1DE0     		b	.L37
+ 794              	.L48:
+ 795              	.LBB2:
+ 288:Src/main.c    ****       }
+ 796              		.loc 1 288 11 view .LVU213
+ 797 00f4 FFF7FEFF 		bl	open_multiple_doors_fun
+ 798              	.LVL61:
+ 799 00f8 1EE0     		b	.L38
+ 800              	.L41:
+ 801              	.LBE2:
+ 802              	.LBB3:
+ 315:Src/main.c    ****                   {
+ 803              		.loc 1 315 19 view .LVU214
+ 315:Src/main.c    ****                   {
+ 804              		.loc 1 315 34 is_stmt 0 view .LVU215
+ 805 00fa 454B     		ldr	r3, .L49+68
+ 806 00fc 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 315:Src/main.c    ****                   {
+ 807              		.loc 1 315 21 view .LVU216
+ 808 00fe 062B     		cmp	r3, #6
+ 809 0100 59D0     		beq	.L44
+ 810              	.L40:
+ 323:Src/main.c    ****       }
+ 811              		.loc 1 323 11 is_stmt 1 view .LVU217
+ 812 0102 344B     		ldr	r3, .L49+8
+ 813 0104 93E80600 		ldm	r3, {r1, r2}
+ 814 0108 0120     		movs	r0, #1
+ 815 010a FFF7FEFF 		bl	pcf85263_set_sw_mode_alarm
+ 816              	.LVL62:
+ 817              	.L39:
+ 818              	.LBE3:
+ 325:Src/main.c    ****       iot_http_get_process();
+ 819              		.loc 1 325 7 view .LVU218
+ 820 010e FFF7FEFF 		bl	low_voltage_check
+ 821              	.LVL63:
+ 326:Src/main.c    ****     /* USER CODE BEGIN 3 */
+ 822              		.loc 1 326 7 view .LVU219
+ 823 0112 FFF7FEFF 		bl	iot_http_get_process
+ 824              	.LVL64:
+ 261:Src/main.c    ****   {
+ 825              		.loc 1 261 9 view .LVU220
+ 826              	.L42:
+ 261:Src/main.c    ****   {
+ 827              		.loc 1 261 3 view .LVU221
+ 264:Src/main.c    ****       {
+ 828              		.loc 1 264 7 view .LVU222
+ 264:Src/main.c    ****       {
+ 829              		.loc 1 264 24 is_stmt 0 view .LVU223
+ 830 0116 394B     		ldr	r3, .L49+48
+ 831 0118 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 832 011a DBB2     		uxtb	r3, r3
+ 264:Src/main.c    ****       {
+ 833              		.loc 1 264 9 view .LVU224
+ 834 011c 012B     		cmp	r3, #1
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 25
+
+
+ 835 011e BED0     		beq	.L45
+ 836              	.L35:
+ 273:Src/main.c    ****       {
+ 837              		.loc 1 273 7 is_stmt 1 view .LVU225
+ 273:Src/main.c    ****       {
+ 838              		.loc 1 273 10 is_stmt 0 view .LVU226
+ 839 0120 394B     		ldr	r3, .L49+60
+ 840 0122 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 273:Src/main.c    ****       {
+ 841              		.loc 1 273 9 view .LVU227
+ 842 0124 002B     		cmp	r3, #0
+ 843 0126 CED1     		bne	.L46
+ 844              	.L36:
+ 282:Src/main.c    ****       {
+ 845              		.loc 1 282 7 is_stmt 1 view .LVU228
+ 282:Src/main.c    ****       {
+ 846              		.loc 1 282 29 is_stmt 0 view .LVU229
+ 847 0128 3A4B     		ldr	r3, .L49+72
+ 848 012a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 282:Src/main.c    ****       {
+ 849              		.loc 1 282 9 view .LVU230
+ 850 012c 012B     		cmp	r3, #1
+ 851 012e DED0     		beq	.L47
+ 852              	.L37:
+ 286:Src/main.c    ****       {
+ 853              		.loc 1 286 7 is_stmt 1 view .LVU231
+ 286:Src/main.c    ****       {
+ 854              		.loc 1 286 10 is_stmt 0 view .LVU232
+ 855 0130 394B     		ldr	r3, .L49+76
+ 856 0132 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 286:Src/main.c    ****       {
+ 857              		.loc 1 286 9 view .LVU233
+ 858 0134 002B     		cmp	r3, #0
+ 859 0136 DDD1     		bne	.L48
+ 860              	.L38:
+ 290:Src/main.c    ****       if(g_rtc_alarm_flag)
+ 861              		.loc 1 290 7 is_stmt 1 view .LVU234
+ 862 0138 FFF7FEFF 		bl	ble_e92_set_fun
+ 863              	.LVL65:
+ 291:Src/main.c    ****       {
+ 864              		.loc 1 291 7 view .LVU235
+ 291:Src/main.c    ****       {
+ 865              		.loc 1 291 10 is_stmt 0 view .LVU236
+ 866 013c 374B     		ldr	r3, .L49+80
+ 867 013e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 291:Src/main.c    ****       {
+ 868              		.loc 1 291 9 view .LVU237
+ 869 0140 002B     		cmp	r3, #0
+ 870 0142 E4D0     		beq	.L39
+ 871              	.LBB4:
+ 293:Src/main.c    ****           printf("alarm flag = %d\n",rtc_read_alarm);
+ 872              		.loc 1 293 11 is_stmt 1 view .LVU238
+ 873 0144 364C     		ldr	r4, .L49+84
+ 874 0146 0122     		movs	r2, #1
+ 875 0148 2146     		mov	r1, r4
+ 876 014a 2B20     		movs	r0, #43
+ 877 014c FFF7FEFF 		bl	pcf85263_read_data
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 26
+
+
+ 878              	.LVL66:
+ 294:Src/main.c    ****           pcf85263_clear_alarm_flag();
+ 879              		.loc 1 294 11 view .LVU239
+ 880 0150 2178     		ldrb	r1, [r4]	@ zero_extendqisi2
+ 881 0152 3448     		ldr	r0, .L49+88
+ 882 0154 FFF7FEFF 		bl	printf
+ 883              	.LVL67:
+ 295:Src/main.c    ****           g_rtc_alarm_flag = V_ZERO;
+ 884              		.loc 1 295 11 view .LVU240
+ 885 0158 FFF7FEFF 		bl	pcf85263_clear_alarm_flag
+ 886              	.LVL68:
+ 296:Src/main.c    ****           pcf85263_query_time(&rtc_read_time);
+ 887              		.loc 1 296 11 view .LVU241
+ 296:Src/main.c    ****           pcf85263_query_time(&rtc_read_time);
+ 888              		.loc 1 296 28 is_stmt 0 view .LVU242
+ 889 015c 2F4B     		ldr	r3, .L49+80
+ 890 015e 0022     		movs	r2, #0
+ 891 0160 1A70     		strb	r2, [r3]
+ 297:Src/main.c    ****           if(rtc_read_time.minute == default_rtc_alarm_time.minute)
+ 892              		.loc 1 297 11 is_stmt 1 view .LVU243
+ 893 0162 1D4C     		ldr	r4, .L49+12
+ 894 0164 2046     		mov	r0, r4
+ 895 0166 FFF7FEFF 		bl	pcf85263_query_time
+ 896              	.LVL69:
+ 298:Src/main.c    ****           {
+ 897              		.loc 1 298 11 view .LVU244
+ 298:Src/main.c    ****           {
+ 898              		.loc 1 298 27 is_stmt 0 view .LVU245
+ 899 016a E278     		ldrb	r2, [r4, #3]	@ zero_extendqisi2
+ 298:Src/main.c    ****           {
+ 900              		.loc 1 298 60 view .LVU246
+ 901 016c 194B     		ldr	r3, .L49+8
+ 902 016e DB78     		ldrb	r3, [r3, #3]	@ zero_extendqisi2
+ 298:Src/main.c    ****           {
+ 903              		.loc 1 298 13 view .LVU247
+ 904 0170 9A42     		cmp	r2, r3
+ 905 0172 C6D1     		bne	.L40
+ 300:Src/main.c    ****               g_alarm_cnt++;
+ 906              		.loc 1 300 15 is_stmt 1 view .LVU248
+ 907 0174 2C48     		ldr	r0, .L49+92
+ 908 0176 FFF7FEFF 		bl	puts
+ 909              	.LVL70:
+ 301:Src/main.c    ****               printf("g_alarm_cnt = %d\r\n", g_alarm_cnt);  
+ 910              		.loc 1 301 15 view .LVU249
+ 301:Src/main.c    ****               printf("g_alarm_cnt = %d\r\n", g_alarm_cnt);  
+ 911              		.loc 1 301 26 is_stmt 0 view .LVU250
+ 912 017a 254B     		ldr	r3, .L49+68
+ 913 017c 1978     		ldrb	r1, [r3]	@ zero_extendqisi2
+ 914 017e 0131     		adds	r1, r1, #1
+ 915 0180 C9B2     		uxtb	r1, r1
+ 916 0182 1970     		strb	r1, [r3]
+ 302:Src/main.c    ****               printf("g_alarm_set_num = %d\r\n", g_alarm_set_num); 
+ 917              		.loc 1 302 15 is_stmt 1 view .LVU251
+ 918 0184 2948     		ldr	r0, .L49+96
+ 919 0186 FFF7FEFF 		bl	printf
+ 920              	.LVL71:
+ 303:Src/main.c    ****               if(g_alarm_set_num >= V_SIX)
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 27
+
+
+ 921              		.loc 1 303 15 view .LVU252
+ 922 018a 294C     		ldr	r4, .L49+100
+ 923 018c 2178     		ldrb	r1, [r4]	@ zero_extendqisi2
+ 924 018e 2948     		ldr	r0, .L49+104
+ 925 0190 FFF7FEFF 		bl	printf
+ 926              	.LVL72:
+ 304:Src/main.c    ****               {
+ 927              		.loc 1 304 15 view .LVU253
+ 304:Src/main.c    ****               {
+ 928              		.loc 1 304 34 is_stmt 0 view .LVU254
+ 929 0194 2378     		ldrb	r3, [r4]	@ zero_extendqisi2
+ 304:Src/main.c    ****               {
+ 930              		.loc 1 304 17 view .LVU255
+ 931 0196 052B     		cmp	r3, #5
+ 932 0198 AFD9     		bls	.L41
+ 306:Src/main.c    ****                   {
+ 933              		.loc 1 306 19 is_stmt 1 view .LVU256
+ 306:Src/main.c    ****                   {
+ 934              		.loc 1 306 34 is_stmt 0 view .LVU257
+ 935 019a 1D4A     		ldr	r2, .L49+68
+ 936 019c 1278     		ldrb	r2, [r2]	@ zero_extendqisi2
+ 306:Src/main.c    ****                   {
+ 937              		.loc 1 306 21 view .LVU258
+ 938 019e 9342     		cmp	r3, r2
+ 939 01a0 AFD1     		bne	.L40
+ 308:Src/main.c    ****                       g_alarm_cnt = V_ZERO;
+ 940              		.loc 1 308 23 is_stmt 1 view .LVU259
+ 308:Src/main.c    ****                       g_alarm_cnt = V_ZERO;
+ 941              		.loc 1 308 41 is_stmt 0 view .LVU260
+ 942 01a2 254B     		ldr	r3, .L49+108
+ 943 01a4 0122     		movs	r2, #1
+ 944 01a6 1A70     		strb	r2, [r3]
+ 309:Src/main.c    ****                       printf("start http\r\n");
+ 945              		.loc 1 309 23 is_stmt 1 view .LVU261
+ 309:Src/main.c    ****                       printf("start http\r\n");
+ 946              		.loc 1 309 35 is_stmt 0 view .LVU262
+ 947 01a8 194B     		ldr	r3, .L49+68
+ 948 01aa 0022     		movs	r2, #0
+ 949 01ac 1A70     		strb	r2, [r3]
+ 310:Src/main.c    ****                   }                  
+ 950              		.loc 1 310 23 is_stmt 1 view .LVU263
+ 951 01ae 2348     		ldr	r0, .L49+112
+ 952 01b0 FFF7FEFF 		bl	puts
+ 953              	.LVL73:
+ 954 01b4 A5E7     		b	.L40
+ 955              	.L44:
+ 317:Src/main.c    ****                       g_alarm_cnt = V_ZERO;
+ 956              		.loc 1 317 23 view .LVU264
+ 317:Src/main.c    ****                       g_alarm_cnt = V_ZERO;
+ 957              		.loc 1 317 41 is_stmt 0 view .LVU265
+ 958 01b6 204B     		ldr	r3, .L49+108
+ 959 01b8 0122     		movs	r2, #1
+ 960 01ba 1A70     		strb	r2, [r3]
+ 318:Src/main.c    ****                       printf("start http\r\n");
+ 961              		.loc 1 318 23 is_stmt 1 view .LVU266
+ 318:Src/main.c    ****                       printf("start http\r\n");
+ 962              		.loc 1 318 35 is_stmt 0 view .LVU267
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 28
+
+
+ 963 01bc 144B     		ldr	r3, .L49+68
+ 964 01be 0022     		movs	r2, #0
+ 965 01c0 1A70     		strb	r2, [r3]
+ 319:Src/main.c    ****                   }                   
+ 966              		.loc 1 319 23 is_stmt 1 view .LVU268
+ 967 01c2 1E48     		ldr	r0, .L49+112
+ 968 01c4 FFF7FEFF 		bl	puts
+ 969              	.LVL74:
+ 970 01c8 9BE7     		b	.L40
+ 971              	.L50:
+ 972 01ca 00BF     		.align	2
+ 973              	.L49:
+ 974 01cc 00000000 		.word	aes_key
+ 975 01d0 00000000 		.word	aes_test
+ 976 01d4 00000000 		.word	.LANCHOR7
+ 977 01d8 00000000 		.word	rtc_read_time
+ 978 01dc 00000000 		.word	htim5
+ 979 01e0 00000000 		.word	htim6
+ 980 01e4 00000000 		.word	hlpuart1
+ 981 01e8 00000000 		.word	ar_usart1_rx_buffer
+ 982 01ec 00000000 		.word	ar_usart5_rx_buffer
+ 983 01f0 00000000 		.word	huart5
+ 984 01f4 00000000 		.word	.LC5
+ 985 01f8 00180048 		.word	1207965696
+ 986 01fc 00000000 		.word	g_unlock_flag
+ 987 0200 00000000 		.word	g_lock_number
+ 988 0204 00080048 		.word	1207961600
+ 989 0208 00000000 		.word	g_ble_disconnect_flag
+ 990 020c 00000000 		.word	g_ble_connect_count
+ 991 0210 00000000 		.word	.LANCHOR9
+ 992 0214 00000000 		.word	g_usart1_rx_finish
+ 993 0218 00000000 		.word	g_open_one_door_flag
+ 994 021c 00000000 		.word	g_rtc_alarm_flag
+ 995 0220 00000000 		.word	.LANCHOR8
+ 996 0224 14000000 		.word	.LC6
+ 997 0228 28000000 		.word	.LC7
+ 998 022c 30000000 		.word	.LC8
+ 999 0230 00000000 		.word	g_alarm_set_num
+ 1000 0234 44000000 		.word	.LC9
+ 1001 0238 00000000 		.word	.LANCHOR0
+ 1002 023c 5C000000 		.word	.LC10
+ 1003              	.LBE4:
+ 1004              		.cfi_endproc
+ 1005              	.LFE320:
+ 1007              		.section	.text.Error_Handler,"ax",%progbits
+ 1008              		.align	1
+ 1009              		.global	Error_Handler
+ 1010              		.syntax unified
+ 1011              		.thumb
+ 1012              		.thumb_func
+ 1013              		.fpu fpv4-sp-d16
+ 1015              	Error_Handler:
+ 1016              	.LFB322:
+ 396:Src/main.c    **** 
+ 397:Src/main.c    **** /* USER CODE BEGIN 4 */
+ 398:Src/main.c    **** 
+ 399:Src/main.c    **** /* USER CODE END 4 */
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 29
+
+
+ 400:Src/main.c    **** 
+ 401:Src/main.c    **** /**
+ 402:Src/main.c    ****   * @brief  This function is executed in case of error occurrence.
+ 403:Src/main.c    ****   * @retval None
+ 404:Src/main.c    ****   */
+ 405:Src/main.c    **** void Error_Handler(void)
+ 406:Src/main.c    **** {
+ 1017              		.loc 1 406 1 view -0
+ 1018              		.cfi_startproc
+ 1019              		@ args = 0, pretend = 0, frame = 0
+ 1020              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1021              		@ link register save eliminated.
+ 407:Src/main.c    ****   /* USER CODE BEGIN Error_Handler_Debug */
+ 408:Src/main.c    ****   /* User can add his own implementation to report the HAL error return state */
+ 409:Src/main.c    **** 
+ 410:Src/main.c    ****   /* USER CODE END Error_Handler_Debug */
+ 411:Src/main.c    **** }
+ 1022              		.loc 1 411 1 view .LVU270
+ 1023 0000 7047     		bx	lr
+ 1024              		.cfi_endproc
+ 1025              	.LFE322:
+ 1027              		.global	rtc_read_alarm
+ 1028              		.global	g_iot_power_on_cnt
+ 1029              		.global	g_start_http_flag
+ 1030              		.global	g_alarm_cnt
+ 1031              		.global	ar_resp_iot_test_fail
+ 1032              		.global	ar_resp_iot_test_success
+ 1033              		.global	g_iot_first_send_cmd
+ 1034              		.global	g_iot_power_on_delay
+ 1035              		.global	g_iot_power_on_delay_cnt
+ 1036              		.global	g_iot_wakeup_flag
+ 1037              		.global	rtc_set_time
+ 1038              		.comm	rtc_read_time,8,4
+ 1039              		.global	default_rtc_alarm_time
+ 1040              		.global	rtc_alarm_time
+ 1041              		.global	g_reset_flag
+ 1042              		.section	.bss.default_rtc_alarm_time,"aw",%nobits
+ 1043              		.align	2
+ 1044              		.set	.LANCHOR7,. + 0
+ 1047              	default_rtc_alarm_time:
+ 1048 0000 00000000 		.space	8
+ 1048      00000000 
+ 1049              		.section	.bss.g_alarm_cnt,"aw",%nobits
+ 1050              		.set	.LANCHOR9,. + 0
+ 1053              	g_alarm_cnt:
+ 1054 0000 00       		.space	1
+ 1055              		.section	.bss.g_iot_first_send_cmd,"aw",%nobits
+ 1056              		.set	.LANCHOR4,. + 0
+ 1059              	g_iot_first_send_cmd:
+ 1060 0000 00       		.space	1
+ 1061              		.section	.bss.g_iot_power_on_cnt,"aw",%nobits
+ 1062              		.set	.LANCHOR1,. + 0
+ 1065              	g_iot_power_on_cnt:
+ 1066 0000 00       		.space	1
+ 1067              		.section	.bss.g_iot_power_on_delay,"aw",%nobits
+ 1068              		.set	.LANCHOR2,. + 0
+ 1071              	g_iot_power_on_delay:
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 30
+
+
+ 1072 0000 00       		.space	1
+ 1073              		.section	.bss.g_iot_power_on_delay_cnt,"aw",%nobits
+ 1074              		.align	1
+ 1075              		.set	.LANCHOR3,. + 0
+ 1078              	g_iot_power_on_delay_cnt:
+ 1079 0000 0000     		.space	2
+ 1080              		.section	.bss.g_iot_wakeup_flag,"aw",%nobits
+ 1081              		.set	.LANCHOR6,. + 0
+ 1084              	g_iot_wakeup_flag:
+ 1085 0000 00       		.space	1
+ 1086              		.section	.bss.g_start_http_flag,"aw",%nobits
+ 1087              		.set	.LANCHOR0,. + 0
+ 1090              	g_start_http_flag:
+ 1091 0000 00       		.space	1
+ 1092              		.section	.bss.rtc_read_alarm,"aw",%nobits
+ 1093              		.set	.LANCHOR8,. + 0
+ 1096              	rtc_read_alarm:
+ 1097 0000 00       		.space	1
+ 1098              		.section	.data.g_reset_flag,"aw"
+ 1101              	g_reset_flag:
+ 1102 0000 01       		.byte	1
+ 1103              		.section	.data.rtc_alarm_time,"aw"
+ 1104              		.align	2
+ 1107              	rtc_alarm_time:
+ 1108 0000 0000     		.short	0
+ 1109 0002 00       		.byte	0
+ 1110 0003 3B       		.byte	59
+ 1111 0004 17       		.byte	23
+ 1112 0005 01       		.byte	1
+ 1113 0006 01       		.byte	1
+ 1114 0007 00       		.space	1
+ 1115 0008 E507     		.short	2021
+ 1116              		.section	.data.rtc_set_time,"aw"
+ 1117              		.align	2
+ 1120              	rtc_set_time:
+ 1121 0000 0000     		.short	0
+ 1122 0002 00       		.byte	0
+ 1123 0003 00       		.byte	0
+ 1124 0004 01       		.byte	1
+ 1125 0005 00       		.byte	0
+ 1126 0006 00       		.byte	0
+ 1127 0007 00       		.space	1
+ 1128              		.section	.rodata.ar_resp_iot_test_fail,"a"
+ 1129              		.align	2
+ 1130              		.set	.LANCHOR5,. + 0
+ 1133              	ar_resp_iot_test_fail:
+ 1134 0000 C5AA1B00 		.ascii	"\305\252\033\000\003\020\020\343\240\313\366tt\221\223"
+ 1134      031010E3 
+ 1134      A0CBF674 
+ 1134      749193
+ 1135 000f 81E9DF43 		.ascii	"\201\351\337C\021;3b\000\000\204\252"
+ 1135      113B3362 
+ 1135      000084AA 
+ 1136              		.section	.rodata.ar_resp_iot_test_success,"a"
+ 1137              		.align	2
+ 1140              	ar_resp_iot_test_success:
+ 1141 0000 C5AA1B00 		.ascii	"\305\252\033\000\003\020\020^>R\017K\254\240+\177u\322"
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 31
+
+
+ 1141      0310105E 
+ 1141      3E520F4B 
+ 1141      ACA02B7F 
+ 1141      75D2
+ 1142 0012 42700740 		.ascii	"Bp\007@Z\000\000\321\252"
+ 1142      5A0000D1 
+ 1142      AA
+ 1143              		.text
+ 1144              	.Letext0:
+ 1145              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 1146              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 1147              		.file 4 "Drivers/CMSIS/Include/core_cm4.h"
+ 1148              		.file 5 "Drivers/CMSIS/Device/ST/STM32L4xx/Include/system_stm32l4xx.h"
+ 1149              		.file 6 "Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l471xx.h"
+ 1150              		.file 7 "Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l4xx.h"
+ 1151              		.file 8 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h"
+ 1152              		.file 9 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc.h"
+ 1153              		.file 10 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_rcc_ex.h"
+ 1154              		.file 11 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_gpio.h"
+ 1155              		.file 12 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_dma.h"
+ 1156              		.file 13 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_adc.h"
+ 1157              		.file 14 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_flash.h"
+ 1158              		.file 15 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_i2c.h"
+ 1159              		.file 16 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi.h"
+ 1160              		.file 17 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_tim.h"
+ 1161              		.file 18 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h"
+ 1162              		.file 19 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h"
+ 1163              		.file 20 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ 1164              		.file 21 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ 1165              		.file 22 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\lib\\gcc\\arm-none-eab
+ 1166              		.file 23 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ 1167              		.file 24 "Inc/main.h"
+ 1168              		.file 25 "Inc/adc.h"
+ 1169              		.file 26 "Inc/i2c.h"
+ 1170              		.file 27 "Inc/spi.h"
+ 1171              		.file 28 "Inc/tim.h"
+ 1172              		.file 29 "Inc/usart.h"
+ 1173              		.file 30 "Inc/user_gpio.h"
+ 1174              		.file 31 "Inc/ble_e95.h"
+ 1175              		.file 32 "Inc/aes.h"
+ 1176              		.file 33 "Inc/pcf85263.h"
+ 1177              		.file 34 "Inc/iot.h"
+ 1178              		.file 35 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ 1179              		.file 36 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ 1180              		.file 37 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_pwr_ex.h"
+ 1181              		.file 38 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ 1182              		.file 39 "<built-in>"
+ 1183              		.file 40 "Inc/gpio.h"
+ 1184              		.file 41 "Inc/dma.h"
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 32
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 main.c
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:18     .text._write:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:26     .text._write:00000000 _write
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:60     .text._write:00000014 $d
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:65     .rodata.low_voltage_check.str1.4:00000000 $d
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:69     .text.low_voltage_check:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:76     .text.low_voltage_check:00000000 low_voltage_check
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:168    .text.low_voltage_check:00000064 $d
+                            *COM*:00000008 rtc_read_time
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:179    .rodata.iot_http_get_process.str1.4:00000000 $d
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:192    .text.iot_http_get_process:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:199    .text.iot_http_get_process:00000000 iot_http_get_process
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:376    .text.iot_http_get_process:000000c4 $d
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:398    .text._sys_exit:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:405    .text._sys_exit:00000000 _sys_exit
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:420    .text.SystemClock_Config:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:427    .text.SystemClock_Config:00000000 SystemClock_Config
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:591    .rodata.main.str1.4:00000000 $d
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:610    .text.main:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:617    .text.main:00000000 main
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:974    .text.main:000001cc $d
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1008   .text.Error_Handler:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1015   .text.Error_Handler:00000000 Error_Handler
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1096   .bss.rtc_read_alarm:00000000 rtc_read_alarm
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1065   .bss.g_iot_power_on_cnt:00000000 g_iot_power_on_cnt
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1090   .bss.g_start_http_flag:00000000 g_start_http_flag
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1053   .bss.g_alarm_cnt:00000000 g_alarm_cnt
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1133   .rodata.ar_resp_iot_test_fail:00000000 ar_resp_iot_test_fail
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1140   .rodata.ar_resp_iot_test_success:00000000 ar_resp_iot_test_success
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1059   .bss.g_iot_first_send_cmd:00000000 g_iot_first_send_cmd
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1071   .bss.g_iot_power_on_delay:00000000 g_iot_power_on_delay
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1078   .bss.g_iot_power_on_delay_cnt:00000000 g_iot_power_on_delay_cnt
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1084   .bss.g_iot_wakeup_flag:00000000 g_iot_wakeup_flag
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1120   .data.rtc_set_time:00000000 rtc_set_time
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1047   .bss.default_rtc_alarm_time:00000000 default_rtc_alarm_time
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1107   .data.rtc_alarm_time:00000000 rtc_alarm_time
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1101   .data.g_reset_flag:00000000 g_reset_flag
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1043   .bss.default_rtc_alarm_time:00000000 $d
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1054   .bss.g_alarm_cnt:00000000 $d
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1060   .bss.g_iot_first_send_cmd:00000000 $d
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1066   .bss.g_iot_power_on_cnt:00000000 $d
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1072   .bss.g_iot_power_on_delay:00000000 $d
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1074   .bss.g_iot_power_on_delay_cnt:00000000 $d
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1085   .bss.g_iot_wakeup_flag:00000000 $d
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1091   .bss.g_start_http_flag:00000000 $d
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1097   .bss.rtc_read_alarm:00000000 $d
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1104   .data.rtc_alarm_time:00000000 $d
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1117   .data.rtc_set_time:00000000 $d
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1129   .rodata.ar_resp_iot_test_fail:00000000 $d
+C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s:1137   .rodata.ar_resp_iot_test_success:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_UART_Transmit
+huart2
+pcf85263_query_time
+HAL_GPIO_ReadPin
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 33
+
+
+HAL_GPIO_WritePin
+HAL_Delay
+get_adc3_value
+printf
+g_voltage_check_flag
+ar_get_voltage_value
+g_min_voltage_flag
+nb_http_set_param
+puts
+iot_power_on_ctrl
+uart5_recv_data_fun
+receive_nb_data_handle
+g_nb_ctrl_step
+g_uart5_receive_finish
+g_iot_start_test
+hlpuart1
+g_usart5_rx_finish
+g_uart5_tick
+g_uart_tmp5
+memset
+HAL_RCC_OscConfig
+HAL_RCC_ClockConfig
+HAL_RCCEx_PeriphCLKConfig
+HAL_PWREx_ControlVoltageScaling
+HAL_Init
+MX_GPIO_Init
+MX_DMA_Init
+MX_ADC3_Init
+MX_I2C3_Init
+MX_SPI1_Init
+MX_TIM5_Init
+MX_UART5_Init
+MX_USART2_UART_Init
+MX_LPUART1_UART_Init
+MX_TIM6_Init
+AES_init_ctx
+pcf85263_check_inta
+init_pcf85263_interrupt
+pcf85263_set_sw_mode_alarm
+lis2dh_init
+HAL_TIM_Base_Start_IT
+HAL_UART_Receive_DMA
+HAL_UART_Receive_IT
+ble_load_name
+ble_e95_reset
+door_control_index
+start_pwm_buzzer
+usart1_protocol_handle
+open_multiple_doors_fun
+ble_e92_set_fun
+pcf85263_read_data
+pcf85263_clear_alarm_flag
+aes_key
+aes_test
+htim5
+htim6
+ar_usart1_rx_buffer
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccSe64Fb.s 			page 34
+
+
+ar_usart5_rx_buffer
+huart5
+g_unlock_flag
+g_lock_number
+g_ble_disconnect_flag
+g_ble_connect_count
+g_usart1_rx_finish
+g_open_one_door_flag
+g_rtc_alarm_flag
+g_alarm_set_num

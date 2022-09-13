@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "adc.h": "c",
+        "tim.h": "c",
+        "iot.h": "c",
+        "ble_e95.h": "c",
+        "dht22.h": "c",
+        "user_gpio.h": "c",
+        "aes.h": "c"
+    }
+}

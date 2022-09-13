@@ -1,0 +1,1266 @@
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"w25q64.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.Spi_Flash_TransmitReveive,"ax",%progbits
+  18              		.align	1
+  19              		.global	Spi_Flash_TransmitReveive
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	Spi_Flash_TransmitReveive:
+  27              	.LVL0:
+  28              	.LFB316:
+  29              		.file 1 "Src/w25q64.c"
+   1:Src/w25q64.c  **** /* Includes ------------------------------------------------------------------*/
+   2:Src/w25q64.c  **** #include "w25q64.h"
+   3:Src/w25q64.c  **** #include "global.h"
+   4:Src/w25q64.c  **** 
+   5:Src/w25q64.c  **** SPI_HandleTypeDef hspi1;
+   6:Src/w25q64.c  **** 
+   7:Src/w25q64.c  **** 
+   8:Src/w25q64.c  **** uint8_t Spi_Flash_TransmitReveive(uint8_t wr_dat)
+   9:Src/w25q64.c  **** {
+  30              		.loc 1 9 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 8
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		.loc 1 9 1 is_stmt 0 view .LVU1
+  35 0000 00B5     		push	{lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 4
+  38              		.cfi_offset 14, -4
+  39 0002 85B0     		sub	sp, sp, #20
+  40              	.LCFI1:
+  41              		.cfi_def_cfa_offset 24
+  10:Src/w25q64.c  **** 	uint8_t wr_buf[2] = { 0 };
+  42              		.loc 1 10 2 is_stmt 1 view .LVU2
+  43              		.loc 1 10 10 is_stmt 0 view .LVU3
+  44 0004 0023     		movs	r3, #0
+  45 0006 ADF80C30 		strh	r3, [sp, #12]	@ movhi
+  11:Src/w25q64.c  **** 	uint8_t rd_buf[2] = { 0 };
+  46              		.loc 1 11 2 is_stmt 1 view .LVU4
+  47              		.loc 1 11 10 is_stmt 0 view .LVU5
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 2
+
+
+  48 000a ADF80830 		strh	r3, [sp, #8]	@ movhi
+  12:Src/w25q64.c  **** 	
+  13:Src/w25q64.c  **** 	wr_buf[0] =  wr_dat;
+  49              		.loc 1 13 2 is_stmt 1 view .LVU6
+  50              		.loc 1 13 12 is_stmt 0 view .LVU7
+  51 000e 8DF80C00 		strb	r0, [sp, #12]
+  14:Src/w25q64.c  **** 	HAL_SPI_TransmitReceive(&hspi1, wr_buf, rd_buf, 1, W25Q_TIMEOUT);
+  52              		.loc 1 14 2 is_stmt 1 view .LVU8
+  53 0012 4FF47A73 		mov	r3, #1000
+  54 0016 0093     		str	r3, [sp]
+  55 0018 0123     		movs	r3, #1
+  56 001a 02AA     		add	r2, sp, #8
+  57 001c 03A9     		add	r1, sp, #12
+  58 001e 0448     		ldr	r0, .L3
+  59              	.LVL1:
+  60              		.loc 1 14 2 is_stmt 0 view .LVU9
+  61 0020 FFF7FEFF 		bl	HAL_SPI_TransmitReceive
+  62              	.LVL2:
+  15:Src/w25q64.c  ****   return rd_buf[0];
+  63              		.loc 1 15 3 is_stmt 1 view .LVU10
+  16:Src/w25q64.c  **** }
+  64              		.loc 1 16 1 is_stmt 0 view .LVU11
+  65 0024 9DF80800 		ldrb	r0, [sp, #8]	@ zero_extendqisi2
+  66 0028 05B0     		add	sp, sp, #20
+  67              	.LCFI2:
+  68              		.cfi_def_cfa_offset 4
+  69              		@ sp needed
+  70 002a 5DF804FB 		ldr	pc, [sp], #4
+  71              	.L4:
+  72 002e 00BF     		.align	2
+  73              	.L3:
+  74 0030 00000000 		.word	hspi1
+  75              		.cfi_endproc
+  76              	.LFE316:
+  78              		.section	.text.SPI_Flash_SendByte,"ax",%progbits
+  79              		.align	1
+  80              		.global	SPI_Flash_SendByte
+  81              		.syntax unified
+  82              		.thumb
+  83              		.thumb_func
+  84              		.fpu fpv4-sp-d16
+  86              	SPI_Flash_SendByte:
+  87              	.LVL3:
+  88              	.LFB317:
+  17:Src/w25q64.c  **** 
+  18:Src/w25q64.c  **** 
+  19:Src/w25q64.c  **** 
+  20:Src/w25q64.c  **** 
+  21:Src/w25q64.c  **** uint8_t SPI_Flash_SendByte(uint8_t Data)
+  22:Src/w25q64.c  **** { 
+  89              		.loc 1 22 1 is_stmt 1 view -0
+  90              		.cfi_startproc
+  91              		@ args = 0, pretend = 0, frame = 0
+  92              		@ frame_needed = 0, uses_anonymous_args = 0
+  93              		.loc 1 22 1 is_stmt 0 view .LVU13
+  94 0000 08B5     		push	{r3, lr}
+  95              	.LCFI3:
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 3
+
+
+  96              		.cfi_def_cfa_offset 8
+  97              		.cfi_offset 3, -8
+  98              		.cfi_offset 14, -4
+  23:Src/w25q64.c  **** 	  uint8_t ret = 0;;
+  99              		.loc 1 23 4 is_stmt 1 view .LVU14
+ 100              	.LVL4:
+ 101              		.loc 1 23 20 view .LVU15
+  24:Src/w25q64.c  **** 		ret = Spi_Flash_TransmitReveive(Data);
+ 102              		.loc 1 24 3 view .LVU16
+ 103              		.loc 1 24 9 is_stmt 0 view .LVU17
+ 104 0002 FFF7FEFF 		bl	Spi_Flash_TransmitReveive
+ 105              	.LVL5:
+  25:Src/w25q64.c  ****     return ret; 
+ 106              		.loc 1 25 5 is_stmt 1 view .LVU18
+  26:Src/w25q64.c  **** } 
+ 107              		.loc 1 26 1 is_stmt 0 view .LVU19
+ 108 0006 08BD     		pop	{r3, pc}
+ 109              		.cfi_endproc
+ 110              	.LFE317:
+ 112              		.section	.text.SPI_Flash_ReceiveByte,"ax",%progbits
+ 113              		.align	1
+ 114              		.global	SPI_Flash_ReceiveByte
+ 115              		.syntax unified
+ 116              		.thumb
+ 117              		.thumb_func
+ 118              		.fpu fpv4-sp-d16
+ 120              	SPI_Flash_ReceiveByte:
+ 121              	.LFB318:
+  27:Src/w25q64.c  **** uint8_t SPI_Flash_ReceiveByte(void)
+  28:Src/w25q64.c  **** {
+ 122              		.loc 1 28 1 is_stmt 1 view -0
+ 123              		.cfi_startproc
+ 124              		@ args = 0, pretend = 0, frame = 0
+ 125              		@ frame_needed = 0, uses_anonymous_args = 0
+ 126 0000 08B5     		push	{r3, lr}
+ 127              	.LCFI4:
+ 128              		.cfi_def_cfa_offset 8
+ 129              		.cfi_offset 3, -8
+ 130              		.cfi_offset 14, -4
+  29:Src/w25q64.c  **** 	uint8_t ret = 0;
+ 131              		.loc 1 29 2 view .LVU21
+ 132              	.LVL6:
+  30:Src/w25q64.c  **** 	ret = Spi_Flash_TransmitReveive(0xFF);
+ 133              		.loc 1 30 2 view .LVU22
+ 134              		.loc 1 30 8 is_stmt 0 view .LVU23
+ 135 0002 FF20     		movs	r0, #255
+ 136 0004 FFF7FEFF 		bl	Spi_Flash_TransmitReveive
+ 137              	.LVL7:
+  31:Src/w25q64.c  **** 	return ret;
+ 138              		.loc 1 31 2 is_stmt 1 view .LVU24
+  32:Src/w25q64.c  **** }
+ 139              		.loc 1 32 1 is_stmt 0 view .LVU25
+ 140 0008 08BD     		pop	{r3, pc}
+ 141              		.cfi_endproc
+ 142              	.LFE318:
+ 144              		.section	.text.W25Q16_ReadStatusRegister,"ax",%progbits
+ 145              		.align	1
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 4
+
+
+ 146              		.global	W25Q16_ReadStatusRegister
+ 147              		.syntax unified
+ 148              		.thumb
+ 149              		.thumb_func
+ 150              		.fpu fpv4-sp-d16
+ 152              	W25Q16_ReadStatusRegister:
+ 153              	.LFB319:
+  33:Src/w25q64.c  **** 
+  34:Src/w25q64.c  **** uint8_t W25Q16_ReadStatusRegister(void)
+  35:Src/w25q64.c  **** {
+ 154              		.loc 1 35 1 is_stmt 1 view -0
+ 155              		.cfi_startproc
+ 156              		@ args = 0, pretend = 0, frame = 0
+ 157              		@ frame_needed = 0, uses_anonymous_args = 0
+ 158 0000 38B5     		push	{r3, r4, r5, lr}
+ 159              	.LCFI5:
+ 160              		.cfi_def_cfa_offset 16
+ 161              		.cfi_offset 3, -16
+ 162              		.cfi_offset 4, -12
+ 163              		.cfi_offset 5, -8
+ 164              		.cfi_offset 14, -4
+  36:Src/w25q64.c  ****   uint8_t StatusRegister = 0;
+ 165              		.loc 1 36 3 view .LVU27
+ 166              	.LVL8:
+  37:Src/w25q64.c  ****   SPI1_CS_EN;
+ 167              		.loc 1 37 3 view .LVU28
+ 168 0002 0B4D     		ldr	r5, .L11
+ 169 0004 0022     		movs	r2, #0
+ 170 0006 4FF48051 		mov	r1, #4096
+ 171 000a 2846     		mov	r0, r5
+ 172 000c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 173              	.LVL9:
+ 174              		.loc 1 37 13 view .LVU29
+  38:Src/w25q64.c  ****   Spi_Flash_TransmitReveive(ReadStatusRegister);
+ 175              		.loc 1 38 3 view .LVU30
+ 176 0010 0520     		movs	r0, #5
+ 177 0012 FFF7FEFF 		bl	Spi_Flash_TransmitReveive
+ 178              	.LVL10:
+  39:Src/w25q64.c  ****   StatusRegister = Spi_Flash_TransmitReveive(0xFF);
+ 179              		.loc 1 39 3 view .LVU31
+ 180              		.loc 1 39 20 is_stmt 0 view .LVU32
+ 181 0016 FF20     		movs	r0, #255
+ 182 0018 FFF7FEFF 		bl	Spi_Flash_TransmitReveive
+ 183              	.LVL11:
+ 184 001c 0446     		mov	r4, r0
+ 185              	.LVL12:
+  40:Src/w25q64.c  ****   SPI1_CS_DIS;
+ 186              		.loc 1 40 3 is_stmt 1 view .LVU33
+ 187 001e 0122     		movs	r2, #1
+ 188 0020 4FF48051 		mov	r1, #4096
+ 189 0024 2846     		mov	r0, r5
+ 190 0026 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 191              	.LVL13:
+ 192              		.loc 1 40 14 view .LVU34
+  41:Src/w25q64.c  ****   return StatusRegister;
+ 193              		.loc 1 41 3 view .LVU35
+  42:Src/w25q64.c  **** }
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 5
+
+
+ 194              		.loc 1 42 1 is_stmt 0 view .LVU36
+ 195 002a 2046     		mov	r0, r4
+ 196 002c 38BD     		pop	{r3, r4, r5, pc}
+ 197              	.LVL14:
+ 198              	.L12:
+ 199              		.loc 1 42 1 view .LVU37
+ 200 002e 00BF     		.align	2
+ 201              	.L11:
+ 202 0030 00100048 		.word	1207963648
+ 203              		.cfi_endproc
+ 204              	.LFE319:
+ 206              		.section	.text.W25Q16_WriteEnable,"ax",%progbits
+ 207              		.align	1
+ 208              		.global	W25Q16_WriteEnable
+ 209              		.syntax unified
+ 210              		.thumb
+ 211              		.thumb_func
+ 212              		.fpu fpv4-sp-d16
+ 214              	W25Q16_WriteEnable:
+ 215              	.LFB320:
+  43:Src/w25q64.c  **** 
+  44:Src/w25q64.c  **** 
+  45:Src/w25q64.c  **** void W25Q16_WriteEnable(void)
+  46:Src/w25q64.c  **** {
+ 216              		.loc 1 46 1 is_stmt 1 view -0
+ 217              		.cfi_startproc
+ 218              		@ args = 0, pretend = 0, frame = 0
+ 219              		@ frame_needed = 0, uses_anonymous_args = 0
+ 220 0000 10B5     		push	{r4, lr}
+ 221              	.LCFI6:
+ 222              		.cfi_def_cfa_offset 8
+ 223              		.cfi_offset 4, -8
+ 224              		.cfi_offset 14, -4
+  47:Src/w25q64.c  ****   SPI1_CS_EN;
+ 225              		.loc 1 47 3 view .LVU39
+ 226 0002 084C     		ldr	r4, .L15
+ 227 0004 0022     		movs	r2, #0
+ 228 0006 4FF48051 		mov	r1, #4096
+ 229 000a 2046     		mov	r0, r4
+ 230 000c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 231              	.LVL15:
+ 232              		.loc 1 47 13 view .LVU40
+  48:Src/w25q64.c  ****   SPI_Flash_SendByte(WriteEnable);
+ 233              		.loc 1 48 3 view .LVU41
+ 234 0010 0620     		movs	r0, #6
+ 235 0012 FFF7FEFF 		bl	SPI_Flash_SendByte
+ 236              	.LVL16:
+  49:Src/w25q64.c  ****   SPI1_CS_DIS;
+ 237              		.loc 1 49 3 view .LVU42
+ 238 0016 0122     		movs	r2, #1
+ 239 0018 4FF48051 		mov	r1, #4096
+ 240 001c 2046     		mov	r0, r4
+ 241 001e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 242              	.LVL17:
+ 243              		.loc 1 49 14 view .LVU43
+  50:Src/w25q64.c  **** }
+ 244              		.loc 1 50 1 is_stmt 0 view .LVU44
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 6
+
+
+ 245 0022 10BD     		pop	{r4, pc}
+ 246              	.L16:
+ 247              		.align	2
+ 248              	.L15:
+ 249 0024 00100048 		.word	1207963648
+ 250              		.cfi_endproc
+ 251              	.LFE320:
+ 253              		.section	.text.W25Q16_WriteDisable,"ax",%progbits
+ 254              		.align	1
+ 255              		.global	W25Q16_WriteDisable
+ 256              		.syntax unified
+ 257              		.thumb
+ 258              		.thumb_func
+ 259              		.fpu fpv4-sp-d16
+ 261              	W25Q16_WriteDisable:
+ 262              	.LFB321:
+  51:Src/w25q64.c  **** void W25Q16_WriteDisable(void)
+  52:Src/w25q64.c  **** {
+ 263              		.loc 1 52 1 is_stmt 1 view -0
+ 264              		.cfi_startproc
+ 265              		@ args = 0, pretend = 0, frame = 0
+ 266              		@ frame_needed = 0, uses_anonymous_args = 0
+ 267 0000 10B5     		push	{r4, lr}
+ 268              	.LCFI7:
+ 269              		.cfi_def_cfa_offset 8
+ 270              		.cfi_offset 4, -8
+ 271              		.cfi_offset 14, -4
+  53:Src/w25q64.c  ****   SPI1_CS_EN;
+ 272              		.loc 1 53 3 view .LVU46
+ 273 0002 084C     		ldr	r4, .L19
+ 274 0004 0022     		movs	r2, #0
+ 275 0006 4FF48051 		mov	r1, #4096
+ 276 000a 2046     		mov	r0, r4
+ 277 000c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 278              	.LVL18:
+ 279              		.loc 1 53 13 view .LVU47
+  54:Src/w25q64.c  ****   SPI_Flash_SendByte(WriteDisable);
+ 280              		.loc 1 54 3 view .LVU48
+ 281 0010 0420     		movs	r0, #4
+ 282 0012 FFF7FEFF 		bl	SPI_Flash_SendByte
+ 283              	.LVL19:
+  55:Src/w25q64.c  ****   SPI1_CS_DIS;
+ 284              		.loc 1 55 3 view .LVU49
+ 285 0016 0122     		movs	r2, #1
+ 286 0018 4FF48051 		mov	r1, #4096
+ 287 001c 2046     		mov	r0, r4
+ 288 001e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 289              	.LVL20:
+ 290              		.loc 1 55 14 view .LVU50
+  56:Src/w25q64.c  **** }
+ 291              		.loc 1 56 1 is_stmt 0 view .LVU51
+ 292 0022 10BD     		pop	{r4, pc}
+ 293              	.L20:
+ 294              		.align	2
+ 295              	.L19:
+ 296 0024 00100048 		.word	1207963648
+ 297              		.cfi_endproc
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 7
+
+
+ 298              	.LFE321:
+ 300              		.section	.text.SPI1_CS_ENableWriteStatusRegister,"ax",%progbits
+ 301              		.align	1
+ 302              		.global	SPI1_CS_ENableWriteStatusRegister
+ 303              		.syntax unified
+ 304              		.thumb
+ 305              		.thumb_func
+ 306              		.fpu fpv4-sp-d16
+ 308              	SPI1_CS_ENableWriteStatusRegister:
+ 309              	.LFB322:
+  57:Src/w25q64.c  **** void SPI1_CS_ENableWriteStatusRegister(void)
+  58:Src/w25q64.c  **** {
+ 310              		.loc 1 58 1 is_stmt 1 view -0
+ 311              		.cfi_startproc
+ 312              		@ args = 0, pretend = 0, frame = 0
+ 313              		@ frame_needed = 0, uses_anonymous_args = 0
+ 314 0000 10B5     		push	{r4, lr}
+ 315              	.LCFI8:
+ 316              		.cfi_def_cfa_offset 8
+ 317              		.cfi_offset 4, -8
+ 318              		.cfi_offset 14, -4
+  59:Src/w25q64.c  ****   SPI1_CS_EN;
+ 319              		.loc 1 59 3 view .LVU53
+ 320 0002 084C     		ldr	r4, .L23
+ 321 0004 0022     		movs	r2, #0
+ 322 0006 4FF48051 		mov	r1, #4096
+ 323 000a 2046     		mov	r0, r4
+ 324 000c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 325              	.LVL21:
+ 326              		.loc 1 59 13 view .LVU54
+  60:Src/w25q64.c  ****   SPI_Flash_SendByte(EnableWriteStatusRegister);
+ 327              		.loc 1 60 3 view .LVU55
+ 328 0010 5020     		movs	r0, #80
+ 329 0012 FFF7FEFF 		bl	SPI_Flash_SendByte
+ 330              	.LVL22:
+  61:Src/w25q64.c  ****   SPI1_CS_DIS;
+ 331              		.loc 1 61 3 view .LVU56
+ 332 0016 0122     		movs	r2, #1
+ 333 0018 4FF48051 		mov	r1, #4096
+ 334 001c 2046     		mov	r0, r4
+ 335 001e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 336              	.LVL23:
+ 337              		.loc 1 61 14 view .LVU57
+  62:Src/w25q64.c  **** }
+ 338              		.loc 1 62 1 is_stmt 0 view .LVU58
+ 339 0022 10BD     		pop	{r4, pc}
+ 340              	.L24:
+ 341              		.align	2
+ 342              	.L23:
+ 343 0024 00100048 		.word	1207963648
+ 344              		.cfi_endproc
+ 345              	.LFE322:
+ 347              		.section	.text.W25Q16_WriteStatusRegister,"ax",%progbits
+ 348              		.align	1
+ 349              		.global	W25Q16_WriteStatusRegister
+ 350              		.syntax unified
+ 351              		.thumb
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 8
+
+
+ 352              		.thumb_func
+ 353              		.fpu fpv4-sp-d16
+ 355              	W25Q16_WriteStatusRegister:
+ 356              	.LVL24:
+ 357              	.LFB323:
+  63:Src/w25q64.c  **** void W25Q16_WriteStatusRegister(uint8_t Byte)
+  64:Src/w25q64.c  **** {
+ 358              		.loc 1 64 1 is_stmt 1 view -0
+ 359              		.cfi_startproc
+ 360              		@ args = 0, pretend = 0, frame = 0
+ 361              		@ frame_needed = 0, uses_anonymous_args = 0
+ 362              		.loc 1 64 1 is_stmt 0 view .LVU60
+ 363 0000 38B5     		push	{r3, r4, r5, lr}
+ 364              	.LCFI9:
+ 365              		.cfi_def_cfa_offset 16
+ 366              		.cfi_offset 3, -16
+ 367              		.cfi_offset 4, -12
+ 368              		.cfi_offset 5, -8
+ 369              		.cfi_offset 14, -4
+ 370 0002 0446     		mov	r4, r0
+  65:Src/w25q64.c  ****   SPI1_CS_EN;
+ 371              		.loc 1 65 3 is_stmt 1 view .LVU61
+ 372 0004 094D     		ldr	r5, .L27
+ 373 0006 0022     		movs	r2, #0
+ 374 0008 4FF48051 		mov	r1, #4096
+ 375 000c 2846     		mov	r0, r5
+ 376              	.LVL25:
+ 377              		.loc 1 65 3 is_stmt 0 view .LVU62
+ 378 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 379              	.LVL26:
+ 380              		.loc 1 65 13 is_stmt 1 view .LVU63
+  66:Src/w25q64.c  ****   SPI_Flash_SendByte(WriteStatusRegister);
+ 381              		.loc 1 66 3 view .LVU64
+ 382 0012 0120     		movs	r0, #1
+ 383 0014 FFF7FEFF 		bl	SPI_Flash_SendByte
+ 384              	.LVL27:
+  67:Src/w25q64.c  ****   SPI_Flash_SendByte(Byte);
+ 385              		.loc 1 67 3 view .LVU65
+ 386 0018 2046     		mov	r0, r4
+ 387 001a FFF7FEFF 		bl	SPI_Flash_SendByte
+ 388              	.LVL28:
+  68:Src/w25q64.c  ****   SPI1_CS_DIS;
+ 389              		.loc 1 68 3 view .LVU66
+ 390 001e 0122     		movs	r2, #1
+ 391 0020 4FF48051 		mov	r1, #4096
+ 392 0024 2846     		mov	r0, r5
+ 393 0026 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 394              	.LVL29:
+ 395              		.loc 1 68 14 view .LVU67
+  69:Src/w25q64.c  **** }
+ 396              		.loc 1 69 1 is_stmt 0 view .LVU68
+ 397 002a 38BD     		pop	{r3, r4, r5, pc}
+ 398              	.L28:
+ 399              		.align	2
+ 400              	.L27:
+ 401 002c 00100048 		.word	1207963648
+ 402              		.cfi_endproc
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 9
+
+
+ 403              	.LFE323:
+ 405              		.section	.text.W25Q16_WaitForWriteEnd,"ax",%progbits
+ 406              		.align	1
+ 407              		.global	W25Q16_WaitForWriteEnd
+ 408              		.syntax unified
+ 409              		.thumb
+ 410              		.thumb_func
+ 411              		.fpu fpv4-sp-d16
+ 413              	W25Q16_WaitForWriteEnd:
+ 414              	.LFB324:
+  70:Src/w25q64.c  **** void W25Q16_WaitForWriteEnd(void)
+  71:Src/w25q64.c  **** {
+ 415              		.loc 1 71 1 is_stmt 1 view -0
+ 416              		.cfi_startproc
+ 417              		@ args = 0, pretend = 0, frame = 0
+ 418              		@ frame_needed = 0, uses_anonymous_args = 0
+ 419 0000 08B5     		push	{r3, lr}
+ 420              	.LCFI10:
+ 421              		.cfi_def_cfa_offset 8
+ 422              		.cfi_offset 3, -8
+ 423              		.cfi_offset 14, -4
+ 424              	.L30:
+  72:Src/w25q64.c  ****   uint8_t FLASH_Status = 0;
+  73:Src/w25q64.c  **** 	//FLASH_Status = W25Q16_ReadStatusRegister();
+  74:Src/w25q64.c  ****   do
+ 425              		.loc 1 74 3 discriminator 1 view .LVU70
+  75:Src/w25q64.c  ****   {
+  76:Src/w25q64.c  ****      FLASH_Status = W25Q16_ReadStatusRegister();
+ 426              		.loc 1 76 6 discriminator 1 view .LVU71
+ 427              		.loc 1 76 21 is_stmt 0 discriminator 1 view .LVU72
+ 428 0002 FFF7FEFF 		bl	W25Q16_ReadStatusRegister
+ 429              	.LVL30:
+  77:Src/w25q64.c  ****   }while(FLASH_Status & 0x01);
+ 430              		.loc 1 77 9 is_stmt 1 discriminator 1 view .LVU73
+ 431              		.loc 1 77 3 is_stmt 0 discriminator 1 view .LVU74
+ 432 0006 10F0010F 		tst	r0, #1
+ 433 000a FAD1     		bne	.L30
+  78:Src/w25q64.c  ****   // while(FLASH_Status & WriteStatusRegister);
+  79:Src/w25q64.c  **** }
+ 434              		.loc 1 79 1 view .LVU75
+ 435 000c 08BD     		pop	{r3, pc}
+ 436              		.cfi_endproc
+ 437              	.LFE324:
+ 439              		.section	.text.W25Q16_HighSpeedBufferRead,"ax",%progbits
+ 440              		.align	1
+ 441              		.global	W25Q16_HighSpeedBufferRead
+ 442              		.syntax unified
+ 443              		.thumb
+ 444              		.thumb_func
+ 445              		.fpu fpv4-sp-d16
+ 447              	W25Q16_HighSpeedBufferRead:
+ 448              	.LVL31:
+ 449              	.LFB325:
+  80:Src/w25q64.c  **** 
+  81:Src/w25q64.c  **** void W25Q16_HighSpeedBufferRead(uint32_t ReadAddr, uint8_t *pBuffer,  uint16_t Count)
+  82:Src/w25q64.c  **** {
+ 450              		.loc 1 82 1 is_stmt 1 view -0
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 10
+
+
+ 451              		.cfi_startproc
+ 452              		@ args = 0, pretend = 0, frame = 0
+ 453              		@ frame_needed = 0, uses_anonymous_args = 0
+ 454              		.loc 1 82 1 is_stmt 0 view .LVU77
+ 455 0000 70B5     		push	{r4, r5, r6, lr}
+ 456              	.LCFI11:
+ 457              		.cfi_def_cfa_offset 16
+ 458              		.cfi_offset 4, -16
+ 459              		.cfi_offset 5, -12
+ 460              		.cfi_offset 6, -8
+ 461              		.cfi_offset 14, -4
+ 462 0002 0446     		mov	r4, r0
+ 463 0004 0E46     		mov	r6, r1
+ 464 0006 1546     		mov	r5, r2
+  83:Src/w25q64.c  **** 	
+  84:Src/w25q64.c  ****   SPI1_CS_EN;
+ 465              		.loc 1 84 3 is_stmt 1 view .LVU78
+ 466 0008 0022     		movs	r2, #0
+ 467              	.LVL32:
+ 468              		.loc 1 84 3 is_stmt 0 view .LVU79
+ 469 000a 4FF48051 		mov	r1, #4096
+ 470              	.LVL33:
+ 471              		.loc 1 84 3 view .LVU80
+ 472 000e 1248     		ldr	r0, .L37
+ 473              	.LVL34:
+ 474              		.loc 1 84 3 view .LVU81
+ 475 0010 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 476              	.LVL35:
+ 477              		.loc 1 84 13 is_stmt 1 view .LVU82
+  85:Src/w25q64.c  ****   SPI_Flash_SendByte(HighSpeedReadData);
+ 478              		.loc 1 85 3 view .LVU83
+ 479 0014 0B20     		movs	r0, #11
+ 480 0016 FFF7FEFF 		bl	SPI_Flash_SendByte
+ 481              	.LVL36:
+  86:Src/w25q64.c  ****   SPI_Flash_SendByte((ReadAddr & 0xFF0000) >> 16);
+ 482              		.loc 1 86 3 view .LVU84
+ 483 001a C4F30740 		ubfx	r0, r4, #16, #8
+ 484 001e FFF7FEFF 		bl	SPI_Flash_SendByte
+ 485              	.LVL37:
+  87:Src/w25q64.c  ****   SPI_Flash_SendByte((ReadAddr& 0xFF00) >> 8);
+ 486              		.loc 1 87 3 view .LVU85
+ 487 0022 C4F30720 		ubfx	r0, r4, #8, #8
+ 488 0026 FFF7FEFF 		bl	SPI_Flash_SendByte
+ 489              	.LVL38:
+  88:Src/w25q64.c  ****   SPI_Flash_SendByte(ReadAddr & 0xFF);
+ 490              		.loc 1 88 3 view .LVU86
+ 491 002a E0B2     		uxtb	r0, r4
+ 492 002c FFF7FEFF 		bl	SPI_Flash_SendByte
+ 493              	.LVL39:
+  89:Src/w25q64.c  ****   SPI_Flash_SendByte(Dummy_Byte);
+ 494              		.loc 1 89 3 view .LVU87
+ 495 0030 A520     		movs	r0, #165
+ 496 0032 FFF7FEFF 		bl	SPI_Flash_SendByte
+ 497              	.LVL40:
+  90:Src/w25q64.c  ****   while(Count--)
+ 498              		.loc 1 90 3 view .LVU88
+ 499              	.L33:
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 11
+
+
+ 500              		.loc 1 90 8 view .LVU89
+ 501              		.loc 1 90 14 is_stmt 0 view .LVU90
+ 502 0036 6B1E     		subs	r3, r5, #1
+ 503 0038 9CB2     		uxth	r4, r3
+ 504              	.LVL41:
+ 505              		.loc 1 90 8 view .LVU91
+ 506 003a 2DB1     		cbz	r5, .L36
+  91:Src/w25q64.c  ****   {
+  92:Src/w25q64.c  ****     *pBuffer = SPI_Flash_ReceiveByte();
+ 507              		.loc 1 92 5 is_stmt 1 view .LVU92
+ 508              		.loc 1 92 16 is_stmt 0 view .LVU93
+ 509 003c FFF7FEFF 		bl	SPI_Flash_ReceiveByte
+ 510              	.LVL42:
+ 511              		.loc 1 92 14 view .LVU94
+ 512 0040 06F8010B 		strb	r0, [r6], #1
+ 513              	.LVL43:
+  93:Src/w25q64.c  ****      pBuffer++;
+ 514              		.loc 1 93 6 is_stmt 1 view .LVU95
+  90:Src/w25q64.c  ****   while(Count--)
+ 515              		.loc 1 90 14 is_stmt 0 view .LVU96
+ 516 0044 2546     		mov	r5, r4
+ 517 0046 F6E7     		b	.L33
+ 518              	.L36:
+  94:Src/w25q64.c  ****   }
+  95:Src/w25q64.c  ****   SPI1_CS_DIS;
+ 519              		.loc 1 95 3 is_stmt 1 view .LVU97
+ 520 0048 0122     		movs	r2, #1
+ 521 004a 4FF48051 		mov	r1, #4096
+ 522 004e 0248     		ldr	r0, .L37
+ 523 0050 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 524              	.LVL44:
+ 525              		.loc 1 95 14 view .LVU98
+  96:Src/w25q64.c  **** }
+ 526              		.loc 1 96 1 is_stmt 0 view .LVU99
+ 527 0054 70BD     		pop	{r4, r5, r6, pc}
+ 528              	.LVL45:
+ 529              	.L38:
+ 530              		.loc 1 96 1 view .LVU100
+ 531 0056 00BF     		.align	2
+ 532              	.L37:
+ 533 0058 00100048 		.word	1207963648
+ 534              		.cfi_endproc
+ 535              	.LFE325:
+ 537              		.section	.text.W25Q16_HighSpeedRead,"ax",%progbits
+ 538              		.align	1
+ 539              		.global	W25Q16_HighSpeedRead
+ 540              		.syntax unified
+ 541              		.thumb
+ 542              		.thumb_func
+ 543              		.fpu fpv4-sp-d16
+ 545              	W25Q16_HighSpeedRead:
+ 546              	.LVL46:
+ 547              	.LFB326:
+  97:Src/w25q64.c  **** 
+  98:Src/w25q64.c  **** 
+  99:Src/w25q64.c  **** uint8_t W25Q16_HighSpeedRead(uint32_t ReadAddr)
+ 100:Src/w25q64.c  **** {
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 12
+
+
+ 548              		.loc 1 100 1 is_stmt 1 view -0
+ 549              		.cfi_startproc
+ 550              		@ args = 0, pretend = 0, frame = 0
+ 551              		@ frame_needed = 0, uses_anonymous_args = 0
+ 552              		.loc 1 100 1 is_stmt 0 view .LVU102
+ 553 0000 38B5     		push	{r3, r4, r5, lr}
+ 554              	.LCFI12:
+ 555              		.cfi_def_cfa_offset 16
+ 556              		.cfi_offset 3, -16
+ 557              		.cfi_offset 4, -12
+ 558              		.cfi_offset 5, -8
+ 559              		.cfi_offset 14, -4
+ 560 0002 0446     		mov	r4, r0
+ 101:Src/w25q64.c  ****   uint32_t Temp = 0;
+ 561              		.loc 1 101 3 is_stmt 1 view .LVU103
+ 562              	.LVL47:
+ 102:Src/w25q64.c  ****   SPI1_CS_EN;
+ 563              		.loc 1 102 3 view .LVU104
+ 564 0004 114D     		ldr	r5, .L41
+ 565 0006 0022     		movs	r2, #0
+ 566 0008 4FF48051 		mov	r1, #4096
+ 567 000c 2846     		mov	r0, r5
+ 568              	.LVL48:
+ 569              		.loc 1 102 3 is_stmt 0 view .LVU105
+ 570 000e FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 571              	.LVL49:
+ 572              		.loc 1 102 13 is_stmt 1 view .LVU106
+ 103:Src/w25q64.c  ****   SPI_Flash_SendByte(HighSpeedReadData);
+ 573              		.loc 1 103 3 view .LVU107
+ 574 0012 0B20     		movs	r0, #11
+ 575 0014 FFF7FEFF 		bl	SPI_Flash_SendByte
+ 576              	.LVL50:
+ 104:Src/w25q64.c  ****   SPI_Flash_SendByte((ReadAddr & 0xFF0000) >> 16);
+ 577              		.loc 1 104 3 view .LVU108
+ 578 0018 C4F30740 		ubfx	r0, r4, #16, #8
+ 579 001c FFF7FEFF 		bl	SPI_Flash_SendByte
+ 580              	.LVL51:
+ 105:Src/w25q64.c  ****   SPI_Flash_SendByte((ReadAddr& 0xFF00) >> 8);
+ 581              		.loc 1 105 3 view .LVU109
+ 582 0020 C4F30720 		ubfx	r0, r4, #8, #8
+ 583 0024 FFF7FEFF 		bl	SPI_Flash_SendByte
+ 584              	.LVL52:
+ 106:Src/w25q64.c  ****   SPI_Flash_SendByte(ReadAddr & 0xFF);
+ 585              		.loc 1 106 3 view .LVU110
+ 586 0028 E0B2     		uxtb	r0, r4
+ 587 002a FFF7FEFF 		bl	SPI_Flash_SendByte
+ 588              	.LVL53:
+ 107:Src/w25q64.c  ****   SPI_Flash_SendByte(Dummy_Byte);
+ 589              		.loc 1 107 3 view .LVU111
+ 590 002e A520     		movs	r0, #165
+ 591 0030 FFF7FEFF 		bl	SPI_Flash_SendByte
+ 592              	.LVL54:
+ 108:Src/w25q64.c  ****   Temp = SPI_Flash_ReceiveByte();
+ 593              		.loc 1 108 3 view .LVU112
+ 594              		.loc 1 108 10 is_stmt 0 view .LVU113
+ 595 0034 FFF7FEFF 		bl	SPI_Flash_ReceiveByte
+ 596              	.LVL55:
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 13
+
+
+ 597 0038 0446     		mov	r4, r0
+ 598              	.LVL56:
+ 109:Src/w25q64.c  ****   SPI1_CS_DIS;
+ 599              		.loc 1 109 3 is_stmt 1 view .LVU114
+ 600 003a 0122     		movs	r2, #1
+ 601 003c 4FF48051 		mov	r1, #4096
+ 602 0040 2846     		mov	r0, r5
+ 603 0042 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 604              	.LVL57:
+ 605              		.loc 1 109 14 view .LVU115
+ 110:Src/w25q64.c  ****   return Temp;
+ 606              		.loc 1 110 3 view .LVU116
+ 111:Src/w25q64.c  **** }
+ 607              		.loc 1 111 1 is_stmt 0 view .LVU117
+ 608 0046 2046     		mov	r0, r4
+ 609 0048 38BD     		pop	{r3, r4, r5, pc}
+ 610              	.LVL58:
+ 611              	.L42:
+ 612              		.loc 1 111 1 view .LVU118
+ 613 004a 00BF     		.align	2
+ 614              	.L41:
+ 615 004c 00100048 		.word	1207963648
+ 616              		.cfi_endproc
+ 617              	.LFE326:
+ 619              		.section	.text.W25Q16_PageWrite,"ax",%progbits
+ 620              		.align	1
+ 621              		.global	W25Q16_PageWrite
+ 622              		.syntax unified
+ 623              		.thumb
+ 624              		.thumb_func
+ 625              		.fpu fpv4-sp-d16
+ 627              	W25Q16_PageWrite:
+ 628              	.LVL59:
+ 629              	.LFB327:
+ 112:Src/w25q64.c  **** 
+ 113:Src/w25q64.c  **** void W25Q16_PageWrite(uint32_t WriteAddr, uint8_t *WritePageBuf, uint16_t  Count )
+ 114:Src/w25q64.c  **** {
+ 630              		.loc 1 114 1 is_stmt 1 view -0
+ 631              		.cfi_startproc
+ 632              		@ args = 0, pretend = 0, frame = 0
+ 633              		@ frame_needed = 0, uses_anonymous_args = 0
+ 634              		.loc 1 114 1 is_stmt 0 view .LVU120
+ 635 0000 70B5     		push	{r4, r5, r6, lr}
+ 636              	.LCFI13:
+ 637              		.cfi_def_cfa_offset 16
+ 638              		.cfi_offset 4, -16
+ 639              		.cfi_offset 5, -12
+ 640              		.cfi_offset 6, -8
+ 641              		.cfi_offset 14, -4
+ 642 0002 0446     		mov	r4, r0
+ 643 0004 0E46     		mov	r6, r1
+ 644 0006 1546     		mov	r5, r2
+ 115:Src/w25q64.c  **** 	uint8_t i;
+ 645              		.loc 1 115 2 is_stmt 1 view .LVU121
+ 116:Src/w25q64.c  **** 	W25Q16_WriteEnable();
+ 646              		.loc 1 116 2 view .LVU122
+ 647 0008 FFF7FEFF 		bl	W25Q16_WriteEnable
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 14
+
+
+ 648              	.LVL60:
+ 117:Src/w25q64.c  **** 	SPI1_CS_EN;
+ 649              		.loc 1 117 2 view .LVU123
+ 650 000c 0022     		movs	r2, #0
+ 651 000e 4FF48051 		mov	r1, #4096
+ 652 0012 1248     		ldr	r0, .L48
+ 653 0014 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 654              	.LVL61:
+ 655              		.loc 1 117 12 view .LVU124
+ 118:Src/w25q64.c  ****   SPI_Flash_SendByte(Page_Program);
+ 656              		.loc 1 118 3 view .LVU125
+ 657 0018 0220     		movs	r0, #2
+ 658 001a FFF7FEFF 		bl	SPI_Flash_SendByte
+ 659              	.LVL62:
+ 119:Src/w25q64.c  ****   //SPI_Flash_SendByte((WriteAddr & 0xFF0000) >> 16);
+ 120:Src/w25q64.c  **** 	SPI_Flash_SendByte((WriteAddr) >> 16);
+ 660              		.loc 1 120 2 view .LVU126
+ 661 001e C4F30740 		ubfx	r0, r4, #16, #8
+ 662 0022 FFF7FEFF 		bl	SPI_Flash_SendByte
+ 663              	.LVL63:
+ 121:Src/w25q64.c  ****   //SPI_Flash_SendByte((WriteAddr & 0xFF00) >> 8);
+ 122:Src/w25q64.c  **** 	SPI_Flash_SendByte((WriteAddr) >> 8);
+ 664              		.loc 1 122 2 view .LVU127
+ 665 0026 C4F30720 		ubfx	r0, r4, #8, #8
+ 666 002a FFF7FEFF 		bl	SPI_Flash_SendByte
+ 667              	.LVL64:
+ 123:Src/w25q64.c  ****   SPI_Flash_SendByte(WriteAddr);  
+ 668              		.loc 1 123 3 view .LVU128
+ 669 002e E0B2     		uxtb	r0, r4
+ 670 0030 FFF7FEFF 		bl	SPI_Flash_SendByte
+ 671              	.LVL65:
+ 124:Src/w25q64.c  ****   for(i = 0; i < Count; i++)
+ 672              		.loc 1 124 3 view .LVU129
+ 673              		.loc 1 124 9 is_stmt 0 view .LVU130
+ 674 0034 0024     		movs	r4, #0
+ 675              	.LVL66:
+ 676              	.L44:
+ 677              		.loc 1 124 14 is_stmt 1 discriminator 1 view .LVU131
+ 678              		.loc 1 124 16 is_stmt 0 discriminator 1 view .LVU132
+ 679 0036 A3B2     		uxth	r3, r4
+ 680              		.loc 1 124 3 discriminator 1 view .LVU133
+ 681 0038 AB42     		cmp	r3, r5
+ 682 003a 05D2     		bcs	.L47
+ 125:Src/w25q64.c  ****   {
+ 126:Src/w25q64.c  ****      Spi_Flash_TransmitReveive(WritePageBuf[i]);
+ 683              		.loc 1 126 6 is_stmt 1 discriminator 3 view .LVU134
+ 684 003c 305D     		ldrb	r0, [r6, r4]	@ zero_extendqisi2
+ 685 003e FFF7FEFF 		bl	Spi_Flash_TransmitReveive
+ 686              	.LVL67:
+ 124:Src/w25q64.c  ****   for(i = 0; i < Count; i++)
+ 687              		.loc 1 124 25 discriminator 3 view .LVU135
+ 124:Src/w25q64.c  ****   for(i = 0; i < Count; i++)
+ 688              		.loc 1 124 26 is_stmt 0 discriminator 3 view .LVU136
+ 689 0042 0134     		adds	r4, r4, #1
+ 690              	.LVL68:
+ 124:Src/w25q64.c  ****   for(i = 0; i < Count; i++)
+ 691              		.loc 1 124 26 discriminator 3 view .LVU137
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 15
+
+
+ 692 0044 E4B2     		uxtb	r4, r4
+ 693              	.LVL69:
+ 124:Src/w25q64.c  ****   for(i = 0; i < Count; i++)
+ 694              		.loc 1 124 26 discriminator 3 view .LVU138
+ 695 0046 F6E7     		b	.L44
+ 696              	.L47:
+ 127:Src/w25q64.c  **** 
+ 128:Src/w25q64.c  ****   }
+ 129:Src/w25q64.c  ****   SPI1_CS_DIS;
+ 697              		.loc 1 129 3 is_stmt 1 view .LVU139
+ 698 0048 0122     		movs	r2, #1
+ 699 004a 4FF48051 		mov	r1, #4096
+ 700 004e 0348     		ldr	r0, .L48
+ 701 0050 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 702              	.LVL70:
+ 703              		.loc 1 129 14 view .LVU140
+ 130:Src/w25q64.c  ****   W25Q16_WaitForWriteEnd();	
+ 704              		.loc 1 130 3 view .LVU141
+ 705 0054 FFF7FEFF 		bl	W25Q16_WaitForWriteEnd
+ 706              	.LVL71:
+ 131:Src/w25q64.c  **** }
+ 707              		.loc 1 131 1 is_stmt 0 view .LVU142
+ 708 0058 70BD     		pop	{r4, r5, r6, pc}
+ 709              	.LVL72:
+ 710              	.L49:
+ 711              		.loc 1 131 1 view .LVU143
+ 712 005a 00BF     		.align	2
+ 713              	.L48:
+ 714 005c 00100048 		.word	1207963648
+ 715              		.cfi_endproc
+ 716              	.LFE327:
+ 718              		.section	.text.W25Q16_ReadID,"ax",%progbits
+ 719              		.align	1
+ 720              		.global	W25Q16_ReadID
+ 721              		.syntax unified
+ 722              		.thumb
+ 723              		.thumb_func
+ 724              		.fpu fpv4-sp-d16
+ 726              	W25Q16_ReadID:
+ 727              	.LFB328:
+ 132:Src/w25q64.c  **** 
+ 133:Src/w25q64.c  **** /*********************锟斤拷取ID*********************/
+ 134:Src/w25q64.c  **** //ID:EF14
+ 135:Src/w25q64.c  **** uint16_t W25Q16_ReadID(void)
+ 136:Src/w25q64.c  **** {
+ 728              		.loc 1 136 1 is_stmt 1 view -0
+ 729              		.cfi_startproc
+ 730              		@ args = 0, pretend = 0, frame = 0
+ 731              		@ frame_needed = 0, uses_anonymous_args = 0
+ 732 0000 38B5     		push	{r3, r4, r5, lr}
+ 733              	.LCFI14:
+ 734              		.cfi_def_cfa_offset 16
+ 735              		.cfi_offset 3, -16
+ 736              		.cfi_offset 4, -12
+ 737              		.cfi_offset 5, -8
+ 738              		.cfi_offset 14, -4
+ 137:Src/w25q64.c  ****   uint16_t ID = 0;
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 16
+
+
+ 739              		.loc 1 137 3 view .LVU145
+ 740              	.LVL73:
+ 138:Src/w25q64.c  **** 	SPI1_CS_EN;
+ 741              		.loc 1 138 2 view .LVU146
+ 742 0002 134D     		ldr	r5, .L52
+ 743 0004 0022     		movs	r2, #0
+ 744 0006 4FF48051 		mov	r1, #4096
+ 745 000a 2846     		mov	r0, r5
+ 746 000c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 747              	.LVL74:
+ 748              		.loc 1 138 12 view .LVU147
+ 139:Src/w25q64.c  **** 	Spi_Flash_TransmitReveive(0x90);//锟斤拷取ID锟斤拷锟斤拷
+ 749              		.loc 1 139 2 view .LVU148
+ 750 0010 9020     		movs	r0, #144
+ 751 0012 FFF7FEFF 		bl	Spi_Flash_TransmitReveive
+ 752              	.LVL75:
+ 140:Src/w25q64.c  **** 	Spi_Flash_TransmitReveive(0xFF);
+ 753              		.loc 1 140 2 view .LVU149
+ 754 0016 FF20     		movs	r0, #255
+ 755 0018 FFF7FEFF 		bl	Spi_Flash_TransmitReveive
+ 756              	.LVL76:
+ 141:Src/w25q64.c  **** 	Spi_Flash_TransmitReveive(0xFF);
+ 757              		.loc 1 141 2 view .LVU150
+ 758 001c FF20     		movs	r0, #255
+ 759 001e FFF7FEFF 		bl	Spi_Flash_TransmitReveive
+ 760              	.LVL77:
+ 142:Src/w25q64.c  **** 	Spi_Flash_TransmitReveive(0xFF);
+ 761              		.loc 1 142 2 view .LVU151
+ 762 0022 FF20     		movs	r0, #255
+ 763 0024 FFF7FEFF 		bl	Spi_Flash_TransmitReveive
+ 764              	.LVL78:
+ 143:Src/w25q64.c  **** 	ID = Spi_Flash_TransmitReveive(0xFF) << 8;
+ 765              		.loc 1 143 2 view .LVU152
+ 766              		.loc 1 143 7 is_stmt 0 view .LVU153
+ 767 0028 FF20     		movs	r0, #255
+ 768 002a FFF7FEFF 		bl	Spi_Flash_TransmitReveive
+ 769              	.LVL79:
+ 770 002e 84B2     		uxth	r4, r0
+ 771              		.loc 1 143 5 view .LVU154
+ 772 0030 2402     		lsls	r4, r4, #8
+ 773 0032 A4B2     		uxth	r4, r4
+ 774              	.LVL80:
+ 144:Src/w25q64.c  **** 	ID += Spi_Flash_TransmitReveive(0xFF);
+ 775              		.loc 1 144 2 is_stmt 1 view .LVU155
+ 776              		.loc 1 144 8 is_stmt 0 view .LVU156
+ 777 0034 FF20     		movs	r0, #255
+ 778 0036 FFF7FEFF 		bl	Spi_Flash_TransmitReveive
+ 779              	.LVL81:
+ 780              		.loc 1 144 5 view .LVU157
+ 781 003a 14FA80F4 		uxtah	r4, r4, r0
+ 782              	.LVL82:
+ 783              		.loc 1 144 5 view .LVU158
+ 784 003e A4B2     		uxth	r4, r4
+ 785              	.LVL83:
+ 145:Src/w25q64.c  ****   SPI1_CS_DIS;
+ 786              		.loc 1 145 3 is_stmt 1 view .LVU159
+ 787 0040 0122     		movs	r2, #1
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 17
+
+
+ 788 0042 4FF48051 		mov	r1, #4096
+ 789 0046 2846     		mov	r0, r5
+ 790 0048 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 791              	.LVL84:
+ 792              		.loc 1 145 14 view .LVU160
+ 146:Src/w25q64.c  **** 	return ID;
+ 793              		.loc 1 146 2 view .LVU161
+ 147:Src/w25q64.c  **** }
+ 794              		.loc 1 147 1 is_stmt 0 view .LVU162
+ 795 004c 2046     		mov	r0, r4
+ 796 004e 38BD     		pop	{r3, r4, r5, pc}
+ 797              	.LVL85:
+ 798              	.L53:
+ 799              		.loc 1 147 1 view .LVU163
+ 800              		.align	2
+ 801              	.L52:
+ 802 0050 00100048 		.word	1207963648
+ 803              		.cfi_endproc
+ 804              	.LFE328:
+ 806              		.section	.text.W25Q16_SectorErase_4KByte,"ax",%progbits
+ 807              		.align	1
+ 808              		.global	W25Q16_SectorErase_4KByte
+ 809              		.syntax unified
+ 810              		.thumb
+ 811              		.thumb_func
+ 812              		.fpu fpv4-sp-d16
+ 814              	W25Q16_SectorErase_4KByte:
+ 815              	.LVL86:
+ 816              	.LFB329:
+ 148:Src/w25q64.c  **** 
+ 149:Src/w25q64.c  **** 
+ 150:Src/w25q64.c  **** void W25Q16_SectorErase_4KByte(uint32_t Addr)
+ 151:Src/w25q64.c  **** {
+ 817              		.loc 1 151 1 is_stmt 1 view -0
+ 818              		.cfi_startproc
+ 819              		@ args = 0, pretend = 0, frame = 0
+ 820              		@ frame_needed = 0, uses_anonymous_args = 0
+ 821              		.loc 1 151 1 is_stmt 0 view .LVU165
+ 822 0000 38B5     		push	{r3, r4, r5, lr}
+ 823              	.LCFI15:
+ 824              		.cfi_def_cfa_offset 16
+ 825              		.cfi_offset 3, -16
+ 826              		.cfi_offset 4, -12
+ 827              		.cfi_offset 5, -8
+ 828              		.cfi_offset 14, -4
+ 829 0002 0446     		mov	r4, r0
+ 152:Src/w25q64.c  ****   W25Q16_WriteEnable();
+ 830              		.loc 1 152 3 is_stmt 1 view .LVU166
+ 831 0004 FFF7FEFF 		bl	W25Q16_WriteEnable
+ 832              	.LVL87:
+ 153:Src/w25q64.c  ****   SPI1_CS_EN;
+ 833              		.loc 1 153 3 view .LVU167
+ 834 0008 0E4D     		ldr	r5, .L56
+ 835 000a 0022     		movs	r2, #0
+ 836 000c 4FF48051 		mov	r1, #4096
+ 837 0010 2846     		mov	r0, r5
+ 838 0012 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 18
+
+
+ 839              	.LVL88:
+ 840              		.loc 1 153 13 view .LVU168
+ 154:Src/w25q64.c  ****   SPI_Flash_SendByte(SectorErace_4KB);
+ 841              		.loc 1 154 3 view .LVU169
+ 842 0016 2020     		movs	r0, #32
+ 843 0018 FFF7FEFF 		bl	SPI_Flash_SendByte
+ 844              	.LVL89:
+ 155:Src/w25q64.c  ****   SPI_Flash_SendByte((Addr & 0xFF0000) >> 16);
+ 845              		.loc 1 155 3 view .LVU170
+ 846 001c C4F30740 		ubfx	r0, r4, #16, #8
+ 847 0020 FFF7FEFF 		bl	SPI_Flash_SendByte
+ 848              	.LVL90:
+ 156:Src/w25q64.c  ****   SPI_Flash_SendByte((Addr & 0xFF00) >> 8);
+ 849              		.loc 1 156 3 view .LVU171
+ 850 0024 C4F30720 		ubfx	r0, r4, #8, #8
+ 851 0028 FFF7FEFF 		bl	SPI_Flash_SendByte
+ 852              	.LVL91:
+ 157:Src/w25q64.c  ****   SPI_Flash_SendByte(Addr & 0xFF);
+ 853              		.loc 1 157 3 view .LVU172
+ 854 002c E0B2     		uxtb	r0, r4
+ 855 002e FFF7FEFF 		bl	SPI_Flash_SendByte
+ 856              	.LVL92:
+ 158:Src/w25q64.c  ****   SPI1_CS_DIS;
+ 857              		.loc 1 158 3 view .LVU173
+ 858 0032 0122     		movs	r2, #1
+ 859 0034 4FF48051 		mov	r1, #4096
+ 860 0038 2846     		mov	r0, r5
+ 861 003a FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 862              	.LVL93:
+ 863              		.loc 1 158 14 view .LVU174
+ 159:Src/w25q64.c  ****   W25Q16_WaitForWriteEnd();
+ 864              		.loc 1 159 3 view .LVU175
+ 865 003e FFF7FEFF 		bl	W25Q16_WaitForWriteEnd
+ 866              	.LVL94:
+ 160:Src/w25q64.c  **** }
+ 867              		.loc 1 160 1 is_stmt 0 view .LVU176
+ 868 0042 38BD     		pop	{r3, r4, r5, pc}
+ 869              	.LVL95:
+ 870              	.L57:
+ 871              		.loc 1 160 1 view .LVU177
+ 872              		.align	2
+ 873              	.L56:
+ 874 0044 00100048 		.word	1207963648
+ 875              		.cfi_endproc
+ 876              	.LFE329:
+ 878              		.section	.text.W25QXX_Read,"ax",%progbits
+ 879              		.align	1
+ 880              		.global	W25QXX_Read
+ 881              		.syntax unified
+ 882              		.thumb
+ 883              		.thumb_func
+ 884              		.fpu fpv4-sp-d16
+ 886              	W25QXX_Read:
+ 887              	.LVL96:
+ 888              	.LFB330:
+ 161:Src/w25q64.c  **** 
+ 162:Src/w25q64.c  **** void W25QXX_Read(uint8_t* pBuffer,uint32_t ReadAddr,uint16_t NumByteToRead)   
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 19
+
+
+ 163:Src/w25q64.c  **** { 
+ 889              		.loc 1 163 1 is_stmt 1 view -0
+ 890              		.cfi_startproc
+ 891              		@ args = 0, pretend = 0, frame = 0
+ 892              		@ frame_needed = 0, uses_anonymous_args = 0
+ 893              		.loc 1 163 1 is_stmt 0 view .LVU179
+ 894 0000 70B5     		push	{r4, r5, r6, lr}
+ 895              	.LCFI16:
+ 896              		.cfi_def_cfa_offset 16
+ 897              		.cfi_offset 4, -16
+ 898              		.cfi_offset 5, -12
+ 899              		.cfi_offset 6, -8
+ 900              		.cfi_offset 14, -4
+ 901 0002 0646     		mov	r6, r0
+ 902 0004 0C46     		mov	r4, r1
+ 903 0006 1546     		mov	r5, r2
+ 164:Src/w25q64.c  ****  	uint16_t i;   										    
+ 904              		.loc 1 164 3 is_stmt 1 view .LVU180
+ 165:Src/w25q64.c  **** 	SPI1_CS_EN;                            	//使锟斤拷锟斤拷锟斤拷   
+ 905              		.loc 1 165 2 view .LVU181
+ 906 0008 0022     		movs	r2, #0
+ 907              	.LVL97:
+ 908              		.loc 1 165 2 is_stmt 0 view .LVU182
+ 909 000a 4FF48051 		mov	r1, #4096
+ 910              	.LVL98:
+ 911              		.loc 1 165 2 view .LVU183
+ 912 000e 1148     		ldr	r0, .L63
+ 913              	.LVL99:
+ 914              		.loc 1 165 2 view .LVU184
+ 915 0010 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 916              	.LVL100:
+ 917              		.loc 1 165 12 is_stmt 1 view .LVU185
+ 166:Src/w25q64.c  **** 	SPI_Flash_SendByte(ReadData);         	//锟斤拷锟酵讹拷取锟斤拷锟斤拷   
+ 918              		.loc 1 166 2 view .LVU186
+ 919 0014 0320     		movs	r0, #3
+ 920 0016 FFF7FEFF 		bl	SPI_Flash_SendByte
+ 921              	.LVL101:
+ 167:Src/w25q64.c  **** 	SPI_Flash_SendByte((uint8_t)((ReadAddr)>>16));  	//锟斤拷锟斤拷24bit锟斤拷址    
+ 922              		.loc 1 167 2 view .LVU187
+ 923 001a C4F30740 		ubfx	r0, r4, #16, #8
+ 924 001e FFF7FEFF 		bl	SPI_Flash_SendByte
+ 925              	.LVL102:
+ 168:Src/w25q64.c  **** 	SPI_Flash_SendByte((uint8_t)((ReadAddr)>>8));   
+ 926              		.loc 1 168 2 view .LVU188
+ 927 0022 C4F30720 		ubfx	r0, r4, #8, #8
+ 928 0026 FFF7FEFF 		bl	SPI_Flash_SendByte
+ 929              	.LVL103:
+ 169:Src/w25q64.c  **** 	SPI_Flash_SendByte((uint8_t)ReadAddr);   
+ 930              		.loc 1 169 2 view .LVU189
+ 931 002a E0B2     		uxtb	r0, r4
+ 932 002c FFF7FEFF 		bl	SPI_Flash_SendByte
+ 933              	.LVL104:
+ 170:Src/w25q64.c  **** 	for(i=0;i<NumByteToRead;i++)
+ 934              		.loc 1 170 2 view .LVU190
+ 935              		.loc 1 170 7 is_stmt 0 view .LVU191
+ 936 0030 0024     		movs	r4, #0
+ 937              	.LVL105:
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 20
+
+
+ 938              	.L59:
+ 939              		.loc 1 170 10 is_stmt 1 discriminator 1 view .LVU192
+ 940              		.loc 1 170 2 is_stmt 0 discriminator 1 view .LVU193
+ 941 0032 AC42     		cmp	r4, r5
+ 942 0034 06D2     		bcs	.L62
+ 171:Src/w25q64.c  **** 	{ 
+ 172:Src/w25q64.c  **** 			pBuffer[i]=SPI_Flash_SendByte(0XFF);   	//循锟斤拷锟斤拷锟斤拷  
+ 943              		.loc 1 172 4 is_stmt 1 discriminator 3 view .LVU194
+ 944              		.loc 1 172 15 is_stmt 0 discriminator 3 view .LVU195
+ 945 0036 FF20     		movs	r0, #255
+ 946 0038 FFF7FEFF 		bl	SPI_Flash_SendByte
+ 947              	.LVL106:
+ 948              		.loc 1 172 14 discriminator 3 view .LVU196
+ 949 003c 3055     		strb	r0, [r6, r4]
+ 170:Src/w25q64.c  **** 	for(i=0;i<NumByteToRead;i++)
+ 950              		.loc 1 170 26 is_stmt 1 discriminator 3 view .LVU197
+ 170:Src/w25q64.c  **** 	for(i=0;i<NumByteToRead;i++)
+ 951              		.loc 1 170 27 is_stmt 0 discriminator 3 view .LVU198
+ 952 003e 0134     		adds	r4, r4, #1
+ 953              	.LVL107:
+ 170:Src/w25q64.c  **** 	for(i=0;i<NumByteToRead;i++)
+ 954              		.loc 1 170 27 discriminator 3 view .LVU199
+ 955 0040 A4B2     		uxth	r4, r4
+ 956              	.LVL108:
+ 170:Src/w25q64.c  **** 	for(i=0;i<NumByteToRead;i++)
+ 957              		.loc 1 170 27 discriminator 3 view .LVU200
+ 958 0042 F6E7     		b	.L59
+ 959              	.L62:
+ 173:Src/w25q64.c  **** 	}
+ 174:Src/w25q64.c  **** 	SPI1_CS_DIS;  				    	      
+ 960              		.loc 1 174 2 is_stmt 1 view .LVU201
+ 961 0044 0122     		movs	r2, #1
+ 962 0046 4FF48051 		mov	r1, #4096
+ 963 004a 0248     		ldr	r0, .L63
+ 964 004c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 965              	.LVL109:
+ 966              		.loc 1 174 13 view .LVU202
+ 175:Src/w25q64.c  **** }...
+ 967              		.loc 1 175 1 is_stmt 0 view .LVU203
+ 968 0050 70BD     		pop	{r4, r5, r6, pc}
+ 969              	.LVL110:
+ 970              	.L64:
+ 971              		.loc 1 175 1 view .LVU204
+ 972 0052 00BF     		.align	2
+ 973              	.L63:
+ 974 0054 00100048 		.word	1207963648
+ 975              		.cfi_endproc
+ 976              	.LFE330:
+ 978              		.comm	hspi1,100,4
+ 979              		.text
+ 980              	.Letext0:
+ 981              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 982              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 983              		.file 4 "Drivers/CMSIS/Include/core_cm4.h"
+ 984              		.file 5 "Drivers/CMSIS/Device/ST/STM32L4xx/Include/system_stm32l4xx.h"
+ 985              		.file 6 "Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l471xx.h"
+ 986              		.file 7 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h"
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 21
+
+
+ 987              		.file 8 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_gpio.h"
+ 988              		.file 9 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_dma.h"
+ 989              		.file 10 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_flash.h"
+ 990              		.file 11 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_spi.h"
+ 991              		.file 12 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h"
+ 992              		.file 13 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ 993              		.file 14 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ 994              		.file 15 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\lib\\gcc\\arm-none-eab
+ 995              		.file 16 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ 996              		.file 17 "Inc/main.h"
+ 997              		.file 18 "Inc/spi.h"
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccCmffcj.s 			page 22
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 w25q64.c
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:18     .text.Spi_Flash_TransmitReveive:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:26     .text.Spi_Flash_TransmitReveive:00000000 Spi_Flash_TransmitReveive
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:74     .text.Spi_Flash_TransmitReveive:00000030 $d
+                            *COM*:00000064 hspi1
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:79     .text.SPI_Flash_SendByte:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:86     .text.SPI_Flash_SendByte:00000000 SPI_Flash_SendByte
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:113    .text.SPI_Flash_ReceiveByte:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:120    .text.SPI_Flash_ReceiveByte:00000000 SPI_Flash_ReceiveByte
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:145    .text.W25Q16_ReadStatusRegister:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:152    .text.W25Q16_ReadStatusRegister:00000000 W25Q16_ReadStatusRegister
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:202    .text.W25Q16_ReadStatusRegister:00000030 $d
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:207    .text.W25Q16_WriteEnable:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:214    .text.W25Q16_WriteEnable:00000000 W25Q16_WriteEnable
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:249    .text.W25Q16_WriteEnable:00000024 $d
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:254    .text.W25Q16_WriteDisable:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:261    .text.W25Q16_WriteDisable:00000000 W25Q16_WriteDisable
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:296    .text.W25Q16_WriteDisable:00000024 $d
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:301    .text.SPI1_CS_ENableWriteStatusRegister:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:308    .text.SPI1_CS_ENableWriteStatusRegister:00000000 SPI1_CS_ENableWriteStatusRegister
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:343    .text.SPI1_CS_ENableWriteStatusRegister:00000024 $d
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:348    .text.W25Q16_WriteStatusRegister:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:355    .text.W25Q16_WriteStatusRegister:00000000 W25Q16_WriteStatusRegister
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:401    .text.W25Q16_WriteStatusRegister:0000002c $d
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:406    .text.W25Q16_WaitForWriteEnd:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:413    .text.W25Q16_WaitForWriteEnd:00000000 W25Q16_WaitForWriteEnd
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:440    .text.W25Q16_HighSpeedBufferRead:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:447    .text.W25Q16_HighSpeedBufferRead:00000000 W25Q16_HighSpeedBufferRead
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:533    .text.W25Q16_HighSpeedBufferRead:00000058 $d
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:538    .text.W25Q16_HighSpeedRead:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:545    .text.W25Q16_HighSpeedRead:00000000 W25Q16_HighSpeedRead
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:615    .text.W25Q16_HighSpeedRead:0000004c $d
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:620    .text.W25Q16_PageWrite:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:627    .text.W25Q16_PageWrite:00000000 W25Q16_PageWrite
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:714    .text.W25Q16_PageWrite:0000005c $d
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:719    .text.W25Q16_ReadID:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:726    .text.W25Q16_ReadID:00000000 W25Q16_ReadID
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:802    .text.W25Q16_ReadID:00000050 $d
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:807    .text.W25Q16_SectorErase_4KByte:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:814    .text.W25Q16_SectorErase_4KByte:00000000 W25Q16_SectorErase_4KByte
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:874    .text.W25Q16_SectorErase_4KByte:00000044 $d
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:879    .text.W25QXX_Read:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:886    .text.W25QXX_Read:00000000 W25QXX_Read
+C:\Users\LY\AppData\Local\Temp\ccCmffcj.s:974    .text.W25QXX_Read:00000054 $d
+
+UNDEFINED SYMBOLS
+HAL_SPI_TransmitReceive
+HAL_GPIO_WritePin

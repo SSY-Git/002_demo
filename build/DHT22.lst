@@ -1,0 +1,1050 @@
+ARM GAS  C:\Users\LY\AppData\Local\Temp\cc7eflYg.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"DHT22.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.Set_HumPin_Output,"ax",%progbits
+  18              		.align	1
+  19              		.global	Set_HumPin_Output
+  20              		.arch armv7e-m
+  21              		.syntax unified
+  22              		.thumb
+  23              		.thumb_func
+  24              		.fpu fpv4-sp-d16
+  26              	Set_HumPin_Output:
+  27              	.LFB316:
+  28              		.file 1 "Src/DHT22.c"
+   1:Src/DHT22.c   **** #include "DHT22.h"
+   2:Src/DHT22.c   **** #include "main.h"
+   3:Src/DHT22.c   **** #include "gpio.h"
+   4:Src/DHT22.c   **** #include "user_gpio.h"
+   5:Src/DHT22.c   **** #include "ble_e95.h"
+   6:Src/DHT22.c   **** 
+   7:Src/DHT22.c   **** extern UART_HandleTypeDef huart2;
+   8:Src/DHT22.c   **** unsigned char  U8RH_data_H = 0,U8RH_data_L = 0;
+   9:Src/DHT22.c   **** unsigned char  U8T_data_H  = 0, U8T_data_L  = 0;
+  10:Src/DHT22.c   **** char Temperature = 0;
+  11:Src/DHT22.c   **** unsigned char Humidity = 0;
+  12:Src/DHT22.c   **** uint16_t g_temp = V_ZERO;
+  13:Src/DHT22.c   **** uint16_t g_hump = V_ZERO;
+  14:Src/DHT22.c   **** 
+  15:Src/DHT22.c   **** void Set_HumPin_Output(void)
+  16:Src/DHT22.c   **** {
+  29              		.loc 1 16 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 24
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 00B5     		push	{lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 4
+  36              		.cfi_offset 14, -4
+  37 0002 87B0     		sub	sp, sp, #28
+  38              	.LCFI1:
+  39              		.cfi_def_cfa_offset 32
+  17:Src/DHT22.c   ****     GPIO_InitTypeDef GPIO_InitStruct = {0};
+  40              		.loc 1 17 5 view .LVU1
+  41              		.loc 1 17 22 is_stmt 0 view .LVU2
+ARM GAS  C:\Users\LY\AppData\Local\Temp\cc7eflYg.s 			page 2
+
+
+  42 0004 0023     		movs	r3, #0
+  43 0006 0593     		str	r3, [sp, #20]
+  18:Src/DHT22.c   **** 
+  19:Src/DHT22.c   ****     GPIO_InitStruct.Pin = HUMI_Pin;
+  44              		.loc 1 19 5 is_stmt 1 view .LVU3
+  45              		.loc 1 19 25 is_stmt 0 view .LVU4
+  46 0008 1022     		movs	r2, #16
+  47 000a 0192     		str	r2, [sp, #4]
+  20:Src/DHT22.c   ****     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  48              		.loc 1 20 5 is_stmt 1 view .LVU5
+  49              		.loc 1 20 26 is_stmt 0 view .LVU6
+  50 000c 0122     		movs	r2, #1
+  51 000e 0292     		str	r2, [sp, #8]
+  21:Src/DHT22.c   ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+  52              		.loc 1 21 5 is_stmt 1 view .LVU7
+  53              		.loc 1 21 26 is_stmt 0 view .LVU8
+  54 0010 0393     		str	r3, [sp, #12]
+  22:Src/DHT22.c   ****     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  55              		.loc 1 22 5 is_stmt 1 view .LVU9
+  56              		.loc 1 22 27 is_stmt 0 view .LVU10
+  57 0012 0493     		str	r3, [sp, #16]
+  23:Src/DHT22.c   ****     HAL_GPIO_Init(HUMI_GPIO_Port, &GPIO_InitStruct);
+  58              		.loc 1 23 5 is_stmt 1 view .LVU11
+  59 0014 01A9     		add	r1, sp, #4
+  60 0016 0348     		ldr	r0, .L3
+  61 0018 FFF7FEFF 		bl	HAL_GPIO_Init
+  62              	.LVL0:
+  24:Src/DHT22.c   **** }
+  63              		.loc 1 24 1 is_stmt 0 view .LVU12
+  64 001c 07B0     		add	sp, sp, #28
+  65              	.LCFI2:
+  66              		.cfi_def_cfa_offset 4
+  67              		@ sp needed
+  68 001e 5DF804FB 		ldr	pc, [sp], #4
+  69              	.L4:
+  70 0022 00BF     		.align	2
+  71              	.L3:
+  72 0024 00180048 		.word	1207965696
+  73              		.cfi_endproc
+  74              	.LFE316:
+  76              		.section	.text.Set_HumPin_Input,"ax",%progbits
+  77              		.align	1
+  78              		.global	Set_HumPin_Input
+  79              		.syntax unified
+  80              		.thumb
+  81              		.thumb_func
+  82              		.fpu fpv4-sp-d16
+  84              	Set_HumPin_Input:
+  85              	.LFB317:
+  25:Src/DHT22.c   **** 
+  26:Src/DHT22.c   **** void Set_HumPin_Input(void)
+  27:Src/DHT22.c   **** {
+  86              		.loc 1 27 1 is_stmt 1 view -0
+  87              		.cfi_startproc
+  88              		@ args = 0, pretend = 0, frame = 24
+  89              		@ frame_needed = 0, uses_anonymous_args = 0
+  90 0000 00B5     		push	{lr}
+ARM GAS  C:\Users\LY\AppData\Local\Temp\cc7eflYg.s 			page 3
+
+
+  91              	.LCFI3:
+  92              		.cfi_def_cfa_offset 4
+  93              		.cfi_offset 14, -4
+  94 0002 87B0     		sub	sp, sp, #28
+  95              	.LCFI4:
+  96              		.cfi_def_cfa_offset 32
+  28:Src/DHT22.c   ****     GPIO_InitTypeDef GPIO_InitStruct = {0};
+  97              		.loc 1 28 5 view .LVU14
+  98              		.loc 1 28 22 is_stmt 0 view .LVU15
+  99 0004 0023     		movs	r3, #0
+ 100 0006 0493     		str	r3, [sp, #16]
+ 101 0008 0593     		str	r3, [sp, #20]
+  29:Src/DHT22.c   **** 
+  30:Src/DHT22.c   ****     GPIO_InitStruct.Pin = HUMI_Pin;
+ 102              		.loc 1 30 5 is_stmt 1 view .LVU16
+ 103              		.loc 1 30 25 is_stmt 0 view .LVU17
+ 104 000a 1022     		movs	r2, #16
+ 105 000c 0192     		str	r2, [sp, #4]
+  31:Src/DHT22.c   ****     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+ 106              		.loc 1 31 5 is_stmt 1 view .LVU18
+ 107              		.loc 1 31 26 is_stmt 0 view .LVU19
+ 108 000e 0293     		str	r3, [sp, #8]
+  32:Src/DHT22.c   ****     GPIO_InitStruct.Pull = GPIO_NOPULL;
+ 109              		.loc 1 32 5 is_stmt 1 view .LVU20
+ 110              		.loc 1 32 26 is_stmt 0 view .LVU21
+ 111 0010 0393     		str	r3, [sp, #12]
+  33:Src/DHT22.c   ****     HAL_GPIO_Init(HUMI_GPIO_Port, &GPIO_InitStruct);
+ 112              		.loc 1 33 5 is_stmt 1 view .LVU22
+ 113 0012 01A9     		add	r1, sp, #4
+ 114 0014 0248     		ldr	r0, .L7
+ 115 0016 FFF7FEFF 		bl	HAL_GPIO_Init
+ 116              	.LVL1:
+  34:Src/DHT22.c   **** }
+ 117              		.loc 1 34 1 is_stmt 0 view .LVU23
+ 118 001a 07B0     		add	sp, sp, #28
+ 119              	.LCFI5:
+ 120              		.cfi_def_cfa_offset 4
+ 121              		@ sp needed
+ 122 001c 5DF804FB 		ldr	pc, [sp], #4
+ 123              	.L8:
+ 124              		.align	2
+ 125              	.L7:
+ 126 0020 00180048 		.word	1207965696
+ 127              		.cfi_endproc
+ 128              	.LFE317:
+ 130              		.section	.text.delay_us,"ax",%progbits
+ 131              		.align	1
+ 132              		.global	delay_us
+ 133              		.syntax unified
+ 134              		.thumb
+ 135              		.thumb_func
+ 136              		.fpu fpv4-sp-d16
+ 138              	delay_us:
+ 139              	.LVL2:
+ 140              	.LFB318:
+  35:Src/DHT22.c   **** 
+  36:Src/DHT22.c   **** void delay_us(uint32_t i)
+ARM GAS  C:\Users\LY\AppData\Local\Temp\cc7eflYg.s 			page 4
+
+
+  37:Src/DHT22.c   **** {
+ 141              		.loc 1 37 1 is_stmt 1 view -0
+ 142              		.cfi_startproc
+ 143              		@ args = 0, pretend = 0, frame = 0
+ 144              		@ frame_needed = 0, uses_anonymous_args = 0
+ 145              		@ link register save eliminated.
+  38:Src/DHT22.c   ****     uint32_t count;
+ 146              		.loc 1 38 5 view .LVU25
+  39:Src/DHT22.c   ****     for(count = i; count > 0; count--)
+ 147              		.loc 1 39 5 view .LVU26
+ 148              		.loc 1 39 5 is_stmt 0 view .LVU27
+ 149 0000 05E0     		b	.L10
+ 150              	.LVL3:
+ 151              	.L11:
+ 152              	.LBB2:
+  40:Src/DHT22.c   ****     {
+  41:Src/DHT22.c   ****         for(uint16_t j = 0; j < 2; j++)
+  42:Src/DHT22.c   ****         {
+  43:Src/DHT22.c   ****             __NOP();
+ 153              		.loc 1 43 13 is_stmt 1 discriminator 3 view .LVU28
+ 154              		.syntax unified
+ 155              	@ 43 "Src/DHT22.c" 1
+ 156 0002 00BF     		nop
+ 157              	@ 0 "" 2
+  41:Src/DHT22.c   ****         {
+ 158              		.loc 1 41 36 discriminator 3 view .LVU29
+  41:Src/DHT22.c   ****         {
+ 159              		.loc 1 41 37 is_stmt 0 discriminator 3 view .LVU30
+ 160              		.thumb
+ 161              		.syntax unified
+ 162 0004 0133     		adds	r3, r3, #1
+ 163              	.LVL4:
+  41:Src/DHT22.c   ****         {
+ 164              		.loc 1 41 37 discriminator 3 view .LVU31
+ 165 0006 9BB2     		uxth	r3, r3
+ 166              	.LVL5:
+ 167              	.L12:
+  41:Src/DHT22.c   ****         {
+ 168              		.loc 1 41 29 is_stmt 1 discriminator 1 view .LVU32
+  41:Src/DHT22.c   ****         {
+ 169              		.loc 1 41 9 is_stmt 0 discriminator 1 view .LVU33
+ 170 0008 012B     		cmp	r3, #1
+ 171 000a FAD9     		bls	.L11
+ 172              	.LBE2:
+  39:Src/DHT22.c   ****     for(count = i; count > 0; count--)
+ 173              		.loc 1 39 31 is_stmt 1 discriminator 2 view .LVU34
+  39:Src/DHT22.c   ****     for(count = i; count > 0; count--)
+ 174              		.loc 1 39 36 is_stmt 0 discriminator 2 view .LVU35
+ 175 000c 0138     		subs	r0, r0, #1
+ 176              	.LVL6:
+ 177              	.L10:
+  39:Src/DHT22.c   ****     for(count = i; count > 0; count--)
+ 178              		.loc 1 39 20 is_stmt 1 discriminator 1 view .LVU36
+  39:Src/DHT22.c   ****     for(count = i; count > 0; count--)
+ 179              		.loc 1 39 5 is_stmt 0 discriminator 1 view .LVU37
+ 180 000e 08B1     		cbz	r0, .L14
+ 181              	.LBB3:
+ARM GAS  C:\Users\LY\AppData\Local\Temp\cc7eflYg.s 			page 5
+
+
+  41:Src/DHT22.c   ****         {
+ 182              		.loc 1 41 22 view .LVU38
+ 183 0010 0023     		movs	r3, #0
+ 184 0012 F9E7     		b	.L12
+ 185              	.L14:
+ 186              	.LBE3:
+  44:Src/DHT22.c   ****         }
+  45:Src/DHT22.c   ****     }
+  46:Src/DHT22.c   **** }
+ 187              		.loc 1 46 1 view .LVU39
+ 188 0014 7047     		bx	lr
+ 189              		.cfi_endproc
+ 190              	.LFE318:
+ 192              		.section	.text.ReadDht22_8bit,"ax",%progbits
+ 193              		.align	1
+ 194              		.global	ReadDht22_8bit
+ 195              		.syntax unified
+ 196              		.thumb
+ 197              		.thumb_func
+ 198              		.fpu fpv4-sp-d16
+ 200              	ReadDht22_8bit:
+ 201              	.LFB319:
+  47:Src/DHT22.c   **** unsigned char ReadDht22_8bit(void)
+  48:Src/DHT22.c   **** {
+ 202              		.loc 1 48 1 is_stmt 1 view -0
+ 203              		.cfi_startproc
+ 204              		@ args = 0, pretend = 0, frame = 0
+ 205              		@ frame_needed = 0, uses_anonymous_args = 0
+ 206 0000 F8B5     		push	{r3, r4, r5, r6, r7, lr}
+ 207              	.LCFI6:
+ 208              		.cfi_def_cfa_offset 24
+ 209              		.cfi_offset 3, -24
+ 210              		.cfi_offset 4, -20
+ 211              		.cfi_offset 5, -16
+ 212              		.cfi_offset 6, -12
+ 213              		.cfi_offset 7, -8
+ 214              		.cfi_offset 14, -4
+  49:Src/DHT22.c   ****     unsigned char i,u8data,value = 0;
+ 215              		.loc 1 49 5 view .LVU41
+ 216              	.LVL7:
+  50:Src/DHT22.c   ****     uint16_t flag;
+ 217              		.loc 1 50 5 view .LVU42
+  51:Src/DHT22.c   ****     for(i=0;i<8;i++)
+ 218              		.loc 1 51 5 view .LVU43
+  49:Src/DHT22.c   ****     unsigned char i,u8data,value = 0;
+ 219              		.loc 1 49 28 is_stmt 0 view .LVU44
+ 220 0002 0025     		movs	r5, #0
+ 221              		.loc 1 51 10 view .LVU45
+ 222 0004 2E46     		mov	r6, r5
+ 223              		.loc 1 51 5 view .LVU46
+ 224 0006 28E0     		b	.L16
+ 225              	.LVL8:
+ 226              	.L24:
+  52:Src/DHT22.c   ****     { 
+  53:Src/DHT22.c   ****         flag = 2;
+  54:Src/DHT22.c   ****         Set_HumPin_Input();
+  55:Src/DHT22.c   ****         while(!DHT22_Port&&flag++ );
+ARM GAS  C:\Users\LY\AppData\Local\Temp\cc7eflYg.s 			page 6
+
+
+ 227              		.loc 1 55 32 view .LVU47
+ 228 0008 1C46     		mov	r4, r3
+ 229              	.LVL9:
+ 230              	.L18:
+ 231              		.loc 1 55 36 is_stmt 1 discriminator 2 view .LVU48
+ 232              		.loc 1 55 14 discriminator 2 view .LVU49
+ 233              		.loc 1 55 16 is_stmt 0 discriminator 2 view .LVU50
+ 234 000a 1021     		movs	r1, #16
+ 235 000c 1748     		ldr	r0, .L28
+ 236 000e FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 237              	.LVL10:
+ 238              		.loc 1 55 14 discriminator 2 view .LVU51
+ 239 0012 18B9     		cbnz	r0, .L17
+ 240              		.loc 1 55 32 discriminator 1 view .LVU52
+ 241 0014 631C     		adds	r3, r4, #1
+ 242 0016 9BB2     		uxth	r3, r3
+ 243              	.LVL11:
+ 244              		.loc 1 55 26 discriminator 1 view .LVU53
+ 245 0018 002C     		cmp	r4, #0
+ 246 001a F5D1     		bne	.L24
+ 247              	.LVL12:
+ 248              	.L17:
+  56:Src/DHT22.c   ****         delay_us(20);
+ 249              		.loc 1 56 9 is_stmt 1 view .LVU54
+ 250 001c 1420     		movs	r0, #20
+ 251 001e FFF7FEFF 		bl	delay_us
+ 252              	.LVL13:
+  57:Src/DHT22.c   ****         u8data = 0;
+ 253              		.loc 1 57 9 view .LVU55
+  58:Src/DHT22.c   ****         if(DHT22_Port)
+ 254              		.loc 1 58 9 view .LVU56
+ 255              		.loc 1 58 12 is_stmt 0 view .LVU57
+ 256 0022 1021     		movs	r1, #16
+ 257 0024 1148     		ldr	r0, .L28
+ 258 0026 FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 259              	.LVL14:
+ 260              		.loc 1 58 11 view .LVU58
+ 261 002a 0746     		mov	r7, r0
+ 262 002c 00B1     		cbz	r0, .L19
+  59:Src/DHT22.c   ****         u8data = 1;
+ 263              		.loc 1 59 16 view .LVU59
+ 264 002e 0127     		movs	r7, #1
+ 265              	.L19:
+ 266              	.LVL15:
+  60:Src/DHT22.c   ****         flag = 2;
+ 267              		.loc 1 60 9 is_stmt 1 view .LVU60
+  61:Src/DHT22.c   ****         while(DHT22_Port&&flag++ );
+ 268              		.loc 1 61 9 view .LVU61
+  60:Src/DHT22.c   ****         flag = 2;
+ 269              		.loc 1 60 14 is_stmt 0 view .LVU62
+ 270 0030 0224     		movs	r4, #2
+ 271              		.loc 1 61 14 view .LVU63
+ 272 0032 00E0     		b	.L21
+ 273              	.LVL16:
+ 274              	.L26:
+ 275              		.loc 1 61 31 view .LVU64
+ 276 0034 1C46     		mov	r4, r3
+ARM GAS  C:\Users\LY\AppData\Local\Temp\cc7eflYg.s 			page 7
+
+
+ 277              	.LVL17:
+ 278              	.L21:
+ 279              		.loc 1 61 35 is_stmt 1 discriminator 2 view .LVU65
+ 280              		.loc 1 61 14 discriminator 2 view .LVU66
+ 281              		.loc 1 61 15 is_stmt 0 discriminator 2 view .LVU67
+ 282 0036 1021     		movs	r1, #16
+ 283 0038 0C48     		ldr	r0, .L28
+ 284 003a FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 285              	.LVL18:
+ 286              		.loc 1 61 14 discriminator 2 view .LVU68
+ 287 003e 20B1     		cbz	r0, .L20
+ 288              		.loc 1 61 31 discriminator 1 view .LVU69
+ 289 0040 631C     		adds	r3, r4, #1
+ 290 0042 9BB2     		uxth	r3, r3
+ 291              	.LVL19:
+ 292              		.loc 1 61 25 discriminator 1 view .LVU70
+ 293 0044 002C     		cmp	r4, #0
+ 294 0046 F5D1     		bne	.L26
+ 295              		.loc 1 61 31 view .LVU71
+ 296 0048 1C46     		mov	r4, r3
+ 297              	.LVL20:
+ 298              	.L20:
+  62:Src/DHT22.c   ****         if(flag == 1) 
+ 299              		.loc 1 62 9 is_stmt 1 view .LVU72
+ 300              		.loc 1 62 11 is_stmt 0 view .LVU73
+ 301 004a 012C     		cmp	r4, #1
+ 302 004c 0BD0     		beq	.L22
+  63:Src/DHT22.c   ****         break;   
+  64:Src/DHT22.c   ****         value <<= 1;
+ 303              		.loc 1 64 9 is_stmt 1 discriminator 2 view .LVU74
+ 304              		.loc 1 64 15 is_stmt 0 discriminator 2 view .LVU75
+ 305 004e 6D00     		lsls	r5, r5, #1
+ 306              	.LVL21:
+ 307              		.loc 1 64 15 discriminator 2 view .LVU76
+ 308 0050 EDB2     		uxtb	r5, r5
+ 309              	.LVL22:
+  65:Src/DHT22.c   ****         value |= u8data;
+ 310              		.loc 1 65 9 is_stmt 1 discriminator 2 view .LVU77
+ 311              		.loc 1 65 15 is_stmt 0 discriminator 2 view .LVU78
+ 312 0052 3D43     		orrs	r5, r5, r7
+ 313              	.LVL23:
+ 314              		.loc 1 65 15 discriminator 2 view .LVU79
+ 315 0054 EDB2     		uxtb	r5, r5
+ 316              	.LVL24:
+  51:Src/DHT22.c   ****     { 
+ 317              		.loc 1 51 17 is_stmt 1 discriminator 2 view .LVU80
+  51:Src/DHT22.c   ****     { 
+ 318              		.loc 1 51 18 is_stmt 0 discriminator 2 view .LVU81
+ 319 0056 0136     		adds	r6, r6, #1
+ 320              	.LVL25:
+  51:Src/DHT22.c   ****     { 
+ 321              		.loc 1 51 18 discriminator 2 view .LVU82
+ 322 0058 F6B2     		uxtb	r6, r6
+ 323              	.LVL26:
+ 324              	.L16:
+  51:Src/DHT22.c   ****     { 
+ 325              		.loc 1 51 13 is_stmt 1 discriminator 1 view .LVU83
+ARM GAS  C:\Users\LY\AppData\Local\Temp\cc7eflYg.s 			page 8
+
+
+  51:Src/DHT22.c   ****     { 
+ 326              		.loc 1 51 5 is_stmt 0 discriminator 1 view .LVU84
+ 327 005a 072E     		cmp	r6, #7
+ 328 005c 03D8     		bhi	.L22
+  53:Src/DHT22.c   ****         Set_HumPin_Input();
+ 329              		.loc 1 53 9 is_stmt 1 view .LVU85
+ 330              	.LVL27:
+  54:Src/DHT22.c   ****         while(!DHT22_Port&&flag++ );
+ 331              		.loc 1 54 9 view .LVU86
+ 332 005e FFF7FEFF 		bl	Set_HumPin_Input
+ 333              	.LVL28:
+  55:Src/DHT22.c   ****         delay_us(20);
+ 334              		.loc 1 55 9 view .LVU87
+  53:Src/DHT22.c   ****         Set_HumPin_Input();
+ 335              		.loc 1 53 14 is_stmt 0 view .LVU88
+ 336 0062 0224     		movs	r4, #2
+  55:Src/DHT22.c   ****         delay_us(20);
+ 337              		.loc 1 55 14 view .LVU89
+ 338 0064 D1E7     		b	.L18
+ 339              	.LVL29:
+ 340              	.L22:
+  66:Src/DHT22.c   ****     }
+  67:Src/DHT22.c   ****     return value;
+ 341              		.loc 1 67 5 is_stmt 1 view .LVU90
+  68:Src/DHT22.c   **** }
+ 342              		.loc 1 68 1 is_stmt 0 view .LVU91
+ 343 0066 2846     		mov	r0, r5
+ 344 0068 F8BD     		pop	{r3, r4, r5, r6, r7, pc}
+ 345              	.LVL30:
+ 346              	.L29:
+ 347              		.loc 1 68 1 view .LVU92
+ 348 006a 00BF     		.align	2
+ 349              	.L28:
+ 350 006c 00180048 		.word	1207965696
+ 351              		.cfi_endproc
+ 352              	.LFE319:
+ 354              		.section	.rodata.read_dht22_RH.str1.4,"aMS",%progbits,1
+ 355              		.align	2
+ 356              	.LC0:
+ 357 0000 68756D20 		.ascii	"hum :%d\015\012\000"
+ 357      3A25640D 
+ 357      0A00
+ 358 000a 0000     		.align	2
+ 359              	.LC1:
+ 360 000c 74656D70 		.ascii	"temp :%d\015\012\000"
+ 360      203A2564 
+ 360      0D0A00
+ 361              		.section	.text.read_dht22_RH,"ax",%progbits
+ 362              		.align	1
+ 363              		.global	read_dht22_RH
+ 364              		.syntax unified
+ 365              		.thumb
+ 366              		.thumb_func
+ 367              		.fpu fpv4-sp-d16
+ 369              	read_dht22_RH:
+ 370              	.LFB320:
+  69:Src/DHT22.c   **** void read_dht22_RH(void)
+ARM GAS  C:\Users\LY\AppData\Local\Temp\cc7eflYg.s 			page 9
+
+
+  70:Src/DHT22.c   **** {
+ 371              		.loc 1 70 1 is_stmt 1 view -0
+ 372              		.cfi_startproc
+ 373              		@ args = 0, pretend = 0, frame = 0
+ 374              		@ frame_needed = 0, uses_anonymous_args = 0
+ 375 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 376              	.LCFI7:
+ 377              		.cfi_def_cfa_offset 24
+ 378              		.cfi_offset 4, -24
+ 379              		.cfi_offset 5, -20
+ 380              		.cfi_offset 6, -16
+ 381              		.cfi_offset 7, -12
+ 382              		.cfi_offset 8, -8
+ 383              		.cfi_offset 14, -4
+  71:Src/DHT22.c   ****     unsigned char U8RH_data_H_temp,U8RH_data_L_temp;
+ 384              		.loc 1 71 5 view .LVU94
+  72:Src/DHT22.c   ****     uint16_t flag;
+ 385              		.loc 1 72 5 view .LVU95
+  73:Src/DHT22.c   ****     unsigned char U8T_data_H_temp,U8T_data_L_temp,U8checkdata_temp,U8temp;
+ 386              		.loc 1 73 5 view .LVU96
+  74:Src/DHT22.c   ****     uint16_t cnt;
+ 387              		.loc 1 74 5 view .LVU97
+  75:Src/DHT22.c   ****     uint8_t data4 = 33;
+ 388              		.loc 1 75 5 view .LVU98
+ 389              	.LVL31:
+  76:Src/DHT22.c   **** 
+  77:Src/DHT22.c   **** //    SENSOR_POWER_EN;
+  78:Src/DHT22.c   ****     HAL_Delay(10);
+ 390              		.loc 1 78 5 view .LVU99
+ 391 0004 0A20     		movs	r0, #10
+ 392 0006 FFF7FEFF 		bl	HAL_Delay
+ 393              	.LVL32:
+  79:Src/DHT22.c   ****     Set_HumPin_Output();
+ 394              		.loc 1 79 5 view .LVU100
+ 395 000a FFF7FEFF 		bl	Set_HumPin_Output
+ 396              	.LVL33:
+  80:Src/DHT22.c   ****     DHT22_High;
+ 397              		.loc 1 80 5 view .LVU101
+ 398 000e 4F4C     		ldr	r4, .L48
+ 399 0010 0122     		movs	r2, #1
+ 400 0012 1021     		movs	r1, #16
+ 401 0014 2046     		mov	r0, r4
+ 402 0016 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 403              	.LVL34:
+  81:Src/DHT22.c   ****     delay_us(10);
+ 404              		.loc 1 81 5 view .LVU102
+ 405 001a 0A20     		movs	r0, #10
+ 406 001c FFF7FEFF 		bl	delay_us
+ 407              	.LVL35:
+  82:Src/DHT22.c   ****     DHT22_Low;
+ 408              		.loc 1 82 5 view .LVU103
+ 409 0020 0022     		movs	r2, #0
+ 410 0022 1021     		movs	r1, #16
+ 411 0024 2046     		mov	r0, r4
+ 412 0026 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 413              	.LVL36:
+  83:Src/DHT22.c   ****     delay_us(500);
+ARM GAS  C:\Users\LY\AppData\Local\Temp\cc7eflYg.s 			page 10
+
+
+ 414              		.loc 1 83 5 view .LVU104
+ 415 002a 4FF4FA70 		mov	r0, #500
+ 416 002e FFF7FEFF 		bl	delay_us
+ 417              	.LVL37:
+  84:Src/DHT22.c   ****     DHT22_High;
+ 418              		.loc 1 84 5 view .LVU105
+ 419 0032 0122     		movs	r2, #1
+ 420 0034 1021     		movs	r1, #16
+ 421 0036 2046     		mov	r0, r4
+ 422 0038 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 423              	.LVL38:
+  85:Src/DHT22.c   ****     Set_HumPin_Input();
+ 424              		.loc 1 85 5 view .LVU106
+ 425 003c FFF7FEFF 		bl	Set_HumPin_Input
+ 426              	.LVL39:
+  86:Src/DHT22.c   ****     cnt = 1;   
+ 427              		.loc 1 86 5 view .LVU107
+  87:Src/DHT22.c   ****     while(DHT22_Port&&cnt++);  
+ 428              		.loc 1 87 5 view .LVU108
+  86:Src/DHT22.c   ****     cnt = 1;   
+ 429              		.loc 1 86 9 is_stmt 0 view .LVU109
+ 430 0040 0124     		movs	r4, #1
+ 431              		.loc 1 87 10 view .LVU110
+ 432 0042 00E0     		b	.L32
+ 433              	.LVL40:
+ 434              	.L41:
+ 435              		.loc 1 87 26 view .LVU111
+ 436 0044 1C46     		mov	r4, r3
+ 437              	.LVL41:
+ 438              	.L32:
+ 439              		.loc 1 87 29 is_stmt 1 discriminator 2 view .LVU112
+ 440              		.loc 1 87 10 discriminator 2 view .LVU113
+ 441              		.loc 1 87 11 is_stmt 0 discriminator 2 view .LVU114
+ 442 0046 1021     		movs	r1, #16
+ 443 0048 4048     		ldr	r0, .L48
+ 444 004a FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 445              	.LVL42:
+ 446              		.loc 1 87 10 discriminator 2 view .LVU115
+ 447 004e 18B1     		cbz	r0, .L31
+ 448              		.loc 1 87 26 discriminator 1 view .LVU116
+ 449 0050 631C     		adds	r3, r4, #1
+ 450 0052 9BB2     		uxth	r3, r3
+ 451              	.LVL43:
+ 452              		.loc 1 87 21 discriminator 1 view .LVU117
+ 453 0054 002C     		cmp	r4, #0
+ 454 0056 F5D1     		bne	.L41
+ 455              	.LVL44:
+ 456              	.L31:
+  88:Src/DHT22.c   ****     if(!DHT22_Port)
+ 457              		.loc 1 88 5 is_stmt 1 view .LVU118
+ 458              		.loc 1 88 9 is_stmt 0 view .LVU119
+ 459 0058 1021     		movs	r1, #16
+ 460 005a 3C48     		ldr	r0, .L48
+ 461 005c FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 462              	.LVL45:
+ 463              		.loc 1 88 7 view .LVU120
+ 464 0060 0028     		cmp	r0, #0
+ARM GAS  C:\Users\LY\AppData\Local\Temp\cc7eflYg.s 			page 11
+
+
+ 465 0062 61D1     		bne	.L33
+  89:Src/DHT22.c   ****     {
+  90:Src/DHT22.c   ****         flag = 2;
+ 466              		.loc 1 90 14 view .LVU121
+ 467 0064 0224     		movs	r4, #2
+ 468 0066 00E0     		b	.L35
+ 469              	.LVL46:
+ 470              	.L43:
+  91:Src/DHT22.c   ****         while(!DHT22_Port&&flag++ );
+ 471              		.loc 1 91 32 view .LVU122
+ 472 0068 1C46     		mov	r4, r3
+ 473              	.LVL47:
+ 474              	.L35:
+ 475              		.loc 1 91 36 is_stmt 1 discriminator 2 view .LVU123
+ 476              		.loc 1 91 14 discriminator 2 view .LVU124
+ 477              		.loc 1 91 16 is_stmt 0 discriminator 2 view .LVU125
+ 478 006a 1021     		movs	r1, #16
+ 479 006c 3748     		ldr	r0, .L48
+ 480 006e FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 481              	.LVL48:
+ 482              		.loc 1 91 14 discriminator 2 view .LVU126
+ 483 0072 28B9     		cbnz	r0, .L42
+ 484              		.loc 1 91 32 discriminator 1 view .LVU127
+ 485 0074 631C     		adds	r3, r4, #1
+ 486 0076 9BB2     		uxth	r3, r3
+ 487              	.LVL49:
+ 488              		.loc 1 91 26 discriminator 1 view .LVU128
+ 489 0078 002C     		cmp	r4, #0
+ 490 007a F5D1     		bne	.L43
+ 491 007c 0224     		movs	r4, #2
+ 492 007e 02E0     		b	.L37
+ 493              	.LVL50:
+ 494              	.L42:
+ 495              		.loc 1 91 26 discriminator 1 view .LVU129
+ 496 0080 0224     		movs	r4, #2
+ 497              	.LVL51:
+ 498              		.loc 1 91 26 discriminator 1 view .LVU130
+ 499 0082 00E0     		b	.L37
+ 500              	.LVL52:
+ 501              	.L44:
+  92:Src/DHT22.c   ****         flag = 2;
+  93:Src/DHT22.c   ****         while(DHT22_Port&&flag++ );
+ 502              		.loc 1 93 31 view .LVU131
+ 503 0084 1C46     		mov	r4, r3
+ 504              	.LVL53:
+ 505              	.L37:
+ 506              		.loc 1 93 35 is_stmt 1 discriminator 2 view .LVU132
+ 507              		.loc 1 93 14 discriminator 2 view .LVU133
+ 508              		.loc 1 93 15 is_stmt 0 discriminator 2 view .LVU134
+ 509 0086 1021     		movs	r1, #16
+ 510 0088 3048     		ldr	r0, .L48
+ 511 008a FFF7FEFF 		bl	HAL_GPIO_ReadPin
+ 512              	.LVL54:
+ 513              		.loc 1 93 14 discriminator 2 view .LVU135
+ 514 008e 18B1     		cbz	r0, .L36
+ 515              		.loc 1 93 31 discriminator 1 view .LVU136
+ 516 0090 631C     		adds	r3, r4, #1
+ARM GAS  C:\Users\LY\AppData\Local\Temp\cc7eflYg.s 			page 12
+
+
+ 517 0092 9BB2     		uxth	r3, r3
+ 518              	.LVL55:
+ 519              		.loc 1 93 25 discriminator 1 view .LVU137
+ 520 0094 002C     		cmp	r4, #0
+ 521 0096 F5D1     		bne	.L44
+ 522              	.LVL56:
+ 523              	.L36:
+  94:Src/DHT22.c   ****         U8RH_data_H_temp = ReadDht22_8bit();
+ 524              		.loc 1 94 9 is_stmt 1 view .LVU138
+ 525              		.loc 1 94 28 is_stmt 0 view .LVU139
+ 526 0098 FFF7FEFF 		bl	ReadDht22_8bit
+ 527              	.LVL57:
+ 528 009c 0546     		mov	r5, r0
+ 529              	.LVL58:
+  95:Src/DHT22.c   ****         U8RH_data_L_temp = ReadDht22_8bit();
+ 530              		.loc 1 95 9 is_stmt 1 view .LVU140
+ 531              		.loc 1 95 28 is_stmt 0 view .LVU141
+ 532 009e FFF7FEFF 		bl	ReadDht22_8bit
+ 533              	.LVL59:
+ 534 00a2 0746     		mov	r7, r0
+ 535              	.LVL60:
+  96:Src/DHT22.c   ****         U8T_data_H_temp  = ReadDht22_8bit();
+ 536              		.loc 1 96 9 is_stmt 1 view .LVU142
+ 537              		.loc 1 96 28 is_stmt 0 view .LVU143
+ 538 00a4 FFF7FEFF 		bl	ReadDht22_8bit
+ 539              	.LVL61:
+ 540 00a8 0446     		mov	r4, r0
+ 541              	.LVL62:
+  97:Src/DHT22.c   ****         U8T_data_L_temp  = ReadDht22_8bit();
+ 542              		.loc 1 97 9 is_stmt 1 view .LVU144
+ 543              		.loc 1 97 28 is_stmt 0 view .LVU145
+ 544 00aa FFF7FEFF 		bl	ReadDht22_8bit
+ 545              	.LVL63:
+ 546 00ae 0646     		mov	r6, r0
+ 547              	.LVL64:
+  98:Src/DHT22.c   ****         U8checkdata_temp = ReadDht22_8bit();
+ 548              		.loc 1 98 9 is_stmt 1 view .LVU146
+ 549              		.loc 1 98 28 is_stmt 0 view .LVU147
+ 550 00b0 FFF7FEFF 		bl	ReadDht22_8bit
+ 551              	.LVL65:
+ 552 00b4 8046     		mov	r8, r0
+ 553              	.LVL66:
+  99:Src/DHT22.c   ****         Set_HumPin_Output();
+ 554              		.loc 1 99 9 is_stmt 1 view .LVU148
+ 555 00b6 FFF7FEFF 		bl	Set_HumPin_Output
+ 556              	.LVL67:
+ 100:Src/DHT22.c   ****         //DHT22_High;
+ 101:Src/DHT22.c   ****         DHT22_Low;
+ 557              		.loc 1 101 9 view .LVU149
+ 558 00ba 0022     		movs	r2, #0
+ 559 00bc 1021     		movs	r1, #16
+ 560 00be 2348     		ldr	r0, .L48
+ 561 00c0 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 562              	.LVL68:
+ 102:Src/DHT22.c   ****         U8temp = (U8T_data_H_temp+U8T_data_L_temp+U8RH_data_H_temp+U8RH_data_L_temp);
+ 563              		.loc 1 102 9 view .LVU150
+ 564              		.loc 1 102 34 is_stmt 0 view .LVU151
+ARM GAS  C:\Users\LY\AppData\Local\Temp\cc7eflYg.s 			page 13
+
+
+ 565 00c4 A319     		adds	r3, r4, r6
+ 566              		.loc 1 102 50 view .LVU152
+ 567 00c6 55FA83F3 		uxtab	r3, r5, r3
+ 568              		.loc 1 102 16 view .LVU153
+ 569 00ca 57FA83F3 		uxtab	r3, r7, r3
+ 570 00ce DBB2     		uxtb	r3, r3
+ 571              	.LVL69:
+ 103:Src/DHT22.c   ****         #if 0
+ 104:Src/DHT22.c   ****         printf("U8RH_data_H_temp = %d U8RH_data_L_temp = %d U8T_data_H_temp = %d U8T_data_L_temp = 
+ 105:Src/DHT22.c   ****                 U8RH_data_H_temp, U8RH_data_L_temp, U8T_data_H_temp, U8T_data_L_temp);
+ 106:Src/DHT22.c   ****         printf("U8temp = %d.\r\n", U8temp);
+ 107:Src/DHT22.c   ****         printf("U8checkdata_temp = %d.\r\n", U8checkdata_temp);
+ 108:Src/DHT22.c   ****         #endif
+ 109:Src/DHT22.c   ****         if(U8temp == U8checkdata_temp)
+ 572              		.loc 1 109 9 is_stmt 1 view .LVU154
+ 573              		.loc 1 109 11 is_stmt 0 view .LVU155
+ 574 00d0 9845     		cmp	r8, r3
+ 575 00d2 01D0     		beq	.L46
+ 576              	.LVL70:
+ 577              	.L30:
+ 110:Src/DHT22.c   ****         {
+ 111:Src/DHT22.c   ****             g_read_dht22_flag = V_ONE;   //读取成功标志位置位        
+ 112:Src/DHT22.c   ****             U8RH_data_H = U8RH_data_H_temp;
+ 113:Src/DHT22.c   ****             U8RH_data_L = U8RH_data_L_temp;
+ 114:Src/DHT22.c   ****             g_hump = (U8RH_data_H_temp << 8) + U8RH_data_L_temp;
+ 115:Src/DHT22.c   ****             printf("hum :%d\r\n", g_hump);
+ 116:Src/DHT22.c   ****             if(U8T_data_H_temp&0x80)
+ 117:Src/DHT22.c   ****             {
+ 118:Src/DHT22.c   ****                 U8T_data_H = 0xFF;
+ 119:Src/DHT22.c   ****                 U8T_data_L = 0xFF - U8T_data_L_temp;
+ 120:Src/DHT22.c   ****             }
+ 121:Src/DHT22.c   ****             else 
+ 122:Src/DHT22.c   ****             {
+ 123:Src/DHT22.c   ****                 U8T_data_H  = U8T_data_H_temp;
+ 124:Src/DHT22.c   ****                 U8T_data_L  = U8T_data_L_temp;
+ 125:Src/DHT22.c   ****             }
+ 126:Src/DHT22.c   ****             g_temp = (U8T_data_H_temp << 8) + U8T_data_L_temp;
+ 127:Src/DHT22.c   ****             printf("temp :%d\r\n", g_temp);
+ 128:Src/DHT22.c   ****         }    
+ 129:Src/DHT22.c   ****     }
+ 130:Src/DHT22.c   ****     else
+ 131:Src/DHT22.c   ****     {
+ 132:Src/DHT22.c   ****         U8RH_data_H = 0xFF;
+ 133:Src/DHT22.c   ****         U8RH_data_L = 0xFF;
+ 134:Src/DHT22.c   ****         U8T_data_H  = 0xFF;
+ 135:Src/DHT22.c   ****         U8T_data_L  = 0xFF;
+ 136:Src/DHT22.c   ****         Set_HumPin_Output();
+ 137:Src/DHT22.c   ****         //DHT22_High;
+ 138:Src/DHT22.c   ****         DHT22_Low;
+ 139:Src/DHT22.c   ****     } 
+ 140:Src/DHT22.c   **** //    SENSOR_POWER_DIS;
+ 141:Src/DHT22.c   **** }
+ 578              		.loc 1 141 1 view .LVU156
+ 579 00d4 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 580              	.LVL71:
+ 581              	.L46:
+ 111:Src/DHT22.c   ****             U8RH_data_H = U8RH_data_H_temp;
+ARM GAS  C:\Users\LY\AppData\Local\Temp\cc7eflYg.s 			page 14
+
+
+ 582              		.loc 1 111 13 is_stmt 1 view .LVU157
+ 111:Src/DHT22.c   ****             U8RH_data_H = U8RH_data_H_temp;
+ 583              		.loc 1 111 31 is_stmt 0 view .LVU158
+ 584 00d8 1D4B     		ldr	r3, .L48+4
+ 585              	.LVL72:
+ 111:Src/DHT22.c   ****             U8RH_data_H = U8RH_data_H_temp;
+ 586              		.loc 1 111 31 view .LVU159
+ 587 00da 0122     		movs	r2, #1
+ 588 00dc 1A70     		strb	r2, [r3]
+ 112:Src/DHT22.c   ****             U8RH_data_L = U8RH_data_L_temp;
+ 589              		.loc 1 112 13 is_stmt 1 view .LVU160
+ 112:Src/DHT22.c   ****             U8RH_data_L = U8RH_data_L_temp;
+ 590              		.loc 1 112 25 is_stmt 0 view .LVU161
+ 591 00de 1D4B     		ldr	r3, .L48+8
+ 592 00e0 1D70     		strb	r5, [r3]
+ 113:Src/DHT22.c   ****             g_hump = (U8RH_data_H_temp << 8) + U8RH_data_L_temp;
+ 593              		.loc 1 113 13 is_stmt 1 view .LVU162
+ 113:Src/DHT22.c   ****             g_hump = (U8RH_data_H_temp << 8) + U8RH_data_L_temp;
+ 594              		.loc 1 113 25 is_stmt 0 view .LVU163
+ 595 00e2 1D4B     		ldr	r3, .L48+12
+ 596 00e4 1F70     		strb	r7, [r3]
+ 114:Src/DHT22.c   ****             printf("hum :%d\r\n", g_hump);
+ 597              		.loc 1 114 13 is_stmt 1 view .LVU164
+ 114:Src/DHT22.c   ****             printf("hum :%d\r\n", g_hump);
+ 598              		.loc 1 114 40 is_stmt 0 view .LVU165
+ 599 00e6 2902     		lsls	r1, r5, #8
+ 600 00e8 89B2     		uxth	r1, r1
+ 114:Src/DHT22.c   ****             printf("hum :%d\r\n", g_hump);
+ 601              		.loc 1 114 46 view .LVU166
+ 602 00ea 3944     		add	r1, r1, r7
+ 603 00ec 89B2     		uxth	r1, r1
+ 114:Src/DHT22.c   ****             printf("hum :%d\r\n", g_hump);
+ 604              		.loc 1 114 20 view .LVU167
+ 605 00ee 1B4B     		ldr	r3, .L48+16
+ 606 00f0 1980     		strh	r1, [r3]	@ movhi
+ 115:Src/DHT22.c   ****             if(U8T_data_H_temp&0x80)
+ 607              		.loc 1 115 13 is_stmt 1 view .LVU168
+ 608 00f2 1B48     		ldr	r0, .L48+20
+ 609 00f4 FFF7FEFF 		bl	printf
+ 610              	.LVL73:
+ 116:Src/DHT22.c   ****             {
+ 611              		.loc 1 116 13 view .LVU169
+ 116:Src/DHT22.c   ****             {
+ 612              		.loc 1 116 15 is_stmt 0 view .LVU170
+ 613 00f8 14F0800F 		tst	r4, #128
+ 614 00fc 0DD1     		bne	.L47
+ 123:Src/DHT22.c   ****                 U8T_data_L  = U8T_data_L_temp;
+ 615              		.loc 1 123 17 is_stmt 1 view .LVU171
+ 123:Src/DHT22.c   ****                 U8T_data_L  = U8T_data_L_temp;
+ 616              		.loc 1 123 29 is_stmt 0 view .LVU172
+ 617 00fe 194B     		ldr	r3, .L48+24
+ 618 0100 1C70     		strb	r4, [r3]
+ 124:Src/DHT22.c   ****             }
+ 619              		.loc 1 124 17 is_stmt 1 view .LVU173
+ 124:Src/DHT22.c   ****             }
+ 620              		.loc 1 124 29 is_stmt 0 view .LVU174
+ 621 0102 194B     		ldr	r3, .L48+28
+ARM GAS  C:\Users\LY\AppData\Local\Temp\cc7eflYg.s 			page 15
+
+
+ 622 0104 1E70     		strb	r6, [r3]
+ 623              	.L40:
+ 126:Src/DHT22.c   ****             printf("temp :%d\r\n", g_temp);
+ 624              		.loc 1 126 13 is_stmt 1 view .LVU175
+ 126:Src/DHT22.c   ****             printf("temp :%d\r\n", g_temp);
+ 625              		.loc 1 126 39 is_stmt 0 view .LVU176
+ 626 0106 2102     		lsls	r1, r4, #8
+ 627 0108 89B2     		uxth	r1, r1
+ 126:Src/DHT22.c   ****             printf("temp :%d\r\n", g_temp);
+ 628              		.loc 1 126 45 view .LVU177
+ 629 010a 3144     		add	r1, r1, r6
+ 630 010c 89B2     		uxth	r1, r1
+ 126:Src/DHT22.c   ****             printf("temp :%d\r\n", g_temp);
+ 631              		.loc 1 126 20 view .LVU178
+ 632 010e 174B     		ldr	r3, .L48+32
+ 633 0110 1980     		strh	r1, [r3]	@ movhi
+ 127:Src/DHT22.c   ****         }    
+ 634              		.loc 1 127 13 is_stmt 1 view .LVU179
+ 635 0112 1748     		ldr	r0, .L48+36
+ 636 0114 FFF7FEFF 		bl	printf
+ 637              	.LVL74:
+ 638 0118 DCE7     		b	.L30
+ 639              	.L47:
+ 118:Src/DHT22.c   ****                 U8T_data_L = 0xFF - U8T_data_L_temp;
+ 640              		.loc 1 118 17 view .LVU180
+ 118:Src/DHT22.c   ****                 U8T_data_L = 0xFF - U8T_data_L_temp;
+ 641              		.loc 1 118 28 is_stmt 0 view .LVU181
+ 642 011a 124B     		ldr	r3, .L48+24
+ 643 011c FF22     		movs	r2, #255
+ 644 011e 1A70     		strb	r2, [r3]
+ 119:Src/DHT22.c   ****             }
+ 645              		.loc 1 119 17 is_stmt 1 view .LVU182
+ 119:Src/DHT22.c   ****             }
+ 646              		.loc 1 119 35 is_stmt 0 view .LVU183
+ 647 0120 F343     		mvns	r3, r6
+ 119:Src/DHT22.c   ****             }
+ 648              		.loc 1 119 28 view .LVU184
+ 649 0122 114A     		ldr	r2, .L48+28
+ 650 0124 1370     		strb	r3, [r2]
+ 651 0126 EEE7     		b	.L40
+ 652              	.LVL75:
+ 653              	.L33:
+ 132:Src/DHT22.c   ****         U8RH_data_L = 0xFF;
+ 654              		.loc 1 132 9 is_stmt 1 view .LVU185
+ 132:Src/DHT22.c   ****         U8RH_data_L = 0xFF;
+ 655              		.loc 1 132 21 is_stmt 0 view .LVU186
+ 656 0128 FF23     		movs	r3, #255
+ 657 012a 0A4A     		ldr	r2, .L48+8
+ 658 012c 1370     		strb	r3, [r2]
+ 133:Src/DHT22.c   ****         U8T_data_H  = 0xFF;
+ 659              		.loc 1 133 9 is_stmt 1 view .LVU187
+ 133:Src/DHT22.c   ****         U8T_data_H  = 0xFF;
+ 660              		.loc 1 133 21 is_stmt 0 view .LVU188
+ 661 012e 0A4A     		ldr	r2, .L48+12
+ 662 0130 1370     		strb	r3, [r2]
+ 134:Src/DHT22.c   ****         U8T_data_L  = 0xFF;
+ 663              		.loc 1 134 9 is_stmt 1 view .LVU189
+ARM GAS  C:\Users\LY\AppData\Local\Temp\cc7eflYg.s 			page 16
+
+
+ 134:Src/DHT22.c   ****         U8T_data_L  = 0xFF;
+ 664              		.loc 1 134 21 is_stmt 0 view .LVU190
+ 665 0132 0C4A     		ldr	r2, .L48+24
+ 666 0134 1370     		strb	r3, [r2]
+ 135:Src/DHT22.c   ****         Set_HumPin_Output();
+ 667              		.loc 1 135 9 is_stmt 1 view .LVU191
+ 135:Src/DHT22.c   ****         Set_HumPin_Output();
+ 668              		.loc 1 135 21 is_stmt 0 view .LVU192
+ 669 0136 0C4A     		ldr	r2, .L48+28
+ 670 0138 1370     		strb	r3, [r2]
+ 136:Src/DHT22.c   ****         //DHT22_High;
+ 671              		.loc 1 136 9 is_stmt 1 view .LVU193
+ 672 013a FFF7FEFF 		bl	Set_HumPin_Output
+ 673              	.LVL76:
+ 138:Src/DHT22.c   ****     } 
+ 674              		.loc 1 138 9 view .LVU194
+ 675 013e 0022     		movs	r2, #0
+ 676 0140 1021     		movs	r1, #16
+ 677 0142 0248     		ldr	r0, .L48
+ 678 0144 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 679              	.LVL77:
+ 680              		.loc 1 141 1 is_stmt 0 view .LVU195
+ 681 0148 C4E7     		b	.L30
+ 682              	.L49:
+ 683 014a 00BF     		.align	2
+ 684              	.L48:
+ 685 014c 00180048 		.word	1207965696
+ 686 0150 00000000 		.word	g_read_dht22_flag
+ 687 0154 00000000 		.word	.LANCHOR0
+ 688 0158 00000000 		.word	.LANCHOR1
+ 689 015c 00000000 		.word	.LANCHOR2
+ 690 0160 00000000 		.word	.LC0
+ 691 0164 00000000 		.word	.LANCHOR3
+ 692 0168 00000000 		.word	.LANCHOR4
+ 693 016c 00000000 		.word	.LANCHOR5
+ 694 0170 0C000000 		.word	.LC1
+ 695              		.cfi_endproc
+ 696              	.LFE320:
+ 698              		.global	g_hump
+ 699              		.global	g_temp
+ 700              		.global	Humidity
+ 701              		.global	Temperature
+ 702              		.global	U8T_data_L
+ 703              		.global	U8T_data_H
+ 704              		.global	U8RH_data_L
+ 705              		.global	U8RH_data_H
+ 706              		.section	.bss.Humidity,"aw",%nobits
+ 709              	Humidity:
+ 710 0000 00       		.space	1
+ 711              		.section	.bss.Temperature,"aw",%nobits
+ 714              	Temperature:
+ 715 0000 00       		.space	1
+ 716              		.section	.bss.U8RH_data_H,"aw",%nobits
+ 717              		.set	.LANCHOR0,. + 0
+ 720              	U8RH_data_H:
+ 721 0000 00       		.space	1
+ 722              		.section	.bss.U8RH_data_L,"aw",%nobits
+ARM GAS  C:\Users\LY\AppData\Local\Temp\cc7eflYg.s 			page 17
+
+
+ 723              		.set	.LANCHOR1,. + 0
+ 726              	U8RH_data_L:
+ 727 0000 00       		.space	1
+ 728              		.section	.bss.U8T_data_H,"aw",%nobits
+ 729              		.set	.LANCHOR3,. + 0
+ 732              	U8T_data_H:
+ 733 0000 00       		.space	1
+ 734              		.section	.bss.U8T_data_L,"aw",%nobits
+ 735              		.set	.LANCHOR4,. + 0
+ 738              	U8T_data_L:
+ 739 0000 00       		.space	1
+ 740              		.section	.bss.g_hump,"aw",%nobits
+ 741              		.align	1
+ 742              		.set	.LANCHOR2,. + 0
+ 745              	g_hump:
+ 746 0000 0000     		.space	2
+ 747              		.section	.bss.g_temp,"aw",%nobits
+ 748              		.align	1
+ 749              		.set	.LANCHOR5,. + 0
+ 752              	g_temp:
+ 753 0000 0000     		.space	2
+ 754              		.text
+ 755              	.Letext0:
+ 756              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 757              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 758              		.file 4 "Drivers/CMSIS/Include/core_cm4.h"
+ 759              		.file 5 "Drivers/CMSIS/Device/ST/STM32L4xx/Include/system_stm32l4xx.h"
+ 760              		.file 6 "Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l471xx.h"
+ 761              		.file 7 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h"
+ 762              		.file 8 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_gpio.h"
+ 763              		.file 9 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_dma.h"
+ 764              		.file 10 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_flash.h"
+ 765              		.file 11 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_uart.h"
+ 766              		.file 12 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h"
+ 767              		.file 13 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ 768              		.file 14 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ 769              		.file 15 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\lib\\gcc\\arm-none-eab
+ 770              		.file 16 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ 771              		.file 17 "Inc/main.h"
+ 772              		.file 18 "Inc/DHT22.h"
+ 773              		.file 19 "Inc/user_gpio.h"
+ 774              		.file 20 "Inc/ble_e95.h"
+ 775              		.file 21 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ARM GAS  C:\Users\LY\AppData\Local\Temp\cc7eflYg.s 			page 18
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 DHT22.c
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:18     .text.Set_HumPin_Output:00000000 $t
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:26     .text.Set_HumPin_Output:00000000 Set_HumPin_Output
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:72     .text.Set_HumPin_Output:00000024 $d
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:77     .text.Set_HumPin_Input:00000000 $t
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:84     .text.Set_HumPin_Input:00000000 Set_HumPin_Input
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:126    .text.Set_HumPin_Input:00000020 $d
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:131    .text.delay_us:00000000 $t
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:138    .text.delay_us:00000000 delay_us
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:193    .text.ReadDht22_8bit:00000000 $t
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:200    .text.ReadDht22_8bit:00000000 ReadDht22_8bit
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:350    .text.ReadDht22_8bit:0000006c $d
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:355    .rodata.read_dht22_RH.str1.4:00000000 $d
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:362    .text.read_dht22_RH:00000000 $t
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:369    .text.read_dht22_RH:00000000 read_dht22_RH
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:685    .text.read_dht22_RH:0000014c $d
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:745    .bss.g_hump:00000000 g_hump
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:752    .bss.g_temp:00000000 g_temp
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:709    .bss.Humidity:00000000 Humidity
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:714    .bss.Temperature:00000000 Temperature
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:738    .bss.U8T_data_L:00000000 U8T_data_L
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:732    .bss.U8T_data_H:00000000 U8T_data_H
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:726    .bss.U8RH_data_L:00000000 U8RH_data_L
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:720    .bss.U8RH_data_H:00000000 U8RH_data_H
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:710    .bss.Humidity:00000000 $d
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:715    .bss.Temperature:00000000 $d
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:721    .bss.U8RH_data_H:00000000 $d
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:727    .bss.U8RH_data_L:00000000 $d
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:733    .bss.U8T_data_H:00000000 $d
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:739    .bss.U8T_data_L:00000000 $d
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:741    .bss.g_hump:00000000 $d
+C:\Users\LY\AppData\Local\Temp\cc7eflYg.s:748    .bss.g_temp:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_Init
+HAL_GPIO_ReadPin
+HAL_Delay
+HAL_GPIO_WritePin
+printf
+g_read_dht22_flag

@@ -1,0 +1,3695 @@
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.eabi_attribute 27, 1
+   3              		.eabi_attribute 28, 1
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 1
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.file	"pcf85263.c"
+  14              		.text
+  15              	.Ltext0:
+  16              		.cfi_sections	.debug_frame
+  17              		.section	.text.bin_to_bcd,"ax",%progbits
+  18              		.align	1
+  19              		.arch armv7e-m
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv4-sp-d16
+  25              	bin_to_bcd:
+  26              	.LVL0:
+  27              	.LFB316:
+  28              		.file 1 "Src/pcf85263.c"
+   1:Src/pcf85263.c **** #include "pcf85263.h"
+   2:Src/pcf85263.c **** #include "global.h"
+   3:Src/pcf85263.c **** #include "i2c.h"
+   4:Src/pcf85263.c **** extern I2C_HandleTypeDef hi2c3;
+   5:Src/pcf85263.c **** 
+   6:Src/pcf85263.c **** /***************************************************************
+   7:Src/pcf85263.c **** * brief  Conversion from hexadecimal to BCD
+   8:Src/pcf85263.c **** * param  BINValue    Hexadecimal value to be converted
+   9:Src/pcf85263.c **** * return Converted BCD code
+  10:Src/pcf85263.c **** * note   2020.10.16
+  11:Src/pcf85263.c **** * Sample tao
+  12:Src/pcf85263.c **** **************************************************************/
+  13:Src/pcf85263.c **** static unsigned char bin_to_bcd(unsigned char BINValue)
+  14:Src/pcf85263.c **** {
+  29              		.loc 1 14 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  15:Src/pcf85263.c ****     unsigned char bcdhigh = I_ZERO;
+  34              		.loc 1 15 5 view .LVU1
+  16:Src/pcf85263.c **** 
+  17:Src/pcf85263.c ****     while(BINValue >= V_TEN)
+  35              		.loc 1 17 5 view .LVU2
+  15:Src/pcf85263.c ****     unsigned char bcdhigh = I_ZERO;
+  36              		.loc 1 15 19 is_stmt 0 view .LVU3
+  37 0000 0023     		movs	r3, #0
+  38              	.LVL1:
+  39              	.L2:
+  40              		.loc 1 17 10 is_stmt 1 view .LVU4
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 2
+
+
+  41 0002 0928     		cmp	r0, #9
+  42 0004 04D9     		bls	.L4
+  18:Src/pcf85263.c ****     {
+  19:Src/pcf85263.c ****         bcdhigh++;
+  43              		.loc 1 19 9 view .LVU5
+  44              		.loc 1 19 16 is_stmt 0 view .LVU6
+  45 0006 0133     		adds	r3, r3, #1
+  46              	.LVL2:
+  47              		.loc 1 19 16 view .LVU7
+  48 0008 DBB2     		uxtb	r3, r3
+  49              	.LVL3:
+  20:Src/pcf85263.c ****         BINValue -= V_TEN;
+  50              		.loc 1 20 9 is_stmt 1 view .LVU8
+  51              		.loc 1 20 18 is_stmt 0 view .LVU9
+  52 000a 0A38     		subs	r0, r0, #10
+  53              	.LVL4:
+  54              		.loc 1 20 18 view .LVU10
+  55 000c C0B2     		uxtb	r0, r0
+  56              	.LVL5:
+  57              		.loc 1 20 18 view .LVU11
+  58 000e F8E7     		b	.L2
+  59              	.L4:
+  21:Src/pcf85263.c ****     }
+  22:Src/pcf85263.c **** 
+  23:Src/pcf85263.c ****     return ((unsigned char)(bcdhigh << V_FOUR) | BINValue);
+  60              		.loc 1 23 5 is_stmt 1 view .LVU12
+  61              		.loc 1 23 13 is_stmt 0 view .LVU13
+  62 0010 1B01     		lsls	r3, r3, #4
+  63              	.LVL6:
+  64              		.loc 1 23 13 view .LVU14
+  65 0012 DBB2     		uxtb	r3, r3
+  24:Src/pcf85263.c **** }
+  66              		.loc 1 24 1 view .LVU15
+  67 0014 1843     		orrs	r0, r0, r3
+  68              	.LVL7:
+  69              		.loc 1 24 1 view .LVU16
+  70 0016 7047     		bx	lr
+  71              		.cfi_endproc
+  72              	.LFE316:
+  74              		.section	.text.bcd_to_bin,"ax",%progbits
+  75              		.align	1
+  76              		.syntax unified
+  77              		.thumb
+  78              		.thumb_func
+  79              		.fpu fpv4-sp-d16
+  81              	bcd_to_bin:
+  82              	.LVL8:
+  83              	.LFB317:
+  25:Src/pcf85263.c **** 
+  26:Src/pcf85263.c **** /***************************************************************
+  27:Src/pcf85263.c **** * brief  Conversion from BCD code to hexadecimal code
+  28:Src/pcf85263.c **** * param  BINValue    BCD code to be converted
+  29:Src/pcf85263.c **** * return hexadecimal number after conversion
+  30:Src/pcf85263.c **** * note   2017.10.26
+  31:Src/pcf85263.c **** * Sample tao
+  32:Src/pcf85263.c **** **************************************************************/
+  33:Src/pcf85263.c **** static unsigned char bcd_to_bin(unsigned char BCDValue)
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 3
+
+
+  34:Src/pcf85263.c **** {
+  84              		.loc 1 34 1 is_stmt 1 view -0
+  85              		.cfi_startproc
+  86              		@ args = 0, pretend = 0, frame = 0
+  87              		@ frame_needed = 0, uses_anonymous_args = 0
+  88              		@ link register save eliminated.
+  35:Src/pcf85263.c ****     unsigned char tmp = I_ZERO;
+  89              		.loc 1 35 5 view .LVU18
+  36:Src/pcf85263.c **** 
+  37:Src/pcf85263.c ****     tmp = ((unsigned char)(BCDValue & (unsigned char)HIGH_FOUR_BITS_ENABLE) >> (unsigned char)V_FOU
+  90              		.loc 1 37 5 view .LVU19
+  91              		.loc 1 37 77 is_stmt 0 view .LVU20
+  92 0000 0309     		lsrs	r3, r0, #4
+  93              		.loc 1 37 9 view .LVU21
+  94 0002 03EB8303 		add	r3, r3, r3, lsl #2
+  95              	.LVL9:
+  38:Src/pcf85263.c ****     return (tmp + (BCDValue & (unsigned char)LOW_FOUR_BITS_ENABLE));
+  96              		.loc 1 38 5 is_stmt 1 view .LVU22
+  97              		.loc 1 38 29 is_stmt 0 view .LVU23
+  98 0006 00F00F00 		and	r0, r0, #15
+  99              	.LVL10:
+ 100              		.loc 1 38 17 view .LVU24
+ 101 000a 00EB4300 		add	r0, r0, r3, lsl #1
+  39:Src/pcf85263.c **** }
+ 102              		.loc 1 39 1 view .LVU25
+ 103 000e C0B2     		uxtb	r0, r0
+ 104 0010 7047     		bx	lr
+ 105              		.cfi_endproc
+ 106              	.LFE317:
+ 108              		.section	.text.pcf85263_write_data,"ax",%progbits
+ 109              		.align	1
+ 110              		.global	pcf85263_write_data
+ 111              		.syntax unified
+ 112              		.thumb
+ 113              		.thumb_func
+ 114              		.fpu fpv4-sp-d16
+ 116              	pcf85263_write_data:
+ 117              	.LVL11:
+ 118              	.LFB318:
+  40:Src/pcf85263.c **** 
+  41:Src/pcf85263.c **** /***************************************************************
+  42:Src/pcf85263.c **** * @brief  To specify length data to PCF8563
+  43:Src/pcf85263.c **** * @param
+  44:Src/pcf85263.c **** *       add     Write address
+  45:Src/pcf85263.c **** *       write_buf Write data
+  46:Src/pcf85263.c **** *       len     data lenth
+  47:Src/pcf85263.c **** * @return ：0-> success          1-> fail
+  48:Src/pcf85263.c **** **************************************************************/
+  49:Src/pcf85263.c **** 
+  50:Src/pcf85263.c **** uint8_t pcf85263_write_data(uint8_t addr, uint8_t *write_buf, uint8_t len)
+  51:Src/pcf85263.c **** {
+ 119              		.loc 1 51 1 is_stmt 1 view -0
+ 120              		.cfi_startproc
+ 121              		@ args = 0, pretend = 0, frame = 0
+ 122              		@ frame_needed = 0, uses_anonymous_args = 0
+ 123              		.loc 1 51 1 is_stmt 0 view .LVU27
+ 124 0000 00B5     		push	{lr}
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 4
+
+
+ 125              	.LCFI0:
+ 126              		.cfi_def_cfa_offset 4
+ 127              		.cfi_offset 14, -4
+ 128 0002 85B0     		sub	sp, sp, #20
+ 129              	.LCFI1:
+ 130              		.cfi_def_cfa_offset 24
+  52:Src/pcf85263.c ****     uint8_t ret = I_ZERO;
+ 131              		.loc 1 52 5 is_stmt 1 view .LVU28
+ 132              	.LVL12:
+  53:Src/pcf85263.c ****     //MX_I2C3_Init();
+  54:Src/pcf85263.c ****     //i2c3_gpio_init();
+  55:Src/pcf85263.c ****     //HAL_Delay(5);
+  56:Src/pcf85263.c **** 	if(HAL_OK == HAL_I2C_Mem_Write(&hi2c3, PCF85263_WRITE_ADDR, addr, I2C_MEMADD_SIZE_8BIT, write_buf,
+ 133              		.loc 1 56 2 view .LVU29
+ 134              		.loc 1 56 15 is_stmt 0 view .LVU30
+ 135 0004 4FF47A73 		mov	r3, #1000
+ 136 0008 0293     		str	r3, [sp, #8]
+ 137 000a 0192     		str	r2, [sp, #4]
+ 138 000c 0091     		str	r1, [sp]
+ 139 000e 0123     		movs	r3, #1
+ 140 0010 0246     		mov	r2, r0
+ 141              	.LVL13:
+ 142              		.loc 1 56 15 view .LVU31
+ 143 0012 A221     		movs	r1, #162
+ 144              	.LVL14:
+ 145              		.loc 1 56 15 view .LVU32
+ 146 0014 0348     		ldr	r0, .L10
+ 147              	.LVL15:
+ 148              		.loc 1 56 15 view .LVU33
+ 149 0016 FFF7FEFF 		bl	HAL_I2C_Mem_Write
+ 150              	.LVL16:
+ 151              		.loc 1 56 4 view .LVU34
+ 152 001a 00B1     		cbz	r0, .L7
+  57:Src/pcf85263.c ****     {
+  58:Src/pcf85263.c ****         ret = V_ZERO;
+  59:Src/pcf85263.c ****         //SEGGER_RTT_printf(0, "pcf85263 write data success!\n");
+  60:Src/pcf85263.c ****     }
+  61:Src/pcf85263.c ****     else
+  62:Src/pcf85263.c ****     {
+  63:Src/pcf85263.c ****         ret = V_ONE;
+ 153              		.loc 1 63 13 view .LVU35
+ 154 001c 0120     		movs	r0, #1
+ 155              	.L7:
+ 156              	.LVL17:
+  64:Src/pcf85263.c ****         //SEGGER_RTT_printf(0, "pcf85263 write data failed!\n");
+  65:Src/pcf85263.c ****     }
+  66:Src/pcf85263.c ****     //HAL_Delay(5);
+  67:Src/pcf85263.c ****     //HAL_I2C_MspDeInit(I2C3);
+  68:Src/pcf85263.c ****     //set_gpio_mode_input_up(GPIOC, GPIO_PIN_0);
+  69:Src/pcf85263.c ****     //set_gpio_mode_input_up(GPIOC, GPIO_PIN_1);
+  70:Src/pcf85263.c ****     return ret;
+ 157              		.loc 1 70 5 is_stmt 1 view .LVU36
+  71:Src/pcf85263.c **** }
+ 158              		.loc 1 71 1 is_stmt 0 view .LVU37
+ 159 001e 05B0     		add	sp, sp, #20
+ 160              	.LCFI2:
+ 161              		.cfi_def_cfa_offset 4
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 5
+
+
+ 162              		@ sp needed
+ 163 0020 5DF804FB 		ldr	pc, [sp], #4
+ 164              	.L11:
+ 165              		.align	2
+ 166              	.L10:
+ 167 0024 00000000 		.word	hi2c3
+ 168              		.cfi_endproc
+ 169              	.LFE318:
+ 171              		.section	.text.pcf85263_read_data,"ax",%progbits
+ 172              		.align	1
+ 173              		.global	pcf85263_read_data
+ 174              		.syntax unified
+ 175              		.thumb
+ 176              		.thumb_func
+ 177              		.fpu fpv4-sp-d16
+ 179              	pcf85263_read_data:
+ 180              	.LVL18:
+ 181              	.LFB319:
+  72:Src/pcf85263.c **** 
+  73:Src/pcf85263.c **** 
+  74:Src/pcf85263.c **** /***************************************************************
+  75:Src/pcf85263.c **** *@brief  Read the specified length data from PCF8563
+  76:Src/pcf85263.c **** *@param
+  77:Src/pcf85263.c **** *       add      read addr 
+  78:Src/pcf85263.c **** *       read_buf read data 
+  79:Src/pcf85263.c **** *       len      data lenth 
+  80:Src/pcf85263.c **** *@return ：0-> success          1-> fail
+  81:Src/pcf85263.c **** **************************************************************/
+  82:Src/pcf85263.c **** uint8_t pcf85263_read_data(uint8_t addr, uint8_t *read_buf, uint8_t len)
+  83:Src/pcf85263.c **** {
+ 182              		.loc 1 83 1 is_stmt 1 view -0
+ 183              		.cfi_startproc
+ 184              		@ args = 0, pretend = 0, frame = 0
+ 185              		@ frame_needed = 0, uses_anonymous_args = 0
+ 186              		.loc 1 83 1 is_stmt 0 view .LVU39
+ 187 0000 00B5     		push	{lr}
+ 188              	.LCFI3:
+ 189              		.cfi_def_cfa_offset 4
+ 190              		.cfi_offset 14, -4
+ 191 0002 85B0     		sub	sp, sp, #20
+ 192              	.LCFI4:
+ 193              		.cfi_def_cfa_offset 24
+  84:Src/pcf85263.c ****     uint8_t ret = I_ZERO;
+ 194              		.loc 1 84 5 is_stmt 1 view .LVU40
+ 195              	.LVL19:
+  85:Src/pcf85263.c ****     //MX_I2C3_Init();
+  86:Src/pcf85263.c ****     //i2c3_gpio_init();
+  87:Src/pcf85263.c ****     //HAL_Delay(5);
+  88:Src/pcf85263.c **** 	if(HAL_OK == HAL_I2C_Mem_Read(&hi2c3, PCF85263_READ_ADDR, addr, I2C_MEMADD_SIZE_8BIT, read_buf, le
+ 196              		.loc 1 88 2 view .LVU41
+ 197              		.loc 1 88 15 is_stmt 0 view .LVU42
+ 198 0004 4FF47A73 		mov	r3, #1000
+ 199 0008 0293     		str	r3, [sp, #8]
+ 200 000a 0192     		str	r2, [sp, #4]
+ 201 000c 0091     		str	r1, [sp]
+ 202 000e 0123     		movs	r3, #1
+ 203 0010 0246     		mov	r2, r0
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 6
+
+
+ 204              	.LVL20:
+ 205              		.loc 1 88 15 view .LVU43
+ 206 0012 A321     		movs	r1, #163
+ 207              	.LVL21:
+ 208              		.loc 1 88 15 view .LVU44
+ 209 0014 0348     		ldr	r0, .L16
+ 210              	.LVL22:
+ 211              		.loc 1 88 15 view .LVU45
+ 212 0016 FFF7FEFF 		bl	HAL_I2C_Mem_Read
+ 213              	.LVL23:
+ 214              		.loc 1 88 4 view .LVU46
+ 215 001a 00B1     		cbz	r0, .L13
+  89:Src/pcf85263.c ****     {
+  90:Src/pcf85263.c ****         //SEGGER_RTT_printf(0, "pcf85263 read data success!\n");
+  91:Src/pcf85263.c ****         ret = V_ZERO;
+  92:Src/pcf85263.c ****     }
+  93:Src/pcf85263.c ****     else
+  94:Src/pcf85263.c ****     {
+  95:Src/pcf85263.c ****         ret = V_ONE;
+ 216              		.loc 1 95 13 view .LVU47
+ 217 001c 0120     		movs	r0, #1
+ 218              	.L13:
+ 219              	.LVL24:
+  96:Src/pcf85263.c ****         //SEGGER_RTT_printf(0, "pcf85263 read data failed!\n");
+  97:Src/pcf85263.c ****     }
+  98:Src/pcf85263.c ****     //HAL_Delay(5);
+  99:Src/pcf85263.c ****     //HAL_I2C_MspDeInit(I2C3);
+ 100:Src/pcf85263.c ****     //set_gpio_mode_input_up(GPIOC, GPIO_PIN_0);
+ 101:Src/pcf85263.c ****     //set_gpio_mode_input_up(GPIOC, GPIO_PIN_1);
+ 102:Src/pcf85263.c ****     return ret;
+ 220              		.loc 1 102 5 is_stmt 1 view .LVU48
+ 103:Src/pcf85263.c **** }
+ 221              		.loc 1 103 1 is_stmt 0 view .LVU49
+ 222 001e 05B0     		add	sp, sp, #20
+ 223              	.LCFI5:
+ 224              		.cfi_def_cfa_offset 4
+ 225              		@ sp needed
+ 226 0020 5DF804FB 		ldr	pc, [sp], #4
+ 227              	.L17:
+ 228              		.align	2
+ 229              	.L16:
+ 230 0024 00000000 		.word	hi2c3
+ 231              		.cfi_endproc
+ 232              	.LFE319:
+ 234              		.section	.rodata.pcf85263_query_time.str1.4,"aMS",%progbits,1
+ 235              		.align	2
+ 236              	.LC1:
+ 237 0000 6D5F7274 		.ascii	"m_rtc_mode_read = %d\012\000"
+ 237      635F6D6F 
+ 237      64655F72 
+ 237      65616420 
+ 237      3D202564 
+ 238 0016 0000     		.align	2
+ 239              	.LC2:
+ 240 0018 72746320 		.ascii	"rtc time:%d %d %d:%d:%d.%d\012\000"
+ 240      74696D65 
+ 240      3A256420 
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 7
+
+
+ 240      25642025 
+ 240      643A2564 
+ 241              		.align	2
+ 242              	.LC3:
+ 243 0034 72746320 		.ascii	"rtc second invalid\000"
+ 243      7365636F 
+ 243      6E642069 
+ 243      6E76616C 
+ 243      696400
+ 244 0047 00       		.align	2
+ 245              	.LC4:
+ 246 0048 72746320 		.ascii	"rtc minute invalid\000"
+ 246      6D696E75 
+ 246      74652069 
+ 246      6E76616C 
+ 246      696400
+ 247 005b 00       		.align	2
+ 248              	.LC5:
+ 249 005c 72746320 		.ascii	"rtc hour ten invalid\000"
+ 249      686F7572 
+ 249      2074656E 
+ 249      20696E76 
+ 249      616C6964 
+ 250 0071 000000   		.align	2
+ 251              	.LC6:
+ 252 0074 72746320 		.ascii	"rtc hour kilo invalid\000"
+ 252      686F7572 
+ 252      206B696C 
+ 252      6F20696E 
+ 252      76616C69 
+ 253 008a 0000     		.align	2
+ 254              	.LC7:
+ 255 008c 72746320 		.ascii	"rtc hour hundredkilo invalid\000"
+ 255      686F7572 
+ 255      2068756E 
+ 255      64726564 
+ 255      6B696C6F 
+ 256 00a9 000000   		.align	2
+ 257              	.LC8:
+ 258 00ac 4552523A 		.ascii	"ERR:pcf85263_query_time:RTC_OP_INVALID_DATE_TIME\000"
+ 258      70636638 
+ 258      35323633 
+ 258      5F717565 
+ 258      72795F74 
+ 259              		.section	.text.pcf85263_query_time,"ax",%progbits
+ 260              		.align	1
+ 261              		.global	pcf85263_query_time
+ 262              		.syntax unified
+ 263              		.thumb
+ 264              		.thumb_func
+ 265              		.fpu fpv4-sp-d16
+ 267              	pcf85263_query_time:
+ 268              	.LVL25:
+ 269              	.LFB320:
+ 104:Src/pcf85263.c **** 
+ 105:Src/pcf85263.c **** /***************************************************************
+ 106:Src/pcf85263.c **** *@brief  This api is the underlying driver interface to get Date and Time from the related register
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 8
+
+
+ 107:Src/pcf85263.c **** *@param[out]  
+ 108:Src/pcf85263.c **** *           pcf8563_query_timer
+ 109:Src/pcf85263.c **** * @return
+ 110:Src/pcf85263.c **** *            RTC_OP_SUCCESS,                
+ 111:Src/pcf85263.c **** *            RTC_OP_COMMUNICATION_FAILURE,  
+ 112:Src/pcf85263.c **** *            RTC_OP_INVALID_DATE_TIME       
+ 113:Src/pcf85263.c **** **************************************************************/
+ 114:Src/pcf85263.c **** rtc_op_return_type_t pcf85263_query_time(RTC_COUNT_TIME_T *count_time)
+ 115:Src/pcf85263.c **** {
+ 270              		.loc 1 115 1 is_stmt 1 view -0
+ 271              		.cfi_startproc
+ 272              		@ args = 0, pretend = 0, frame = 8
+ 273              		@ frame_needed = 0, uses_anonymous_args = 0
+ 274              		.loc 1 115 1 is_stmt 0 view .LVU51
+ 275 0000 2DE9F047 		push	{r4, r5, r6, r7, r8, r9, r10, lr}
+ 276              	.LCFI6:
+ 277              		.cfi_def_cfa_offset 32
+ 278              		.cfi_offset 4, -32
+ 279              		.cfi_offset 5, -28
+ 280              		.cfi_offset 6, -24
+ 281              		.cfi_offset 7, -20
+ 282              		.cfi_offset 8, -16
+ 283              		.cfi_offset 9, -12
+ 284              		.cfi_offset 10, -8
+ 285              		.cfi_offset 14, -4
+ 286 0004 86B0     		sub	sp, sp, #24
+ 287              	.LCFI7:
+ 288              		.cfi_def_cfa_offset 56
+ 289 0006 0446     		mov	r4, r0
+ 116:Src/pcf85263.c ****     uint8_t m_rtc_mode_read = 0;
+ 290              		.loc 1 116 5 is_stmt 1 view .LVU52
+ 291              		.loc 1 116 13 is_stmt 0 view .LVU53
+ 292 0008 0023     		movs	r3, #0
+ 293 000a 8DF81730 		strb	r3, [sp, #23]
+ 117:Src/pcf85263.c ****     uint8_t ret = I_ZERO;
+ 294              		.loc 1 117 5 is_stmt 1 view .LVU54
+ 295              	.LVL26:
+ 118:Src/pcf85263.c ****     uint8_t ram_flag = I_ZERO;
+ 296              		.loc 1 118 5 view .LVU55
+ 297              		.loc 1 118 13 is_stmt 0 view .LVU56
+ 298 000e 8DF81630 		strb	r3, [sp, #22]
+ 119:Src/pcf85263.c ****     uint8_t PCF8563_Read_buf[V_SIX] = {I_ZERO, I_ZERO, I_ZERO, I_ZERO,\
+ 299              		.loc 1 119 5 is_stmt 1 view .LVU57
+ 300              		.loc 1 119 13 is_stmt 0 view .LVU58
+ 301 0012 4E4B     		ldr	r3, .L36
+ 302 0014 93E80300 		ldm	r3, {r0, r1}
+ 303              	.LVL27:
+ 304              		.loc 1 119 13 view .LVU59
+ 305 0018 0490     		str	r0, [sp, #16]
+ 306 001a ADF81410 		strh	r1, [sp, #20]	@ movhi
+ 120:Src/pcf85263.c ****                                              I_ZERO, I_ZERO};
+ 121:Src/pcf85263.c ****     // uint8_t m_rtc_mode_bit = SW_MODE;   
+ 122:Src/pcf85263.c ****     // ret = pcf85263_write_data(PCF8563_ADDR_FUN, &m_rtc_mode_bit, L_ONE);    /*rtc mode enable*/
+ 123:Src/pcf85263.c ****     // printf("rtc mode enable\n");
+ 124:Src/pcf85263.c **** 
+ 125:Src/pcf85263.c ****     ret = pcf85263_read_data(PCF8563_ADDR_RAM_BYTE, &ram_flag, L_ONE);    /*read flag*/
+ 307              		.loc 1 125 5 is_stmt 1 view .LVU60
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 9
+
+
+ 308              		.loc 1 125 11 is_stmt 0 view .LVU61
+ 309 001e 0122     		movs	r2, #1
+ 310 0020 0DF11601 		add	r1, sp, #22
+ 311 0024 2C20     		movs	r0, #44
+ 312 0026 FFF7FEFF 		bl	pcf85263_read_data
+ 313              	.LVL28:
+ 126:Src/pcf85263.c ****     if(ret != V_ZERO)
+ 314              		.loc 1 126 5 is_stmt 1 view .LVU62
+ 315              		.loc 1 126 7 is_stmt 0 view .LVU63
+ 316 002a 20B1     		cbz	r0, .L30
+ 127:Src/pcf85263.c ****     {
+ 128:Src/pcf85263.c ****         return RTC_OP_COMMUNICATION_FAILURE;
+ 317              		.loc 1 128 16 view .LVU64
+ 318 002c 0126     		movs	r6, #1
+ 319              	.LVL29:
+ 320              	.L19:
+ 129:Src/pcf85263.c ****     }
+ 130:Src/pcf85263.c ****     ret = pcf85263_read_data(PCF8563_ADDR_FUN, &m_rtc_mode_read, L_ONE);    /*read rtc mode */
+ 131:Src/pcf85263.c ****     printf("m_rtc_mode_read = %d\n", m_rtc_mode_read);
+ 132:Src/pcf85263.c ****     HAL_Delay(10);
+ 133:Src/pcf85263.c ****     ret = pcf85263_read_data(PCF8563_ADDR_MS, PCF8563_Read_buf, L_SIX);   /*read time from pcf8563*
+ 134:Src/pcf85263.c **** 
+ 135:Src/pcf85263.c ****     // PCF8563_Read_buf[V_ZERO] &= LOW_SEVEN_BITS_ENABLE;           /*millisecond*/
+ 136:Src/pcf85263.c ****     PCF8563_Read_buf[V_ONE] &= LOW_SEVEN_BITS_ENABLE;           /*second*/
+ 137:Src/pcf85263.c ****     PCF8563_Read_buf[V_TWO] &= LOW_SEVEN_BITS_ENABLE;           /*Minute*/
+ 138:Src/pcf85263.c ****     // PCF8563_Read_buf[V_THREE] &= LOW_SIX_BITS_ENABLE;           /*hour*/
+ 139:Src/pcf85263.c ****     // PCF8563_Read_buf[V_FOUR] &= LOW_SIX_BITS_ENABLE;           /*day*/
+ 140:Src/pcf85263.c ****     // PCF8563_Read_buf[V_FIVE] &= LOW_THREE_BITS_ENABLE;           /*week*/
+ 141:Src/pcf85263.c ****     // PCF8563_Read_buf[V_SIX] &= LOW_FIVE_BITS_ENABLE;           /*month*/
+ 142:Src/pcf85263.c **** 
+ 143:Src/pcf85263.c ****     count_time->millis = bcd_to_bin(PCF8563_Read_buf[V_ZERO]) * TIMES_TEN;
+ 144:Src/pcf85263.c ****     count_time->second = bcd_to_bin(PCF8563_Read_buf[V_ONE]);
+ 145:Src/pcf85263.c ****     count_time->minute = bcd_to_bin(PCF8563_Read_buf[V_TWO]);
+ 146:Src/pcf85263.c ****     count_time->ten = bcd_to_bin(PCF8563_Read_buf[V_THREE]);
+ 147:Src/pcf85263.c ****     count_time->kilo = bcd_to_bin(PCF8563_Read_buf[V_FOUR]);
+ 148:Src/pcf85263.c ****     count_time->hundredkilo = bcd_to_bin(PCF8563_Read_buf[V_FIVE]);
+ 149:Src/pcf85263.c **** 
+ 150:Src/pcf85263.c ****     printf("rtc time:%d %d %d:%d:%d.%d\n", count_time->hundredkilo,count_time->kilo,count_time->ten
+ 151:Src/pcf85263.c ****     if (count_time->second > SECOND_MAX)
+ 152:Src/pcf85263.c ****     {
+ 153:Src/pcf85263.c ****         printf("rtc second invalid\n");
+ 154:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 155:Src/pcf85263.c ****     }    
+ 156:Src/pcf85263.c ****     else if (count_time->minute > MINUTE_MAX)
+ 157:Src/pcf85263.c ****     {
+ 158:Src/pcf85263.c ****         printf("rtc minute invalid\n");
+ 159:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 160:Src/pcf85263.c ****     }    
+ 161:Src/pcf85263.c ****     else if (count_time->ten > TEN_MAX)
+ 162:Src/pcf85263.c ****     {    
+ 163:Src/pcf85263.c ****         printf("rtc hour ten invalid\n");
+ 164:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 165:Src/pcf85263.c ****     } 
+ 166:Src/pcf85263.c ****     else if (count_time->kilo > KILO_MAX)
+ 167:Src/pcf85263.c ****     {    
+ 168:Src/pcf85263.c ****         printf("rtc hour kilo invalid\n");
+ 169:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 10
+
+
+ 170:Src/pcf85263.c ****     }    
+ 171:Src/pcf85263.c ****     else if (count_time->hundredkilo > H_KILO_MAX)
+ 172:Src/pcf85263.c ****     {    
+ 173:Src/pcf85263.c ****         printf("rtc hour hundredkilo invalid\n");
+ 174:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 175:Src/pcf85263.c ****     }    
+ 176:Src/pcf85263.c **** 
+ 177:Src/pcf85263.c ****     if(ret == RTC_OP_INVALID_DATE_TIME)
+ 178:Src/pcf85263.c ****     {
+ 179:Src/pcf85263.c ****         printf("ERR:pcf85263_query_time:RTC_OP_INVALID_DATE_TIME\n");
+ 180:Src/pcf85263.c ****         return ret;
+ 181:Src/pcf85263.c ****     } 
+ 182:Src/pcf85263.c **** 
+ 183:Src/pcf85263.c ****     if (ret == V_ZERO)
+ 184:Src/pcf85263.c ****     {
+ 185:Src/pcf85263.c ****         if (ram_flag != RAM_FLAG_VALUE)                                            /*Here protocol 
+ 186:Src/pcf85263.c ****         {
+ 187:Src/pcf85263.c ****             return RTC_OP_INVALID_DATE_TIME;                            /*Time is not accurate*/
+ 188:Src/pcf85263.c ****         }
+ 189:Src/pcf85263.c ****         else
+ 190:Src/pcf85263.c ****         {
+ 191:Src/pcf85263.c ****             return RTC_OP_SUCCESS;                                      /*Correct read to time*/
+ 192:Src/pcf85263.c ****         }
+ 193:Src/pcf85263.c ****     }
+ 194:Src/pcf85263.c ****     else
+ 195:Src/pcf85263.c ****     {
+ 196:Src/pcf85263.c ****         return RTC_OP_COMMUNICATION_FAILURE;                             /*read failure communicati
+ 197:Src/pcf85263.c ****     }
+ 198:Src/pcf85263.c **** }
+ 321              		.loc 1 198 1 view .LVU65
+ 322 002e 3046     		mov	r0, r6
+ 323 0030 06B0     		add	sp, sp, #24
+ 324              	.LCFI8:
+ 325              		.cfi_remember_state
+ 326              		.cfi_def_cfa_offset 32
+ 327              		@ sp needed
+ 328 0032 BDE8F087 		pop	{r4, r5, r6, r7, r8, r9, r10, pc}
+ 329              	.LVL30:
+ 330              	.L30:
+ 331              	.LCFI9:
+ 332              		.cfi_restore_state
+ 130:Src/pcf85263.c ****     printf("m_rtc_mode_read = %d\n", m_rtc_mode_read);
+ 333              		.loc 1 130 5 is_stmt 1 view .LVU66
+ 130:Src/pcf85263.c ****     printf("m_rtc_mode_read = %d\n", m_rtc_mode_read);
+ 334              		.loc 1 130 11 is_stmt 0 view .LVU67
+ 335 0036 0122     		movs	r2, #1
+ 336 0038 0DF11701 		add	r1, sp, #23
+ 337 003c 2820     		movs	r0, #40
+ 338              	.LVL31:
+ 130:Src/pcf85263.c ****     printf("m_rtc_mode_read = %d\n", m_rtc_mode_read);
+ 339              		.loc 1 130 11 view .LVU68
+ 340 003e FFF7FEFF 		bl	pcf85263_read_data
+ 341              	.LVL32:
+ 131:Src/pcf85263.c ****     HAL_Delay(10);
+ 342              		.loc 1 131 5 is_stmt 1 view .LVU69
+ 343 0042 9DF81710 		ldrb	r1, [sp, #23]	@ zero_extendqisi2
+ 344 0046 4248     		ldr	r0, .L36+4
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 11
+
+
+ 345 0048 FFF7FEFF 		bl	printf
+ 346              	.LVL33:
+ 132:Src/pcf85263.c ****     ret = pcf85263_read_data(PCF8563_ADDR_MS, PCF8563_Read_buf, L_SIX);   /*read time from pcf8563*
+ 347              		.loc 1 132 5 view .LVU70
+ 348 004c 0A20     		movs	r0, #10
+ 349 004e FFF7FEFF 		bl	HAL_Delay
+ 350              	.LVL34:
+ 133:Src/pcf85263.c **** 
+ 351              		.loc 1 133 5 view .LVU71
+ 133:Src/pcf85263.c **** 
+ 352              		.loc 1 133 11 is_stmt 0 view .LVU72
+ 353 0052 0622     		movs	r2, #6
+ 354 0054 04A9     		add	r1, sp, #16
+ 355 0056 0020     		movs	r0, #0
+ 356 0058 FFF7FEFF 		bl	pcf85263_read_data
+ 357              	.LVL35:
+ 358 005c 0646     		mov	r6, r0
+ 359              	.LVL36:
+ 136:Src/pcf85263.c ****     PCF8563_Read_buf[V_TWO] &= LOW_SEVEN_BITS_ENABLE;           /*Minute*/
+ 360              		.loc 1 136 5 is_stmt 1 view .LVU73
+ 136:Src/pcf85263.c ****     PCF8563_Read_buf[V_TWO] &= LOW_SEVEN_BITS_ENABLE;           /*Minute*/
+ 361              		.loc 1 136 29 is_stmt 0 view .LVU74
+ 362 005e 9DF81130 		ldrb	r3, [sp, #17]	@ zero_extendqisi2
+ 363 0062 03F07F03 		and	r3, r3, #127
+ 364 0066 9846     		mov	r8, r3
+ 365 0068 8DF81130 		strb	r3, [sp, #17]
+ 137:Src/pcf85263.c ****     // PCF8563_Read_buf[V_THREE] &= LOW_SIX_BITS_ENABLE;           /*hour*/
+ 366              		.loc 1 137 5 is_stmt 1 view .LVU75
+ 137:Src/pcf85263.c ****     // PCF8563_Read_buf[V_THREE] &= LOW_SIX_BITS_ENABLE;           /*hour*/
+ 367              		.loc 1 137 29 is_stmt 0 view .LVU76
+ 368 006c 9DF81230 		ldrb	r3, [sp, #18]	@ zero_extendqisi2
+ 369 0070 03F07F03 		and	r3, r3, #127
+ 370 0074 1F46     		mov	r7, r3
+ 371 0076 8DF81230 		strb	r3, [sp, #18]
+ 143:Src/pcf85263.c ****     count_time->second = bcd_to_bin(PCF8563_Read_buf[V_ONE]);
+ 372              		.loc 1 143 5 is_stmt 1 view .LVU77
+ 143:Src/pcf85263.c ****     count_time->second = bcd_to_bin(PCF8563_Read_buf[V_ONE]);
+ 373              		.loc 1 143 26 is_stmt 0 view .LVU78
+ 374 007a 9DF81000 		ldrb	r0, [sp, #16]	@ zero_extendqisi2
+ 375 007e FFF7FEFF 		bl	bcd_to_bin
+ 376              	.LVL37:
+ 377 0082 85B2     		uxth	r5, r0
+ 143:Src/pcf85263.c ****     count_time->second = bcd_to_bin(PCF8563_Read_buf[V_ONE]);
+ 378              		.loc 1 143 63 view .LVU79
+ 379 0084 05EB8505 		add	r5, r5, r5, lsl #2
+ 380 0088 6D00     		lsls	r5, r5, #1
+ 381 008a ADB2     		uxth	r5, r5
+ 143:Src/pcf85263.c ****     count_time->second = bcd_to_bin(PCF8563_Read_buf[V_ONE]);
+ 382              		.loc 1 143 24 view .LVU80
+ 383 008c 2580     		strh	r5, [r4]	@ movhi
+ 144:Src/pcf85263.c ****     count_time->minute = bcd_to_bin(PCF8563_Read_buf[V_TWO]);
+ 384              		.loc 1 144 5 is_stmt 1 view .LVU81
+ 144:Src/pcf85263.c ****     count_time->minute = bcd_to_bin(PCF8563_Read_buf[V_TWO]);
+ 385              		.loc 1 144 26 is_stmt 0 view .LVU82
+ 386 008e 08F07F00 		and	r0, r8, #127
+ 387 0092 FFF7FEFF 		bl	bcd_to_bin
+ 388              	.LVL38:
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 12
+
+
+ 389 0096 8146     		mov	r9, r0
+ 144:Src/pcf85263.c ****     count_time->minute = bcd_to_bin(PCF8563_Read_buf[V_TWO]);
+ 390              		.loc 1 144 24 view .LVU83
+ 391 0098 A070     		strb	r0, [r4, #2]
+ 145:Src/pcf85263.c ****     count_time->ten = bcd_to_bin(PCF8563_Read_buf[V_THREE]);
+ 392              		.loc 1 145 5 is_stmt 1 view .LVU84
+ 145:Src/pcf85263.c ****     count_time->ten = bcd_to_bin(PCF8563_Read_buf[V_THREE]);
+ 393              		.loc 1 145 26 is_stmt 0 view .LVU85
+ 394 009a 07F07F00 		and	r0, r7, #127
+ 395 009e FFF7FEFF 		bl	bcd_to_bin
+ 396              	.LVL39:
+ 397 00a2 8246     		mov	r10, r0
+ 145:Src/pcf85263.c ****     count_time->ten = bcd_to_bin(PCF8563_Read_buf[V_THREE]);
+ 398              		.loc 1 145 24 view .LVU86
+ 399 00a4 E070     		strb	r0, [r4, #3]
+ 146:Src/pcf85263.c ****     count_time->kilo = bcd_to_bin(PCF8563_Read_buf[V_FOUR]);
+ 400              		.loc 1 146 5 is_stmt 1 view .LVU87
+ 146:Src/pcf85263.c ****     count_time->kilo = bcd_to_bin(PCF8563_Read_buf[V_FOUR]);
+ 401              		.loc 1 146 23 is_stmt 0 view .LVU88
+ 402 00a6 9DF81300 		ldrb	r0, [sp, #19]	@ zero_extendqisi2
+ 403 00aa FFF7FEFF 		bl	bcd_to_bin
+ 404              	.LVL40:
+ 405 00ae 8046     		mov	r8, r0
+ 146:Src/pcf85263.c ****     count_time->kilo = bcd_to_bin(PCF8563_Read_buf[V_FOUR]);
+ 406              		.loc 1 146 21 view .LVU89
+ 407 00b0 2071     		strb	r0, [r4, #4]
+ 147:Src/pcf85263.c ****     count_time->hundredkilo = bcd_to_bin(PCF8563_Read_buf[V_FIVE]);
+ 408              		.loc 1 147 5 is_stmt 1 view .LVU90
+ 147:Src/pcf85263.c ****     count_time->hundredkilo = bcd_to_bin(PCF8563_Read_buf[V_FIVE]);
+ 409              		.loc 1 147 24 is_stmt 0 view .LVU91
+ 410 00b2 9DF81400 		ldrb	r0, [sp, #20]	@ zero_extendqisi2
+ 411 00b6 FFF7FEFF 		bl	bcd_to_bin
+ 412              	.LVL41:
+ 413 00ba 0746     		mov	r7, r0
+ 147:Src/pcf85263.c ****     count_time->hundredkilo = bcd_to_bin(PCF8563_Read_buf[V_FIVE]);
+ 414              		.loc 1 147 22 view .LVU92
+ 415 00bc 6071     		strb	r0, [r4, #5]
+ 148:Src/pcf85263.c **** 
+ 416              		.loc 1 148 5 is_stmt 1 view .LVU93
+ 148:Src/pcf85263.c **** 
+ 417              		.loc 1 148 31 is_stmt 0 view .LVU94
+ 418 00be 9DF81500 		ldrb	r0, [sp, #21]	@ zero_extendqisi2
+ 419 00c2 FFF7FEFF 		bl	bcd_to_bin
+ 420              	.LVL42:
+ 421 00c6 0146     		mov	r1, r0
+ 148:Src/pcf85263.c **** 
+ 422              		.loc 1 148 29 view .LVU95
+ 423 00c8 A071     		strb	r0, [r4, #6]
+ 150:Src/pcf85263.c ****     if (count_time->second > SECOND_MAX)
+ 424              		.loc 1 150 5 is_stmt 1 view .LVU96
+ 425 00ca 0295     		str	r5, [sp, #8]
+ 426 00cc CDF80490 		str	r9, [sp, #4]
+ 427 00d0 CDF800A0 		str	r10, [sp]
+ 428 00d4 4346     		mov	r3, r8
+ 429 00d6 3A46     		mov	r2, r7
+ 430 00d8 1E48     		ldr	r0, .L36+8
+ 431 00da FFF7FEFF 		bl	printf
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 13
+
+
+ 432              	.LVL43:
+ 151:Src/pcf85263.c ****     {
+ 433              		.loc 1 151 5 view .LVU97
+ 151:Src/pcf85263.c ****     {
+ 434              		.loc 1 151 19 is_stmt 0 view .LVU98
+ 435 00de A378     		ldrb	r3, [r4, #2]	@ zero_extendqisi2
+ 151:Src/pcf85263.c ****     {
+ 436              		.loc 1 151 8 view .LVU99
+ 437 00e0 3B2B     		cmp	r3, #59
+ 438 00e2 14D8     		bhi	.L31
+ 156:Src/pcf85263.c ****     {
+ 439              		.loc 1 156 10 is_stmt 1 view .LVU100
+ 156:Src/pcf85263.c ****     {
+ 440              		.loc 1 156 24 is_stmt 0 view .LVU101
+ 441 00e4 E378     		ldrb	r3, [r4, #3]	@ zero_extendqisi2
+ 156:Src/pcf85263.c ****     {
+ 442              		.loc 1 156 13 view .LVU102
+ 443 00e6 3B2B     		cmp	r3, #59
+ 444 00e8 19D8     		bhi	.L32
+ 161:Src/pcf85263.c ****     {    
+ 445              		.loc 1 161 10 is_stmt 1 view .LVU103
+ 161:Src/pcf85263.c ****     {    
+ 446              		.loc 1 161 24 is_stmt 0 view .LVU104
+ 447 00ea 2379     		ldrb	r3, [r4, #4]	@ zero_extendqisi2
+ 161:Src/pcf85263.c ****     {    
+ 448              		.loc 1 161 13 view .LVU105
+ 449 00ec 632B     		cmp	r3, #99
+ 450 00ee 1BD8     		bhi	.L33
+ 166:Src/pcf85263.c ****     {    
+ 451              		.loc 1 166 10 is_stmt 1 view .LVU106
+ 166:Src/pcf85263.c ****     {    
+ 452              		.loc 1 166 24 is_stmt 0 view .LVU107
+ 453 00f0 6379     		ldrb	r3, [r4, #5]	@ zero_extendqisi2
+ 166:Src/pcf85263.c ****     {    
+ 454              		.loc 1 166 13 view .LVU108
+ 455 00f2 632B     		cmp	r3, #99
+ 456 00f4 1DD8     		bhi	.L34
+ 171:Src/pcf85263.c ****     {    
+ 457              		.loc 1 171 10 is_stmt 1 view .LVU109
+ 171:Src/pcf85263.c ****     {    
+ 458              		.loc 1 171 24 is_stmt 0 view .LVU110
+ 459 00f6 A379     		ldrb	r3, [r4, #6]	@ zero_extendqisi2
+ 171:Src/pcf85263.c ****     {    
+ 460              		.loc 1 171 13 view .LVU111
+ 461 00f8 632B     		cmp	r3, #99
+ 462 00fa 1FD8     		bhi	.L35
+ 177:Src/pcf85263.c ****     {
+ 463              		.loc 1 177 5 is_stmt 1 view .LVU112
+ 177:Src/pcf85263.c ****     {
+ 464              		.loc 1 177 7 is_stmt 0 view .LVU113
+ 465 00fc 022E     		cmp	r6, #2
+ 466 00fe 0AD0     		beq	.L21
+ 183:Src/pcf85263.c ****     {
+ 467              		.loc 1 183 5 is_stmt 1 view .LVU114
+ 183:Src/pcf85263.c ****     {
+ 468              		.loc 1 183 8 is_stmt 0 view .LVU115
+ 469 0100 0EBB     		cbnz	r6, .L28
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 14
+
+
+ 185:Src/pcf85263.c ****         {
+ 470              		.loc 1 185 9 is_stmt 1 view .LVU116
+ 185:Src/pcf85263.c ****         {
+ 471              		.loc 1 185 22 is_stmt 0 view .LVU117
+ 472 0102 9DF81630 		ldrb	r3, [sp, #22]	@ zero_extendqisi2
+ 185:Src/pcf85263.c ****         {
+ 473              		.loc 1 185 12 view .LVU118
+ 474 0106 A52B     		cmp	r3, #165
+ 475 0108 91D0     		beq	.L19
+ 187:Src/pcf85263.c ****         }
+ 476              		.loc 1 187 20 view .LVU119
+ 477 010a 0226     		movs	r6, #2
+ 478              	.LVL44:
+ 187:Src/pcf85263.c ****         }
+ 479              		.loc 1 187 20 view .LVU120
+ 480 010c 8FE7     		b	.L19
+ 481              	.LVL45:
+ 482              	.L31:
+ 153:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 483              		.loc 1 153 9 is_stmt 1 view .LVU121
+ 484 010e 1248     		ldr	r0, .L36+12
+ 485 0110 FFF7FEFF 		bl	puts
+ 486              	.LVL46:
+ 154:Src/pcf85263.c ****     }    
+ 487              		.loc 1 154 9 view .LVU122
+ 177:Src/pcf85263.c ****     {
+ 488              		.loc 1 177 5 view .LVU123
+ 154:Src/pcf85263.c ****     }    
+ 489              		.loc 1 154 13 is_stmt 0 view .LVU124
+ 490 0114 0226     		movs	r6, #2
+ 491              	.LVL47:
+ 492              	.L21:
+ 179:Src/pcf85263.c ****         return ret;
+ 493              		.loc 1 179 9 is_stmt 1 view .LVU125
+ 494 0116 1148     		ldr	r0, .L36+16
+ 495 0118 FFF7FEFF 		bl	puts
+ 496              	.LVL48:
+ 180:Src/pcf85263.c ****     } 
+ 497              		.loc 1 180 9 view .LVU126
+ 180:Src/pcf85263.c ****     } 
+ 498              		.loc 1 180 16 is_stmt 0 view .LVU127
+ 499 011c 87E7     		b	.L19
+ 500              	.LVL49:
+ 501              	.L32:
+ 158:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 502              		.loc 1 158 9 is_stmt 1 view .LVU128
+ 503 011e 1048     		ldr	r0, .L36+20
+ 504 0120 FFF7FEFF 		bl	puts
+ 505              	.LVL50:
+ 159:Src/pcf85263.c ****     }    
+ 506              		.loc 1 159 9 view .LVU129
+ 177:Src/pcf85263.c ****     {
+ 507              		.loc 1 177 5 view .LVU130
+ 159:Src/pcf85263.c ****     }    
+ 508              		.loc 1 159 13 is_stmt 0 view .LVU131
+ 509 0124 0226     		movs	r6, #2
+ 510 0126 F6E7     		b	.L21
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 15
+
+
+ 511              	.LVL51:
+ 512              	.L33:
+ 163:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 513              		.loc 1 163 9 is_stmt 1 view .LVU132
+ 514 0128 0E48     		ldr	r0, .L36+24
+ 515 012a FFF7FEFF 		bl	puts
+ 516              	.LVL52:
+ 164:Src/pcf85263.c ****     } 
+ 517              		.loc 1 164 9 view .LVU133
+ 177:Src/pcf85263.c ****     {
+ 518              		.loc 1 177 5 view .LVU134
+ 164:Src/pcf85263.c ****     } 
+ 519              		.loc 1 164 13 is_stmt 0 view .LVU135
+ 520 012e 0226     		movs	r6, #2
+ 521 0130 F1E7     		b	.L21
+ 522              	.LVL53:
+ 523              	.L34:
+ 168:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 524              		.loc 1 168 9 is_stmt 1 view .LVU136
+ 525 0132 0D48     		ldr	r0, .L36+28
+ 526 0134 FFF7FEFF 		bl	puts
+ 527              	.LVL54:
+ 169:Src/pcf85263.c ****     }    
+ 528              		.loc 1 169 9 view .LVU137
+ 177:Src/pcf85263.c ****     {
+ 529              		.loc 1 177 5 view .LVU138
+ 169:Src/pcf85263.c ****     }    
+ 530              		.loc 1 169 13 is_stmt 0 view .LVU139
+ 531 0138 0226     		movs	r6, #2
+ 532 013a ECE7     		b	.L21
+ 533              	.LVL55:
+ 534              	.L35:
+ 173:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 535              		.loc 1 173 9 is_stmt 1 view .LVU140
+ 536 013c 0B48     		ldr	r0, .L36+32
+ 537 013e FFF7FEFF 		bl	puts
+ 538              	.LVL56:
+ 174:Src/pcf85263.c ****     }    
+ 539              		.loc 1 174 9 view .LVU141
+ 177:Src/pcf85263.c ****     {
+ 540              		.loc 1 177 5 view .LVU142
+ 174:Src/pcf85263.c ****     }    
+ 541              		.loc 1 174 13 is_stmt 0 view .LVU143
+ 542 0142 0226     		movs	r6, #2
+ 543 0144 E7E7     		b	.L21
+ 544              	.LVL57:
+ 545              	.L28:
+ 196:Src/pcf85263.c ****     }
+ 546              		.loc 1 196 16 view .LVU144
+ 547 0146 0126     		movs	r6, #1
+ 548              	.LVL58:
+ 196:Src/pcf85263.c ****     }
+ 549              		.loc 1 196 16 view .LVU145
+ 550 0148 71E7     		b	.L19
+ 551              	.L37:
+ 552 014a 00BF     		.align	2
+ 553              	.L36:
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 16
+
+
+ 554 014c 00000000 		.word	.LANCHOR0
+ 555 0150 00000000 		.word	.LC1
+ 556 0154 18000000 		.word	.LC2
+ 557 0158 34000000 		.word	.LC3
+ 558 015c AC000000 		.word	.LC8
+ 559 0160 48000000 		.word	.LC4
+ 560 0164 5C000000 		.word	.LC5
+ 561 0168 74000000 		.word	.LC6
+ 562 016c 8C000000 		.word	.LC7
+ 563              		.cfi_endproc
+ 564              	.LFE320:
+ 566              		.section	.rodata.pcf85263_set_time.str1.4,"aMS",%progbits,1
+ 567              		.align	2
+ 568              	.LC9:
+ 569 0000 70636638 		.ascii	"pcf85263 set time\000"
+ 569      35323633 
+ 569      20736574 
+ 569      2074696D 
+ 569      6500
+ 570 0012 0000     		.align	2
+ 571              	.LC10:
+ 572 0014 73657420 		.ascii	"set zero to five:\000"
+ 572      7A65726F 
+ 572      20746F20 
+ 572      66697665 
+ 572      3A00
+ 573 0026 0000     		.align	2
+ 574              	.LC11:
+ 575 0028 25642000 		.ascii	"%d \000"
+ 576              		.section	.text.pcf85263_set_time,"ax",%progbits
+ 577              		.align	1
+ 578              		.global	pcf85263_set_time
+ 579              		.syntax unified
+ 580              		.thumb
+ 581              		.thumb_func
+ 582              		.fpu fpv4-sp-d16
+ 584              	pcf85263_set_time:
+ 585              	.LFB321:
+ 199:Src/pcf85263.c **** 
+ 200:Src/pcf85263.c **** /***************************************************************
+ 201:Src/pcf85263.c **** * @brief  This is the underlying driver interface to configure the Date and Time register 
+ 202:Src/pcf85263.c **** *        for the external rtc chip 
+ 203:Src/pcf85263.c **** * @param[in]
+ 204:Src/pcf85263.c **** *          pcf8563_set_timer
+ 205:Src/pcf85263.c **** * @return
+ 206:Src/pcf85263.c **** *          RTC_OP_SUCCESS                
+ 207:Src/pcf85263.c **** *          RTC_OP_COMMUNICATION_FAILURE  
+ 208:Src/pcf85263.c **** **************************************************************/
+ 209:Src/pcf85263.c **** rtc_op_return_type_t pcf85263_set_time(RTC_COUNT_TIME_T count_time)
+ 210:Src/pcf85263.c **** {
+ 586              		.loc 1 210 1 is_stmt 1 view -0
+ 587              		.cfi_startproc
+ 588              		@ args = 0, pretend = 0, frame = 24
+ 589              		@ frame_needed = 0, uses_anonymous_args = 0
+ 590 0000 30B5     		push	{r4, r5, lr}
+ 591              	.LCFI10:
+ 592              		.cfi_def_cfa_offset 12
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 17
+
+
+ 593              		.cfi_offset 4, -12
+ 594              		.cfi_offset 5, -8
+ 595              		.cfi_offset 14, -4
+ 596 0002 87B0     		sub	sp, sp, #28
+ 597              	.LCFI11:
+ 598              		.cfi_def_cfa_offset 40
+ 599 0004 6B46     		mov	r3, sp
+ 600 0006 83E80300 		stm	r3, {r0, r1}
+ 211:Src/pcf85263.c ****     uint8_t ret = RTC_OP_SUCCESS;
+ 601              		.loc 1 211 5 view .LVU147
+ 602              	.LVL59:
+ 212:Src/pcf85263.c ****     uint8_t m_100th_seconds_dis = I_ZERO;
+ 603              		.loc 1 212 5 view .LVU148
+ 604              		.loc 1 212 13 is_stmt 0 view .LVU149
+ 605 000a 0023     		movs	r3, #0
+ 606 000c 8DF81730 		strb	r3, [sp, #23]
+ 213:Src/pcf85263.c ****     uint8_t m_stop_clock = V_ONE;
+ 607              		.loc 1 213 5 is_stmt 1 view .LVU150
+ 608              		.loc 1 213 13 is_stmt 0 view .LVU151
+ 609 0010 0123     		movs	r3, #1
+ 610 0012 8DF81630 		strb	r3, [sp, #22]
+ 214:Src/pcf85263.c ****     uint8_t m_clear_prescaler = 0xA4;
+ 611              		.loc 1 214 5 is_stmt 1 view .LVU152
+ 612              		.loc 1 214 13 is_stmt 0 view .LVU153
+ 613 0016 A423     		movs	r3, #164
+ 614 0018 8DF81530 		strb	r3, [sp, #21]
+ 215:Src/pcf85263.c ****     printf("pcf85263 set time\n");
+ 615              		.loc 1 215 5 is_stmt 1 view .LVU154
+ 616 001c 4B48     		ldr	r0, .L67
+ 617 001e FFF7FEFF 		bl	puts
+ 618              	.LVL60:
+ 216:Src/pcf85263.c ****     if (count_time.second > SECOND_MAX)
+ 619              		.loc 1 216 5 view .LVU155
+ 620              		.loc 1 216 19 is_stmt 0 view .LVU156
+ 621 0022 9DF80230 		ldrb	r3, [sp, #2]	@ zero_extendqisi2
+ 622              		.loc 1 216 8 view .LVU157
+ 623 0026 3B2B     		cmp	r3, #59
+ 624 0028 32D8     		bhi	.L56
+ 217:Src/pcf85263.c ****     {
+ 218:Src/pcf85263.c ****         printf("rtc second invalid\n");
+ 219:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 220:Src/pcf85263.c ****     }    
+ 221:Src/pcf85263.c ****     else if (count_time.minute > MINUTE_MAX)
+ 625              		.loc 1 221 10 is_stmt 1 view .LVU158
+ 626              		.loc 1 221 24 is_stmt 0 view .LVU159
+ 627 002a 9DF80320 		ldrb	r2, [sp, #3]	@ zero_extendqisi2
+ 628              		.loc 1 221 13 view .LVU160
+ 629 002e 3B2A     		cmp	r2, #59
+ 630 0030 32D8     		bhi	.L57
+ 222:Src/pcf85263.c ****     {
+ 223:Src/pcf85263.c ****         printf("rtc minute invalid\n");
+ 224:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 225:Src/pcf85263.c ****     }    
+ 226:Src/pcf85263.c ****     else if (count_time.ten > TEN_MAX)
+ 631              		.loc 1 226 10 is_stmt 1 view .LVU161
+ 632              		.loc 1 226 24 is_stmt 0 view .LVU162
+ 633 0032 9DF80410 		ldrb	r1, [sp, #4]	@ zero_extendqisi2
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 18
+
+
+ 634              		.loc 1 226 13 view .LVU163
+ 635 0036 6329     		cmp	r1, #99
+ 636 0038 32D8     		bhi	.L58
+ 227:Src/pcf85263.c ****     {    
+ 228:Src/pcf85263.c ****         printf("rtc hour ten invalid\n");
+ 229:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 230:Src/pcf85263.c ****     } 
+ 231:Src/pcf85263.c ****     else if (count_time.kilo > KILO_MAX)
+ 637              		.loc 1 231 10 is_stmt 1 view .LVU164
+ 638              		.loc 1 231 24 is_stmt 0 view .LVU165
+ 639 003a 9DF80500 		ldrb	r0, [sp, #5]	@ zero_extendqisi2
+ 640              		.loc 1 231 13 view .LVU166
+ 641 003e 6328     		cmp	r0, #99
+ 642 0040 32D8     		bhi	.L59
+ 232:Src/pcf85263.c ****     {    
+ 233:Src/pcf85263.c ****         printf("rtc hour kilo invalid\n");
+ 234:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 235:Src/pcf85263.c ****     }    
+ 236:Src/pcf85263.c ****     else if (count_time.hundredkilo > H_KILO_MAX)
+ 643              		.loc 1 236 10 is_stmt 1 view .LVU167
+ 644              		.loc 1 236 24 is_stmt 0 view .LVU168
+ 645 0042 9DF80650 		ldrb	r5, [sp, #6]	@ zero_extendqisi2
+ 646              		.loc 1 236 13 view .LVU169
+ 647 0046 632D     		cmp	r5, #99
+ 648 0048 32D8     		bhi	.L60
+ 237:Src/pcf85263.c ****     {    
+ 238:Src/pcf85263.c ****         printf("rtc hour hundredkilo invalid\n");
+ 239:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 240:Src/pcf85263.c ****     }  
+ 241:Src/pcf85263.c **** 
+ 242:Src/pcf85263.c ****     if(ret == RTC_OP_INVALID_DATE_TIME)
+ 649              		.loc 1 242 5 is_stmt 1 view .LVU170
+ 243:Src/pcf85263.c ****     {
+ 244:Src/pcf85263.c ****         printf("ERR:pcf85263_query_time:RTC_OP_INVALID_DATE_TIME\n");
+ 245:Src/pcf85263.c ****         return ret;
+ 246:Src/pcf85263.c ****     }    
+ 247:Src/pcf85263.c ****         
+ 248:Src/pcf85263.c ****     uint8_t pcf8563_flag = RAM_FLAG_VALUE;
+ 650              		.loc 1 248 5 view .LVU171
+ 651              		.loc 1 248 13 is_stmt 0 view .LVU172
+ 652 004a A524     		movs	r4, #165
+ 653 004c 8DF81440 		strb	r4, [sp, #20]
+ 249:Src/pcf85263.c ****     uint8_t PCF8563_Set_buf[V_SIX] = {I_ZERO, I_ZERO, I_ZERO, I_ZERO,\
+ 654              		.loc 1 249 5 is_stmt 1 view .LVU173
+ 250:Src/pcf85263.c ****                                             I_ZERO, I_ZERO};
+ 251:Src/pcf85263.c **** 
+ 252:Src/pcf85263.c ****     PCF8563_Set_buf[V_ZERO] = I_ZERO;
+ 655              		.loc 1 252 5 view .LVU174
+ 656              		.loc 1 252 29 is_stmt 0 view .LVU175
+ 657 0050 0024     		movs	r4, #0
+ 658 0052 8DF80C40 		strb	r4, [sp, #12]
+ 253:Src/pcf85263.c ****     PCF8563_Set_buf[V_ONE] = count_time.second;
+ 659              		.loc 1 253 5 is_stmt 1 view .LVU176
+ 254:Src/pcf85263.c ****     PCF8563_Set_buf[V_TWO] = count_time.minute;
+ 660              		.loc 1 254 5 view .LVU177
+ 255:Src/pcf85263.c ****     PCF8563_Set_buf[V_THREE] = count_time.ten;
+ 661              		.loc 1 255 5 view .LVU178
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 19
+
+
+ 662              		.loc 1 255 30 is_stmt 0 view .LVU179
+ 663 0056 8DF80F10 		strb	r1, [sp, #15]
+ 256:Src/pcf85263.c ****     PCF8563_Set_buf[V_FOUR] = count_time.kilo;
+ 664              		.loc 1 256 5 is_stmt 1 view .LVU180
+ 665              		.loc 1 256 29 is_stmt 0 view .LVU181
+ 666 005a 8DF81000 		strb	r0, [sp, #16]
+ 257:Src/pcf85263.c ****     PCF8563_Set_buf[V_FIVE] = count_time.hundredkilo;                                              
+ 667              		.loc 1 257 5 is_stmt 1 view .LVU182
+ 668              		.loc 1 257 29 is_stmt 0 view .LVU183
+ 669 005e 8DF81150 		strb	r5, [sp, #17]
+ 258:Src/pcf85263.c **** 
+ 259:Src/pcf85263.c ****     PCF8563_Set_buf[V_ZERO] &= LOW_SEVEN_BITS_ENABLE;           /*millisecond*/
+ 670              		.loc 1 259 5 is_stmt 1 view .LVU184
+ 260:Src/pcf85263.c ****     PCF8563_Set_buf[V_ONE] &= LOW_SEVEN_BITS_ENABLE;           /*second*/
+ 671              		.loc 1 260 5 view .LVU185
+ 672              		.loc 1 260 28 is_stmt 0 view .LVU186
+ 673 0062 03F07F03 		and	r3, r3, #127
+ 674 0066 8DF80D30 		strb	r3, [sp, #13]
+ 261:Src/pcf85263.c ****     PCF8563_Set_buf[V_TWO] &= LOW_SEVEN_BITS_ENABLE;           /*Minute*/
+ 675              		.loc 1 261 5 is_stmt 1 view .LVU187
+ 676              		.loc 1 261 28 is_stmt 0 view .LVU188
+ 677 006a 02F07F02 		and	r2, r2, #127
+ 678 006e 8DF80E20 		strb	r2, [sp, #14]
+ 262:Src/pcf85263.c ****     
+ 263:Src/pcf85263.c ****     printf("set zero to five:");    
+ 679              		.loc 1 263 5 is_stmt 1 view .LVU189
+ 680 0072 3748     		ldr	r0, .L67+4
+ 681 0074 FFF7FEFF 		bl	printf
+ 682              	.LVL61:
+ 264:Src/pcf85263.c ****     for(uint8_t i = 0; i < 6; i++)
+ 683              		.loc 1 264 5 view .LVU190
+ 684              	.LBB2:
+ 685              		.loc 1 264 9 view .LVU191
+ 686              	.L45:
+ 687              		.loc 1 264 24 discriminator 1 view .LVU192
+ 688              		.loc 1 264 5 is_stmt 0 discriminator 1 view .LVU193
+ 689 0078 052C     		cmp	r4, #5
+ 690 007a 22D8     		bhi	.L61
+ 265:Src/pcf85263.c ****     {
+ 266:Src/pcf85263.c ****         printf("%d ", PCF8563_Set_buf[i]);
+ 691              		.loc 1 266 9 is_stmt 1 discriminator 3 view .LVU194
+ 692              		.loc 1 266 38 is_stmt 0 discriminator 3 view .LVU195
+ 693 007c 06AB     		add	r3, sp, #24
+ 694 007e 2344     		add	r3, r3, r4
+ 695              		.loc 1 266 9 discriminator 3 view .LVU196
+ 696 0080 13F80C1C 		ldrb	r1, [r3, #-12]	@ zero_extendqisi2
+ 697 0084 3348     		ldr	r0, .L67+8
+ 698 0086 FFF7FEFF 		bl	printf
+ 699              	.LVL62:
+ 264:Src/pcf85263.c ****     for(uint8_t i = 0; i < 6; i++)
+ 700              		.loc 1 264 31 is_stmt 1 discriminator 3 view .LVU197
+ 264:Src/pcf85263.c ****     for(uint8_t i = 0; i < 6; i++)
+ 701              		.loc 1 264 32 is_stmt 0 discriminator 3 view .LVU198
+ 702 008a 0134     		adds	r4, r4, #1
+ 703              	.LVL63:
+ 264:Src/pcf85263.c ****     for(uint8_t i = 0; i < 6; i++)
+ 704              		.loc 1 264 32 discriminator 3 view .LVU199
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 20
+
+
+ 705 008c E4B2     		uxtb	r4, r4
+ 706              	.LVL64:
+ 264:Src/pcf85263.c ****     for(uint8_t i = 0; i < 6; i++)
+ 707              		.loc 1 264 32 discriminator 3 view .LVU200
+ 708 008e F3E7     		b	.L45
+ 709              	.LVL65:
+ 710              	.L56:
+ 264:Src/pcf85263.c ****     for(uint8_t i = 0; i < 6; i++)
+ 711              		.loc 1 264 32 discriminator 3 view .LVU201
+ 712              	.LBE2:
+ 218:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 713              		.loc 1 218 9 is_stmt 1 view .LVU202
+ 714 0090 3148     		ldr	r0, .L67+12
+ 715 0092 FFF7FEFF 		bl	puts
+ 716              	.LVL66:
+ 219:Src/pcf85263.c ****     }    
+ 717              		.loc 1 219 9 view .LVU203
+ 242:Src/pcf85263.c ****     {
+ 718              		.loc 1 242 5 view .LVU204
+ 719 0096 0EE0     		b	.L40
+ 720              	.LVL67:
+ 721              	.L57:
+ 223:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 722              		.loc 1 223 9 view .LVU205
+ 723 0098 3048     		ldr	r0, .L67+16
+ 724 009a FFF7FEFF 		bl	puts
+ 725              	.LVL68:
+ 224:Src/pcf85263.c ****     }    
+ 726              		.loc 1 224 9 view .LVU206
+ 242:Src/pcf85263.c ****     {
+ 727              		.loc 1 242 5 view .LVU207
+ 728 009e 0AE0     		b	.L40
+ 729              	.LVL69:
+ 730              	.L58:
+ 228:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 731              		.loc 1 228 9 view .LVU208
+ 732 00a0 2F48     		ldr	r0, .L67+20
+ 733 00a2 FFF7FEFF 		bl	puts
+ 734              	.LVL70:
+ 229:Src/pcf85263.c ****     } 
+ 735              		.loc 1 229 9 view .LVU209
+ 242:Src/pcf85263.c ****     {
+ 736              		.loc 1 242 5 view .LVU210
+ 737 00a6 06E0     		b	.L40
+ 738              	.LVL71:
+ 739              	.L59:
+ 233:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 740              		.loc 1 233 9 view .LVU211
+ 741 00a8 2E48     		ldr	r0, .L67+24
+ 742 00aa FFF7FEFF 		bl	puts
+ 743              	.LVL72:
+ 234:Src/pcf85263.c ****     }    
+ 744              		.loc 1 234 9 view .LVU212
+ 242:Src/pcf85263.c ****     {
+ 745              		.loc 1 242 5 view .LVU213
+ 746 00ae 02E0     		b	.L40
+ 747              	.LVL73:
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 21
+
+
+ 748              	.L60:
+ 238:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 749              		.loc 1 238 9 view .LVU214
+ 750 00b0 2D48     		ldr	r0, .L67+28
+ 751 00b2 FFF7FEFF 		bl	puts
+ 752              	.LVL74:
+ 239:Src/pcf85263.c ****     }  
+ 753              		.loc 1 239 9 view .LVU215
+ 242:Src/pcf85263.c ****     {
+ 754              		.loc 1 242 5 view .LVU216
+ 755              	.L40:
+ 244:Src/pcf85263.c ****         return ret;
+ 756              		.loc 1 244 9 view .LVU217
+ 757 00b6 2D48     		ldr	r0, .L67+32
+ 758 00b8 FFF7FEFF 		bl	puts
+ 759              	.LVL75:
+ 245:Src/pcf85263.c ****     }    
+ 760              		.loc 1 245 9 view .LVU218
+ 245:Src/pcf85263.c ****     }    
+ 761              		.loc 1 245 16 is_stmt 0 view .LVU219
+ 762 00bc 0220     		movs	r0, #2
+ 763              	.LVL76:
+ 764              	.L46:
+ 267:Src/pcf85263.c ****     }
+ 268:Src/pcf85263.c ****     printf("\n");
+ 269:Src/pcf85263.c **** 
+ 270:Src/pcf85263.c ****     for(uint8_t i = V_ZERO; i < V_SIX; i++)                                          /*bin change t
+ 271:Src/pcf85263.c ****     {
+ 272:Src/pcf85263.c ****         PCF8563_Set_buf[i] = bin_to_bcd(PCF8563_Set_buf[i]);
+ 273:Src/pcf85263.c ****     }
+ 274:Src/pcf85263.c **** 
+ 275:Src/pcf85263.c ****     ret = pcf85263_write_data(PCF8563_ADDR_RAM_BYTE, &pcf8563_flag, L_ONE);    /*Writing flag to PC
+ 276:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 277:Src/pcf85263.c ****     {
+ 278:Src/pcf85263.c ****         return RTC_OP_COMMUNICATION_FAILURE;
+ 279:Src/pcf85263.c ****     }
+ 280:Src/pcf85263.c ****     ret = pcf85263_write_data(PCF8563_ADDR_STOP_EN, &m_stop_clock, L_ONE);    /*STOP CLOCK*/
+ 281:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 282:Src/pcf85263.c ****     {
+ 283:Src/pcf85263.c ****         return RTC_OP_COMMUNICATION_FAILURE;
+ 284:Src/pcf85263.c ****     }
+ 285:Src/pcf85263.c **** 
+ 286:Src/pcf85263.c ****     ret = pcf85263_write_data(PCF8563_ADDR_RESET_REG, &m_clear_prescaler, L_ONE);    /*clear presca
+ 287:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 288:Src/pcf85263.c ****     {
+ 289:Src/pcf85263.c ****         return RTC_OP_COMMUNICATION_FAILURE;
+ 290:Src/pcf85263.c ****     }
+ 291:Src/pcf85263.c **** 
+ 292:Src/pcf85263.c ****     ret = pcf85263_write_data(PCF8563_ADDR_FUN, &m_100th_seconds_dis, L_ONE);    /*100TH seconds di
+ 293:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 294:Src/pcf85263.c ****     {
+ 295:Src/pcf85263.c ****         return RTC_OP_COMMUNICATION_FAILURE;
+ 296:Src/pcf85263.c ****     }
+ 297:Src/pcf85263.c **** 
+ 298:Src/pcf85263.c ****     ret = pcf85263_write_data(PCF8563_ADDR_MS, PCF8563_Set_buf, V_SIX);    /*write time to pcf85263
+ 299:Src/pcf85263.c ****     m_stop_clock = V_ZERO;
+ 300:Src/pcf85263.c ****     ret = pcf85263_write_data(PCF8563_ADDR_STOP_EN, &m_stop_clock, L_ONE);    /*STOP CLOCK*/
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 22
+
+
+ 301:Src/pcf85263.c ****     if (ret == V_ZERO)
+ 302:Src/pcf85263.c ****     {
+ 303:Src/pcf85263.c ****         return RTC_OP_SUCCESS;
+ 304:Src/pcf85263.c ****     }
+ 305:Src/pcf85263.c ****     else
+ 306:Src/pcf85263.c ****     {
+ 307:Src/pcf85263.c ****         return RTC_OP_COMMUNICATION_FAILURE;
+ 308:Src/pcf85263.c ****     }
+ 309:Src/pcf85263.c **** }
+ 765              		.loc 1 309 1 view .LVU220
+ 766 00be 07B0     		add	sp, sp, #28
+ 767              	.LCFI12:
+ 768              		.cfi_remember_state
+ 769              		.cfi_def_cfa_offset 12
+ 770              		@ sp needed
+ 771 00c0 30BD     		pop	{r4, r5, pc}
+ 772              	.LVL77:
+ 773              	.L61:
+ 774              	.LCFI13:
+ 775              		.cfi_restore_state
+ 268:Src/pcf85263.c **** 
+ 776              		.loc 1 268 5 is_stmt 1 view .LVU221
+ 777 00c2 0A20     		movs	r0, #10
+ 778 00c4 FFF7FEFF 		bl	putchar
+ 779              	.LVL78:
+ 270:Src/pcf85263.c ****     {
+ 780              		.loc 1 270 5 view .LVU222
+ 781              	.LBB3:
+ 270:Src/pcf85263.c ****     {
+ 782              		.loc 1 270 9 view .LVU223
+ 270:Src/pcf85263.c ****     {
+ 783              		.loc 1 270 17 is_stmt 0 view .LVU224
+ 784 00c8 0024     		movs	r4, #0
+ 785              	.LVL79:
+ 786              	.L48:
+ 270:Src/pcf85263.c ****     {
+ 787              		.loc 1 270 29 is_stmt 1 discriminator 1 view .LVU225
+ 270:Src/pcf85263.c ****     {
+ 788              		.loc 1 270 5 is_stmt 0 discriminator 1 view .LVU226
+ 789 00ca 052C     		cmp	r4, #5
+ 790 00cc 0AD8     		bhi	.L62
+ 272:Src/pcf85263.c ****     }
+ 791              		.loc 1 272 9 is_stmt 1 discriminator 3 view .LVU227
+ 272:Src/pcf85263.c ****     }
+ 792              		.loc 1 272 30 is_stmt 0 discriminator 3 view .LVU228
+ 793 00ce 06AB     		add	r3, sp, #24
+ 794 00d0 1D19     		adds	r5, r3, r4
+ 795 00d2 15F80C0C 		ldrb	r0, [r5, #-12]	@ zero_extendqisi2
+ 796 00d6 FFF7FEFF 		bl	bin_to_bcd
+ 797              	.LVL80:
+ 272:Src/pcf85263.c ****     }
+ 798              		.loc 1 272 28 discriminator 3 view .LVU229
+ 799 00da 05F80C0C 		strb	r0, [r5, #-12]
+ 270:Src/pcf85263.c ****     {
+ 800              		.loc 1 270 40 is_stmt 1 discriminator 3 view .LVU230
+ 270:Src/pcf85263.c ****     {
+ 801              		.loc 1 270 41 is_stmt 0 discriminator 3 view .LVU231
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 23
+
+
+ 802 00de 0134     		adds	r4, r4, #1
+ 803              	.LVL81:
+ 270:Src/pcf85263.c ****     {
+ 804              		.loc 1 270 41 discriminator 3 view .LVU232
+ 805 00e0 E4B2     		uxtb	r4, r4
+ 806              	.LVL82:
+ 270:Src/pcf85263.c ****     {
+ 807              		.loc 1 270 41 discriminator 3 view .LVU233
+ 808 00e2 F2E7     		b	.L48
+ 809              	.L62:
+ 270:Src/pcf85263.c ****     {
+ 810              		.loc 1 270 41 discriminator 3 view .LVU234
+ 811              	.LBE3:
+ 275:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 812              		.loc 1 275 5 is_stmt 1 view .LVU235
+ 275:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 813              		.loc 1 275 11 is_stmt 0 view .LVU236
+ 814 00e4 0122     		movs	r2, #1
+ 815 00e6 05A9     		add	r1, sp, #20
+ 816 00e8 2C20     		movs	r0, #44
+ 817 00ea FFF7FEFF 		bl	pcf85263_write_data
+ 818              	.LVL83:
+ 276:Src/pcf85263.c ****     {
+ 819              		.loc 1 276 5 is_stmt 1 view .LVU237
+ 276:Src/pcf85263.c ****     {
+ 820              		.loc 1 276 8 is_stmt 0 view .LVU238
+ 821 00ee 08B1     		cbz	r0, .L63
+ 278:Src/pcf85263.c ****     }
+ 822              		.loc 1 278 16 view .LVU239
+ 823 00f0 0120     		movs	r0, #1
+ 824              	.LVL84:
+ 278:Src/pcf85263.c ****     }
+ 825              		.loc 1 278 16 view .LVU240
+ 826 00f2 E4E7     		b	.L46
+ 827              	.LVL85:
+ 828              	.L63:
+ 280:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 829              		.loc 1 280 5 is_stmt 1 view .LVU241
+ 280:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 830              		.loc 1 280 11 is_stmt 0 view .LVU242
+ 831 00f4 0122     		movs	r2, #1
+ 832 00f6 0DF11601 		add	r1, sp, #22
+ 833 00fa 2E20     		movs	r0, #46
+ 834              	.LVL86:
+ 280:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 835              		.loc 1 280 11 view .LVU243
+ 836 00fc FFF7FEFF 		bl	pcf85263_write_data
+ 837              	.LVL87:
+ 281:Src/pcf85263.c ****     {
+ 838              		.loc 1 281 5 is_stmt 1 view .LVU244
+ 281:Src/pcf85263.c ****     {
+ 839              		.loc 1 281 8 is_stmt 0 view .LVU245
+ 840 0100 08B1     		cbz	r0, .L64
+ 283:Src/pcf85263.c ****     }
+ 841              		.loc 1 283 16 view .LVU246
+ 842 0102 0120     		movs	r0, #1
+ 843              	.LVL88:
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 24
+
+
+ 283:Src/pcf85263.c ****     }
+ 844              		.loc 1 283 16 view .LVU247
+ 845 0104 DBE7     		b	.L46
+ 846              	.LVL89:
+ 847              	.L64:
+ 286:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 848              		.loc 1 286 5 is_stmt 1 view .LVU248
+ 286:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 849              		.loc 1 286 11 is_stmt 0 view .LVU249
+ 850 0106 0122     		movs	r2, #1
+ 851 0108 0DF11501 		add	r1, sp, #21
+ 852 010c 2F20     		movs	r0, #47
+ 853              	.LVL90:
+ 286:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 854              		.loc 1 286 11 view .LVU250
+ 855 010e FFF7FEFF 		bl	pcf85263_write_data
+ 856              	.LVL91:
+ 287:Src/pcf85263.c ****     {
+ 857              		.loc 1 287 5 is_stmt 1 view .LVU251
+ 287:Src/pcf85263.c ****     {
+ 858              		.loc 1 287 8 is_stmt 0 view .LVU252
+ 859 0112 08B1     		cbz	r0, .L65
+ 289:Src/pcf85263.c ****     }
+ 860              		.loc 1 289 16 view .LVU253
+ 861 0114 0120     		movs	r0, #1
+ 862              	.LVL92:
+ 289:Src/pcf85263.c ****     }
+ 863              		.loc 1 289 16 view .LVU254
+ 864 0116 D2E7     		b	.L46
+ 865              	.LVL93:
+ 866              	.L65:
+ 292:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 867              		.loc 1 292 5 is_stmt 1 view .LVU255
+ 292:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 868              		.loc 1 292 11 is_stmt 0 view .LVU256
+ 869 0118 0122     		movs	r2, #1
+ 870 011a 0DF11701 		add	r1, sp, #23
+ 871 011e 2820     		movs	r0, #40
+ 872              	.LVL94:
+ 292:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 873              		.loc 1 292 11 view .LVU257
+ 874 0120 FFF7FEFF 		bl	pcf85263_write_data
+ 875              	.LVL95:
+ 293:Src/pcf85263.c ****     {
+ 876              		.loc 1 293 5 is_stmt 1 view .LVU258
+ 293:Src/pcf85263.c ****     {
+ 877              		.loc 1 293 8 is_stmt 0 view .LVU259
+ 878 0124 08B1     		cbz	r0, .L66
+ 295:Src/pcf85263.c ****     }
+ 879              		.loc 1 295 16 view .LVU260
+ 880 0126 0120     		movs	r0, #1
+ 881              	.LVL96:
+ 295:Src/pcf85263.c ****     }
+ 882              		.loc 1 295 16 view .LVU261
+ 883 0128 C9E7     		b	.L46
+ 884              	.LVL97:
+ 885              	.L66:
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 25
+
+
+ 298:Src/pcf85263.c ****     m_stop_clock = V_ZERO;
+ 886              		.loc 1 298 5 is_stmt 1 view .LVU262
+ 298:Src/pcf85263.c ****     m_stop_clock = V_ZERO;
+ 887              		.loc 1 298 11 is_stmt 0 view .LVU263
+ 888 012a 0622     		movs	r2, #6
+ 889 012c 03A9     		add	r1, sp, #12
+ 890 012e FFF7FEFF 		bl	pcf85263_write_data
+ 891              	.LVL98:
+ 299:Src/pcf85263.c ****     ret = pcf85263_write_data(PCF8563_ADDR_STOP_EN, &m_stop_clock, L_ONE);    /*STOP CLOCK*/
+ 892              		.loc 1 299 5 is_stmt 1 view .LVU264
+ 299:Src/pcf85263.c ****     ret = pcf85263_write_data(PCF8563_ADDR_STOP_EN, &m_stop_clock, L_ONE);    /*STOP CLOCK*/
+ 893              		.loc 1 299 18 is_stmt 0 view .LVU265
+ 894 0132 0023     		movs	r3, #0
+ 895 0134 8DF81630 		strb	r3, [sp, #22]
+ 300:Src/pcf85263.c ****     if (ret == V_ZERO)
+ 896              		.loc 1 300 5 is_stmt 1 view .LVU266
+ 300:Src/pcf85263.c ****     if (ret == V_ZERO)
+ 897              		.loc 1 300 11 is_stmt 0 view .LVU267
+ 898 0138 0122     		movs	r2, #1
+ 899 013a 0DF11601 		add	r1, sp, #22
+ 900 013e 2E20     		movs	r0, #46
+ 901 0140 FFF7FEFF 		bl	pcf85263_write_data
+ 902              	.LVL99:
+ 301:Src/pcf85263.c ****     {
+ 903              		.loc 1 301 5 is_stmt 1 view .LVU268
+ 301:Src/pcf85263.c ****     {
+ 904              		.loc 1 301 8 is_stmt 0 view .LVU269
+ 905 0144 0028     		cmp	r0, #0
+ 906 0146 BAD0     		beq	.L46
+ 307:Src/pcf85263.c ****     }
+ 907              		.loc 1 307 16 view .LVU270
+ 908 0148 0120     		movs	r0, #1
+ 909              	.LVL100:
+ 307:Src/pcf85263.c ****     }
+ 910              		.loc 1 307 16 view .LVU271
+ 911 014a B8E7     		b	.L46
+ 912              	.L68:
+ 913              		.align	2
+ 914              	.L67:
+ 915 014c 00000000 		.word	.LC9
+ 916 0150 14000000 		.word	.LC10
+ 917 0154 28000000 		.word	.LC11
+ 918 0158 34000000 		.word	.LC3
+ 919 015c 48000000 		.word	.LC4
+ 920 0160 5C000000 		.word	.LC5
+ 921 0164 74000000 		.word	.LC6
+ 922 0168 8C000000 		.word	.LC7
+ 923 016c AC000000 		.word	.LC8
+ 924              		.cfi_endproc
+ 925              	.LFE321:
+ 927              		.section	.text.pcf85263_config_inta,"ax",%progbits
+ 928              		.align	1
+ 929              		.global	pcf85263_config_inta
+ 930              		.syntax unified
+ 931              		.thumb
+ 932              		.thumb_func
+ 933              		.fpu fpv4-sp-d16
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 26
+
+
+ 935              	pcf85263_config_inta:
+ 936              	.LVL101:
+ 937              	.LFB322:
+ 310:Src/pcf85263.c **** 
+ 311:Src/pcf85263.c **** 
+ 312:Src/pcf85263.c **** /***************************************************************
+ 313:Src/pcf85263.c **** * @brief   This api is the underlying driver interface  to  enable alarm1 or alarm2 interrupt funct
+ 314:Src/pcf85263.c **** * @param[in]  
+ 315:Src/pcf85263.c **** *           alarm_id
+ 316:Src/pcf85263.c **** * @return
+ 317:Src/pcf85263.c **** *           RTC_OP_SUCCESS                    
+ 318:Src/pcf85263.c **** *           RTC_OP_COMMUNICATION_FAILURE     
+ 319:Src/pcf85263.c **** *           RTC_OP_INVALID_DATE_TIME        
+ 320:Src/pcf85263.c **** **************************************************************/
+ 321:Src/pcf85263.c **** rtc_op_return_type_t  pcf85263_config_inta(uint32_t alarm_id)
+ 322:Src/pcf85263.c **** {
+ 938              		.loc 1 322 1 is_stmt 1 view -0
+ 939              		.cfi_startproc
+ 940              		@ args = 0, pretend = 0, frame = 8
+ 941              		@ frame_needed = 0, uses_anonymous_args = 0
+ 942              		.loc 1 322 1 is_stmt 0 view .LVU273
+ 943 0000 10B5     		push	{r4, lr}
+ 944              	.LCFI14:
+ 945              		.cfi_def_cfa_offset 8
+ 946              		.cfi_offset 4, -8
+ 947              		.cfi_offset 14, -4
+ 948 0002 82B0     		sub	sp, sp, #8
+ 949              	.LCFI15:
+ 950              		.cfi_def_cfa_offset 16
+ 951 0004 0446     		mov	r4, r0
+ 323:Src/pcf85263.c ****     uint8_t ret = I_ZERO;
+ 952              		.loc 1 323 5 is_stmt 1 view .LVU274
+ 953              	.LVL102:
+ 324:Src/pcf85263.c ****     uint8_t read_data = I_ZERO;
+ 954              		.loc 1 324 5 view .LVU275
+ 955              		.loc 1 324 13 is_stmt 0 view .LVU276
+ 956 0006 0023     		movs	r3, #0
+ 957 0008 8DF80730 		strb	r3, [sp, #7]
+ 325:Src/pcf85263.c ****     uint8_t write_data = I_ZERO;
+ 958              		.loc 1 325 5 is_stmt 1 view .LVU277
+ 326:Src/pcf85263.c **** 
+ 327:Src/pcf85263.c ****     write_data = PCF_CLK_REGISTER_ENABLE;                                  /*config  clk pin  is in
+ 959              		.loc 1 327 5 view .LVU278
+ 960              		.loc 1 327 16 is_stmt 0 view .LVU279
+ 961 000c 8223     		movs	r3, #130
+ 962 000e 8DF80630 		strb	r3, [sp, #6]
+ 328:Src/pcf85263.c ****     ret = pcf85263_write_data(PCF8563_ADDR_PIN_CON, &write_data, L_ONE);          
+ 963              		.loc 1 328 5 is_stmt 1 view .LVU280
+ 964              		.loc 1 328 11 is_stmt 0 view .LVU281
+ 965 0012 0122     		movs	r2, #1
+ 966 0014 0DF10601 		add	r1, sp, #6
+ 967 0018 2720     		movs	r0, #39
+ 968              	.LVL103:
+ 969              		.loc 1 328 11 view .LVU282
+ 970 001a FFF7FEFF 		bl	pcf85263_write_data
+ 971              	.LVL104:
+ 329:Src/pcf85263.c ****     if (ret != V_ZERO)
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 27
+
+
+ 972              		.loc 1 329 5 is_stmt 1 view .LVU283
+ 973              		.loc 1 329 8 is_stmt 0 view .LVU284
+ 974 001e 10B1     		cbz	r0, .L78
+ 330:Src/pcf85263.c ****     {
+ 331:Src/pcf85263.c ****         return RTC_OP_COMMUNICATION_FAILURE;
+ 975              		.loc 1 331 16 view .LVU285
+ 976 0020 0120     		movs	r0, #1
+ 977              	.LVL105:
+ 978              	.L70:
+ 332:Src/pcf85263.c **** 
+ 333:Src/pcf85263.c ****     }
+ 334:Src/pcf85263.c **** 
+ 335:Src/pcf85263.c ****     write_data  = V_ZERO;
+ 336:Src/pcf85263.c ****     ret = pcf85263_read_data(PCF8563_ADDR_INTA_CON, &read_data, L_ONE);          /* read inta confi
+ 337:Src/pcf85263.c **** 	
+ 338:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 339:Src/pcf85263.c ****     {
+ 340:Src/pcf85263.c ****         return RTC_OP_COMMUNICATION_FAILURE;
+ 341:Src/pcf85263.c ****     }
+ 342:Src/pcf85263.c **** 
+ 343:Src/pcf85263.c ****     if (alarm_id == ALARM_ID_ONE)
+ 344:Src/pcf85263.c ****     {
+ 345:Src/pcf85263.c ****         write_data = read_data | PCF_ALARM_ONE_REGISTER_ENABLE; /* 0b1001 0000*/                   
+ 346:Src/pcf85263.c **** 
+ 347:Src/pcf85263.c ****     }
+ 348:Src/pcf85263.c ****     else if (alarm_id == ALARM_ID_TWO)
+ 349:Src/pcf85263.c ****     {
+ 350:Src/pcf85263.c ****         write_data = read_data | PCF_ALARM_TWO_REGISTER_ENABLE; /* 0b1000 1000*/
+ 351:Src/pcf85263.c ****     }
+ 352:Src/pcf85263.c ****     else
+ 353:Src/pcf85263.c ****     {
+ 354:Src/pcf85263.c ****         return RTC_OP_INVALID_DATE_TIME;
+ 355:Src/pcf85263.c ****     }
+ 356:Src/pcf85263.c **** 
+ 357:Src/pcf85263.c ****     ret = pcf85263_write_data(PCF8563_ADDR_INTA_CON, &write_data, L_ONE);          /*get alarm1 int
+ 358:Src/pcf85263.c **** 	
+ 359:Src/pcf85263.c ****     if (ret == V_ZERO)
+ 360:Src/pcf85263.c ****     {
+ 361:Src/pcf85263.c ****         return RTC_OP_SUCCESS;                                               /*success*/
+ 362:Src/pcf85263.c ****     }
+ 363:Src/pcf85263.c ****     else
+ 364:Src/pcf85263.c ****     {
+ 365:Src/pcf85263.c ****         return RTC_OP_COMMUNICATION_FAILURE;
+ 366:Src/pcf85263.c ****     }
+ 367:Src/pcf85263.c **** }
+ 979              		.loc 1 367 1 view .LVU286
+ 980 0022 02B0     		add	sp, sp, #8
+ 981              	.LCFI16:
+ 982              		.cfi_remember_state
+ 983              		.cfi_def_cfa_offset 8
+ 984              		@ sp needed
+ 985 0024 10BD     		pop	{r4, pc}
+ 986              	.LVL106:
+ 987              	.L78:
+ 988              	.LCFI17:
+ 989              		.cfi_restore_state
+ 335:Src/pcf85263.c ****     ret = pcf85263_read_data(PCF8563_ADDR_INTA_CON, &read_data, L_ONE);          /* read inta confi
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 28
+
+
+ 990              		.loc 1 335 5 is_stmt 1 view .LVU287
+ 335:Src/pcf85263.c ****     ret = pcf85263_read_data(PCF8563_ADDR_INTA_CON, &read_data, L_ONE);          /* read inta confi
+ 991              		.loc 1 335 17 is_stmt 0 view .LVU288
+ 992 0026 0023     		movs	r3, #0
+ 993 0028 8DF80630 		strb	r3, [sp, #6]
+ 336:Src/pcf85263.c **** 	
+ 994              		.loc 1 336 5 is_stmt 1 view .LVU289
+ 336:Src/pcf85263.c **** 	
+ 995              		.loc 1 336 11 is_stmt 0 view .LVU290
+ 996 002c 0122     		movs	r2, #1
+ 997 002e 0DF10701 		add	r1, sp, #7
+ 998 0032 2920     		movs	r0, #41
+ 999              	.LVL107:
+ 336:Src/pcf85263.c **** 	
+ 1000              		.loc 1 336 11 view .LVU291
+ 1001 0034 FFF7FEFF 		bl	pcf85263_read_data
+ 1002              	.LVL108:
+ 338:Src/pcf85263.c ****     {
+ 1003              		.loc 1 338 5 is_stmt 1 view .LVU292
+ 338:Src/pcf85263.c ****     {
+ 1004              		.loc 1 338 8 is_stmt 0 view .LVU293
+ 1005 0038 D0B9     		cbnz	r0, .L74
+ 343:Src/pcf85263.c ****     {
+ 1006              		.loc 1 343 5 is_stmt 1 view .LVU294
+ 343:Src/pcf85263.c ****     {
+ 1007              		.loc 1 343 8 is_stmt 0 view .LVU295
+ 1008 003a 012C     		cmp	r4, #1
+ 1009 003c 11D0     		beq	.L79
+ 348:Src/pcf85263.c ****     {
+ 1010              		.loc 1 348 10 is_stmt 1 view .LVU296
+ 348:Src/pcf85263.c ****     {
+ 1011              		.loc 1 348 13 is_stmt 0 view .LVU297
+ 1012 003e 022C     		cmp	r4, #2
+ 1013 0040 18D1     		bne	.L75
+ 350:Src/pcf85263.c ****     }
+ 1014              		.loc 1 350 9 is_stmt 1 view .LVU298
+ 350:Src/pcf85263.c ****     }
+ 1015              		.loc 1 350 20 is_stmt 0 view .LVU299
+ 1016 0042 9DF80730 		ldrb	r3, [sp, #7]	@ zero_extendqisi2
+ 1017 0046 63F07703 		orn	r3, r3, #119
+ 1018 004a 8DF80630 		strb	r3, [sp, #6]
+ 1019              	.L72:
+ 357:Src/pcf85263.c **** 	
+ 1020              		.loc 1 357 5 is_stmt 1 view .LVU300
+ 357:Src/pcf85263.c **** 	
+ 1021              		.loc 1 357 11 is_stmt 0 view .LVU301
+ 1022 004e 0122     		movs	r2, #1
+ 1023 0050 0DF10601 		add	r1, sp, #6
+ 1024 0054 2920     		movs	r0, #41
+ 1025              	.LVL109:
+ 357:Src/pcf85263.c **** 	
+ 1026              		.loc 1 357 11 view .LVU302
+ 1027 0056 FFF7FEFF 		bl	pcf85263_write_data
+ 1028              	.LVL110:
+ 359:Src/pcf85263.c ****     {
+ 1029              		.loc 1 359 5 is_stmt 1 view .LVU303
+ 359:Src/pcf85263.c ****     {
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 29
+
+
+ 1030              		.loc 1 359 8 is_stmt 0 view .LVU304
+ 1031 005a 0028     		cmp	r0, #0
+ 1032 005c E1D0     		beq	.L70
+ 365:Src/pcf85263.c ****     }
+ 1033              		.loc 1 365 16 view .LVU305
+ 1034 005e 0120     		movs	r0, #1
+ 1035              	.LVL111:
+ 365:Src/pcf85263.c ****     }
+ 1036              		.loc 1 365 16 view .LVU306
+ 1037 0060 DFE7     		b	.L70
+ 1038              	.LVL112:
+ 1039              	.L79:
+ 345:Src/pcf85263.c **** 
+ 1040              		.loc 1 345 9 is_stmt 1 view .LVU307
+ 345:Src/pcf85263.c **** 
+ 1041              		.loc 1 345 20 is_stmt 0 view .LVU308
+ 1042 0062 9DF80730 		ldrb	r3, [sp, #7]	@ zero_extendqisi2
+ 1043 0066 63F06F03 		orn	r3, r3, #111
+ 1044 006a 8DF80630 		strb	r3, [sp, #6]
+ 1045 006e EEE7     		b	.L72
+ 1046              	.L74:
+ 340:Src/pcf85263.c ****     }
+ 1047              		.loc 1 340 16 view .LVU309
+ 1048 0070 0120     		movs	r0, #1
+ 1049              	.LVL113:
+ 340:Src/pcf85263.c ****     }
+ 1050              		.loc 1 340 16 view .LVU310
+ 1051 0072 D6E7     		b	.L70
+ 1052              	.LVL114:
+ 1053              	.L75:
+ 354:Src/pcf85263.c ****     }
+ 1054              		.loc 1 354 16 view .LVU311
+ 1055 0074 0220     		movs	r0, #2
+ 1056              	.LVL115:
+ 354:Src/pcf85263.c ****     }
+ 1057              		.loc 1 354 16 view .LVU312
+ 1058 0076 D4E7     		b	.L70
+ 1059              		.cfi_endproc
+ 1060              	.LFE322:
+ 1062              		.section	.text.pcf85263_check_inta,"ax",%progbits
+ 1063              		.align	1
+ 1064              		.global	pcf85263_check_inta
+ 1065              		.syntax unified
+ 1066              		.thumb
+ 1067              		.thumb_func
+ 1068              		.fpu fpv4-sp-d16
+ 1070              	pcf85263_check_inta:
+ 1071              	.LFB323:
+ 368:Src/pcf85263.c **** 
+ 369:Src/pcf85263.c **** /***************************************************************
+ 370:Src/pcf85263.c **** *@brief   This api  is the underlying driver interface  to configure INTA pin  as the interrupt out
+ 371:Src/pcf85263.c **** *@param   void
+ 372:Src/pcf85263.c **** *@return
+ 373:Src/pcf85263.c **** *         RTC_OP_SUCCESS                    
+ 374:Src/pcf85263.c **** *         RTC_OP_COMMUNICATION_FAILURE    
+ 375:Src/pcf85263.c **** **************************************************************/
+ 376:Src/pcf85263.c **** 
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 30
+
+
+ 377:Src/pcf85263.c **** rtc_op_return_type_t pcf85263_check_inta(void)
+ 378:Src/pcf85263.c **** {
+ 1072              		.loc 1 378 1 is_stmt 1 view -0
+ 1073              		.cfi_startproc
+ 1074              		@ args = 0, pretend = 0, frame = 8
+ 1075              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1076 0000 00B5     		push	{lr}
+ 1077              	.LCFI18:
+ 1078              		.cfi_def_cfa_offset 4
+ 1079              		.cfi_offset 14, -4
+ 1080 0002 83B0     		sub	sp, sp, #12
+ 1081              	.LCFI19:
+ 1082              		.cfi_def_cfa_offset 16
+ 379:Src/pcf85263.c ****     uint8_t ret = I_ZERO;
+ 1083              		.loc 1 379 5 view .LVU314
+ 1084              	.LVL116:
+ 380:Src/pcf85263.c ****     uint8_t write_data[V_TWO];
+ 1085              		.loc 1 380 5 view .LVU315
+ 381:Src/pcf85263.c ****     uint8_t read_data[V_TWO];
+ 1086              		.loc 1 381 5 view .LVU316
+ 382:Src/pcf85263.c **** 
+ 383:Src/pcf85263.c ****     ret = pcf85263_read_data(PCF8563_ADDR_PIN_CON, read_data, L_ONE);          /*Configure alarm1 i
+ 1087              		.loc 1 383 5 view .LVU317
+ 1088              		.loc 1 383 11 is_stmt 0 view .LVU318
+ 1089 0004 0122     		movs	r2, #1
+ 1090 0006 6946     		mov	r1, sp
+ 1091 0008 2720     		movs	r0, #39
+ 1092 000a FFF7FEFF 		bl	pcf85263_read_data
+ 1093              	.LVL117:
+ 384:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 1094              		.loc 1 384 5 is_stmt 1 view .LVU319
+ 1095              		.loc 1 384 8 is_stmt 0 view .LVU320
+ 1096 000e 70B9     		cbnz	r0, .L82
+ 385:Src/pcf85263.c ****     {
+ 386:Src/pcf85263.c ****         return RTC_OP_COMMUNICATION_FAILURE;
+ 387:Src/pcf85263.c ****     }
+ 388:Src/pcf85263.c **** 
+ 389:Src/pcf85263.c ****     if (read_data[V_ZERO] == PCF_CLK_REGISTER_ENABLE)
+ 1097              		.loc 1 389 5 is_stmt 1 view .LVU321
+ 1098              		.loc 1 389 18 is_stmt 0 view .LVU322
+ 1099 0010 9DF80030 		ldrb	r3, [sp]	@ zero_extendqisi2
+ 1100              		.loc 1 389 8 view .LVU323
+ 1101 0014 822B     		cmp	r3, #130
+ 1102 0016 0BD0     		beq	.L81
+ 390:Src/pcf85263.c ****     {
+ 391:Src/pcf85263.c ****         return RTC_OP_SUCCESS;
+ 392:Src/pcf85263.c ****     }
+ 393:Src/pcf85263.c **** 
+ 394:Src/pcf85263.c ****     write_data[V_ZERO] = PCF_CLK_REGISTER_ENABLE;                                        /*Enable C
+ 1103              		.loc 1 394 5 is_stmt 1 view .LVU324
+ 1104              		.loc 1 394 24 is_stmt 0 view .LVU325
+ 1105 0018 8223     		movs	r3, #130
+ 1106 001a 8DF80430 		strb	r3, [sp, #4]
+ 395:Src/pcf85263.c ****     ret = pcf85263_write_data(PCF8563_ADDR_PIN_CON, write_data, L_ONE);    
+ 1107              		.loc 1 395 5 is_stmt 1 view .LVU326
+ 1108              		.loc 1 395 11 is_stmt 0 view .LVU327
+ 1109 001e 0122     		movs	r2, #1
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 31
+
+
+ 1110 0020 01A9     		add	r1, sp, #4
+ 1111 0022 2720     		movs	r0, #39
+ 1112 0024 FFF7FEFF 		bl	pcf85263_write_data
+ 1113              	.LVL118:
+ 396:Src/pcf85263.c **** 
+ 397:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 1114              		.loc 1 397 5 is_stmt 1 view .LVU328
+ 1115              		.loc 1 397 8 is_stmt 0 view .LVU329
+ 1116 0028 10B1     		cbz	r0, .L81
+ 398:Src/pcf85263.c ****     {
+ 399:Src/pcf85263.c ****         return RTC_OP_COMMUNICATION_FAILURE; 
+ 1117              		.loc 1 399 16 view .LVU330
+ 1118 002a 0120     		movs	r0, #1
+ 1119              	.LVL119:
+ 1120              		.loc 1 399 16 view .LVU331
+ 1121 002c 00E0     		b	.L81
+ 1122              	.L82:
+ 386:Src/pcf85263.c ****     }
+ 1123              		.loc 1 386 16 view .LVU332
+ 1124 002e 0120     		movs	r0, #1
+ 1125              	.L81:
+ 400:Src/pcf85263.c ****     }
+ 401:Src/pcf85263.c ****     return RTC_OP_SUCCESS;
+ 402:Src/pcf85263.c **** }
+ 1126              		.loc 1 402 1 view .LVU333
+ 1127 0030 03B0     		add	sp, sp, #12
+ 1128              	.LCFI20:
+ 1129              		.cfi_def_cfa_offset 4
+ 1130              		@ sp needed
+ 1131 0032 5DF804FB 		ldr	pc, [sp], #4
+ 1132              		.cfi_endproc
+ 1133              	.LFE323:
+ 1135              		.section	.rodata.pcf85263_set_alarm.str1.4,"aMS",%progbits,1
+ 1136              		.align	2
+ 1137              	.LC12:
+ 1138 0000 72746320 		.ascii	"rtc hour invalid\000"
+ 1138      686F7572 
+ 1138      20696E76 
+ 1138      616C6964 
+ 1138      00
+ 1139 0011 000000   		.align	2
+ 1140              	.LC13:
+ 1141 0014 72746320 		.ascii	"rtc day invalid\015\000"
+ 1141      64617920 
+ 1141      696E7661 
+ 1141      6C69640D 
+ 1141      00
+ 1142 0025 000000   		.align	2
+ 1143              	.LC14:
+ 1144 0028 72746320 		.ascii	"rtc month invalid\015\000"
+ 1144      6D6F6E74 
+ 1144      6820696E 
+ 1144      76616C69 
+ 1144      640D00
+ 1145 003b 00       		.align	2
+ 1146              	.LC15:
+ 1147 003c 4552523A 		.ascii	"ERR:pcf85263_set_alarm:RTC_OP_INVALID_DATE_TIME\015"
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 32
+
+
+ 1147      70636638 
+ 1147      35323633 
+ 1147      5F736574 
+ 1147      5F616C61 
+ 1148 006c 00       		.ascii	"\000"
+ 1149              		.section	.text.pcf85263_set_alarm,"ax",%progbits
+ 1150              		.align	1
+ 1151              		.global	pcf85263_set_alarm
+ 1152              		.syntax unified
+ 1153              		.thumb
+ 1154              		.thumb_func
+ 1155              		.fpu fpv4-sp-d16
+ 1157              	pcf85263_set_alarm:
+ 1158              	.LVL120:
+ 1159              	.LFB324:
+ 403:Src/pcf85263.c **** 
+ 404:Src/pcf85263.c **** 
+ 405:Src/pcf85263.c **** /***************************************************************
+ 406:Src/pcf85263.c **** * @brief  This is the underlying driver interface to set the alarm1 or alarm2 register value and en
+ 407:Src/pcf85263.c **** *         Month, day, Hour, minute and second can be configured  by the Alarm1.
+ 408:Src/pcf85263.c **** *         only  weekday, hours and minutes can be configured by the Alarm2
+ 409:Src/pcf85263.c **** * @param[in]
+ 410:Src/pcf85263.c **** *           alarm_id
+ 411:Src/pcf85263.c **** *           date_time
+ 412:Src/pcf85263.c **** * @return
+ 413:Src/pcf85263.c **** *           RTC_OP_SUCCESS                
+ 414:Src/pcf85263.c **** *           RTC_OP_COMMUNICATION_FAILURE  
+ 415:Src/pcf85263.c **** **************************************************************/
+ 416:Src/pcf85263.c **** rtc_op_return_type_t pcf85263_set_alarm(uint32_t alarm_id , RTC_DATE_TIME_T date_time)
+ 417:Src/pcf85263.c **** {
+ 1160              		.loc 1 417 1 is_stmt 1 view -0
+ 1161              		.cfi_startproc
+ 1162              		@ args = 0, pretend = 0, frame = 24
+ 1163              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1164              		.loc 1 417 1 is_stmt 0 view .LVU335
+ 1165 0000 70B5     		push	{r4, r5, r6, lr}
+ 1166              	.LCFI21:
+ 1167              		.cfi_def_cfa_offset 16
+ 1168              		.cfi_offset 4, -16
+ 1169              		.cfi_offset 5, -12
+ 1170              		.cfi_offset 6, -8
+ 1171              		.cfi_offset 14, -4
+ 1172 0002 86B0     		sub	sp, sp, #24
+ 1173              	.LCFI22:
+ 1174              		.cfi_def_cfa_offset 40
+ 1175 0004 01AC     		add	r4, sp, #4
+ 1176 0006 84E80E00 		stm	r4, {r1, r2, r3}
+ 418:Src/pcf85263.c ****     uint8_t ret = RTC_OP_SUCCESS;
+ 1177              		.loc 1 418 5 is_stmt 1 view .LVU336
+ 1178              	.LVL121:
+ 419:Src/pcf85263.c **** 
+ 420:Src/pcf85263.c ****     if (date_time.second > SECOND_MAX)
+ 1179              		.loc 1 420 5 view .LVU337
+ 1180              		.loc 1 420 18 is_stmt 0 view .LVU338
+ 1181 000a 9DF80630 		ldrb	r3, [sp, #6]	@ zero_extendqisi2
+ 1182              		.loc 1 420 8 view .LVU339
+ 1183 000e 3B2B     		cmp	r3, #59
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 33
+
+
+ 1184 0010 38D8     		bhi	.L102
+ 1185 0012 0646     		mov	r6, r0
+ 421:Src/pcf85263.c ****     {
+ 422:Src/pcf85263.c ****         printf("rtc second invalid\n");
+ 423:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 424:Src/pcf85263.c ****     }
+ 425:Src/pcf85263.c ****     else if (date_time.minute > MINUTE_MAX)
+ 1186              		.loc 1 425 10 is_stmt 1 view .LVU340
+ 1187              		.loc 1 425 23 is_stmt 0 view .LVU341
+ 1188 0014 9DF80720 		ldrb	r2, [sp, #7]	@ zero_extendqisi2
+ 1189              		.loc 1 425 13 view .LVU342
+ 1190 0018 3B2A     		cmp	r2, #59
+ 1191 001a 3CD8     		bhi	.L103
+ 426:Src/pcf85263.c ****     {
+ 427:Src/pcf85263.c ****         printf("rtc minute invalid\n");
+ 428:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 429:Src/pcf85263.c ****     }    
+ 430:Src/pcf85263.c ****     else if (date_time.hour > HOUR_MAX)
+ 1192              		.loc 1 430 10 is_stmt 1 view .LVU343
+ 1193              		.loc 1 430 23 is_stmt 0 view .LVU344
+ 1194 001c 9DF80810 		ldrb	r1, [sp, #8]	@ zero_extendqisi2
+ 1195              		.loc 1 430 13 view .LVU345
+ 1196 0020 1729     		cmp	r1, #23
+ 1197 0022 3CD8     		bhi	.L104
+ 431:Src/pcf85263.c ****     {    
+ 432:Src/pcf85263.c ****         printf("rtc hour invalid\n");
+ 433:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 434:Src/pcf85263.c ****     } 
+ 435:Src/pcf85263.c ****     else if ((date_time.day_of_month < DAY_MIN) || (date_time.day_of_month > DAY_MAX))   
+ 1198              		.loc 1 435 10 is_stmt 1 view .LVU346
+ 1199              		.loc 1 435 24 is_stmt 0 view .LVU347
+ 1200 0024 9DF80900 		ldrb	r0, [sp, #9]	@ zero_extendqisi2
+ 1201              	.LVL122:
+ 1202              		.loc 1 435 49 view .LVU348
+ 1203 0028 441E     		subs	r4, r0, #1
+ 1204 002a E4B2     		uxtb	r4, r4
+ 1205              		.loc 1 435 13 view .LVU349
+ 1206 002c 1E2C     		cmp	r4, #30
+ 1207 002e 3AD8     		bhi	.L105
+ 436:Src/pcf85263.c ****     {
+ 437:Src/pcf85263.c ****         printf("rtc day invalid\r\n");
+ 438:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 439:Src/pcf85263.c ****     }    
+ 440:Src/pcf85263.c ****     else if ((date_time.month < MONTH_MIN) || (date_time.month > MONTH_MAX))
+ 1208              		.loc 1 440 10 is_stmt 1 view .LVU350
+ 1209              		.loc 1 440 24 is_stmt 0 view .LVU351
+ 1210 0030 9DF80A50 		ldrb	r5, [sp, #10]	@ zero_extendqisi2
+ 1211              		.loc 1 440 44 view .LVU352
+ 1212 0034 6C1E     		subs	r4, r5, #1
+ 1213 0036 E4B2     		uxtb	r4, r4
+ 1214              		.loc 1 440 13 view .LVU353
+ 1215 0038 0B2C     		cmp	r4, #11
+ 1216 003a 38D8     		bhi	.L106
+ 441:Src/pcf85263.c ****     {
+ 442:Src/pcf85263.c ****         printf("rtc month invalid\r\n");
+ 443:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 444:Src/pcf85263.c ****     }     
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 34
+
+
+ 445:Src/pcf85263.c ****     if(ret == RTC_OP_INVALID_DATE_TIME)
+ 1217              		.loc 1 445 5 is_stmt 1 view .LVU354
+ 446:Src/pcf85263.c ****     {
+ 447:Src/pcf85263.c ****         printf("ERR:pcf85263_set_alarm:RTC_OP_INVALID_DATE_TIME\r\n");
+ 448:Src/pcf85263.c ****         return ret;
+ 449:Src/pcf85263.c ****     }   
+ 450:Src/pcf85263.c ****     rtc_op_return_type_t err_code;
+ 1218              		.loc 1 450 5 view .LVU355
+ 451:Src/pcf85263.c **** 
+ 452:Src/pcf85263.c ****     uint8_t alarm_status = I_ZERO;             /*Configure alarm interrupt*/
+ 1219              		.loc 1 452 5 view .LVU356
+ 1220              		.loc 1 452 13 is_stmt 0 view .LVU357
+ 1221 003c 0024     		movs	r4, #0
+ 1222 003e 8DF81740 		strb	r4, [sp, #23]
+ 453:Src/pcf85263.c ****     uint8_t set_alarm[V_FIVE];
+ 1223              		.loc 1 453 5 is_stmt 1 view .LVU358
+ 454:Src/pcf85263.c **** 
+ 455:Src/pcf85263.c ****     memset(set_alarm, V_ZERO, V_FIVE);
+ 1224              		.loc 1 455 5 view .LVU359
+ 456:Src/pcf85263.c ****     set_alarm[V_ZERO] = date_time.second;
+ 1225              		.loc 1 456 5 view .LVU360
+ 457:Src/pcf85263.c ****     set_alarm[V_ONE] = date_time.minute;
+ 1226              		.loc 1 457 5 view .LVU361
+ 458:Src/pcf85263.c ****     set_alarm[V_TWO] = date_time.hour;
+ 1227              		.loc 1 458 5 view .LVU362
+ 459:Src/pcf85263.c ****     set_alarm[V_THREE] = date_time.day_of_month;
+ 1228              		.loc 1 459 5 view .LVU363
+ 460:Src/pcf85263.c ****     set_alarm[V_FOUR] = date_time.month;
+ 1229              		.loc 1 460 5 view .LVU364
+ 461:Src/pcf85263.c **** 
+ 462:Src/pcf85263.c ****     set_alarm[V_ZERO] &= LOW_SEVEN_BITS_ENABLE;           
+ 1230              		.loc 1 462 5 view .LVU365
+ 1231              		.loc 1 462 23 is_stmt 0 view .LVU366
+ 1232 0042 03F07F03 		and	r3, r3, #127
+ 1233 0046 8DF81030 		strb	r3, [sp, #16]
+ 463:Src/pcf85263.c ****     set_alarm[V_ONE] &= LOW_SEVEN_BITS_ENABLE;           
+ 1234              		.loc 1 463 5 is_stmt 1 view .LVU367
+ 1235              		.loc 1 463 22 is_stmt 0 view .LVU368
+ 1236 004a 02F07F02 		and	r2, r2, #127
+ 1237 004e 8DF81120 		strb	r2, [sp, #17]
+ 464:Src/pcf85263.c ****     set_alarm[V_TWO] &= LOW_SIX_BITS_ENABLE;           
+ 1238              		.loc 1 464 5 is_stmt 1 view .LVU369
+ 1239              		.loc 1 464 22 is_stmt 0 view .LVU370
+ 1240 0052 01F03F01 		and	r1, r1, #63
+ 1241 0056 8DF81210 		strb	r1, [sp, #18]
+ 465:Src/pcf85263.c ****     set_alarm[V_THREE] &= LOW_SIX_BITS_ENABLE;           
+ 1242              		.loc 1 465 5 is_stmt 1 view .LVU371
+ 1243              		.loc 1 465 24 is_stmt 0 view .LVU372
+ 1244 005a 00F03F00 		and	r0, r0, #63
+ 1245 005e 8DF81300 		strb	r0, [sp, #19]
+ 466:Src/pcf85263.c ****     set_alarm[V_FOUR] &= LOW_SIX_BITS_ENABLE;           
+ 1246              		.loc 1 466 5 is_stmt 1 view .LVU373
+ 1247              		.loc 1 466 23 is_stmt 0 view .LVU374
+ 1248 0062 05F03F05 		and	r5, r5, #63
+ 1249 0066 8DF81450 		strb	r5, [sp, #20]
+ 467:Src/pcf85263.c **** 
+ 468:Src/pcf85263.c ****     for(uint8_t i = V_ZERO; i < V_FIVE; i++) /*change to bcd code*/
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 35
+
+
+ 1250              		.loc 1 468 5 is_stmt 1 view .LVU375
+ 1251              	.LBB4:
+ 1252              		.loc 1 468 9 view .LVU376
+ 1253              	.LVL123:
+ 1254              	.L92:
+ 1255              		.loc 1 468 29 discriminator 1 view .LVU377
+ 1256              		.loc 1 468 5 is_stmt 0 discriminator 1 view .LVU378
+ 1257 006a 042C     		cmp	r4, #4
+ 1258 006c 23D8     		bhi	.L107
+ 469:Src/pcf85263.c ****     {
+ 470:Src/pcf85263.c ****         set_alarm[i] = bin_to_bcd(set_alarm[i]);
+ 1259              		.loc 1 470 9 is_stmt 1 discriminator 3 view .LVU379
+ 1260              		.loc 1 470 24 is_stmt 0 discriminator 3 view .LVU380
+ 1261 006e 06AB     		add	r3, sp, #24
+ 1262 0070 1D19     		adds	r5, r3, r4
+ 1263 0072 15F8080C 		ldrb	r0, [r5, #-8]	@ zero_extendqisi2
+ 1264 0076 FFF7FEFF 		bl	bin_to_bcd
+ 1265              	.LVL124:
+ 1266              		.loc 1 470 22 discriminator 3 view .LVU381
+ 1267 007a 05F8080C 		strb	r0, [r5, #-8]
+ 468:Src/pcf85263.c ****     {
+ 1268              		.loc 1 468 41 is_stmt 1 discriminator 3 view .LVU382
+ 468:Src/pcf85263.c ****     {
+ 1269              		.loc 1 468 42 is_stmt 0 discriminator 3 view .LVU383
+ 1270 007e 0134     		adds	r4, r4, #1
+ 1271              	.LVL125:
+ 468:Src/pcf85263.c ****     {
+ 1272              		.loc 1 468 42 discriminator 3 view .LVU384
+ 1273 0080 E4B2     		uxtb	r4, r4
+ 1274              	.LVL126:
+ 468:Src/pcf85263.c ****     {
+ 1275              		.loc 1 468 42 discriminator 3 view .LVU385
+ 1276 0082 F2E7     		b	.L92
+ 1277              	.LVL127:
+ 1278              	.L102:
+ 468:Src/pcf85263.c ****     {
+ 1279              		.loc 1 468 42 discriminator 3 view .LVU386
+ 1280              	.LBE4:
+ 422:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 1281              		.loc 1 422 9 is_stmt 1 view .LVU387
+ 1282 0084 2D48     		ldr	r0, .L111
+ 1283              	.LVL128:
+ 422:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 1284              		.loc 1 422 9 is_stmt 0 view .LVU388
+ 1285 0086 FFF7FEFF 		bl	puts
+ 1286              	.LVL129:
+ 423:Src/pcf85263.c ****     }
+ 1287              		.loc 1 423 9 is_stmt 1 view .LVU389
+ 445:Src/pcf85263.c ****     {
+ 1288              		.loc 1 445 5 view .LVU390
+ 1289              	.L87:
+ 447:Src/pcf85263.c ****         return ret;
+ 1290              		.loc 1 447 9 view .LVU391
+ 1291 008a 2D48     		ldr	r0, .L111+4
+ 1292 008c FFF7FEFF 		bl	puts
+ 1293              	.LVL130:
+ 448:Src/pcf85263.c ****     }   
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 36
+
+
+ 1294              		.loc 1 448 9 view .LVU392
+ 448:Src/pcf85263.c ****     }   
+ 1295              		.loc 1 448 16 is_stmt 0 view .LVU393
+ 1296 0090 0220     		movs	r0, #2
+ 1297              	.LVL131:
+ 1298              	.L93:
+ 471:Src/pcf85263.c ****     }
+ 472:Src/pcf85263.c **** 
+ 473:Src/pcf85263.c ****     err_code = pcf85263_config_inta(alarm_id);                                       /*Configure in
+ 474:Src/pcf85263.c ****     if (err_code != RTC_OP_SUCCESS)
+ 475:Src/pcf85263.c ****     {
+ 476:Src/pcf85263.c ****         return err_code;
+ 477:Src/pcf85263.c ****     }
+ 478:Src/pcf85263.c **** 
+ 479:Src/pcf85263.c ****     ret = pcf85263_read_data(PCF8563_ALARM_ENABLES, &alarm_status, L_ONE);        /*read alarm conf
+ 480:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 481:Src/pcf85263.c ****     {
+ 482:Src/pcf85263.c ****         return RTC_OP_COMMUNICATION_FAILURE;
+ 483:Src/pcf85263.c ****     }
+ 484:Src/pcf85263.c **** 
+ 485:Src/pcf85263.c ****     if (alarm_id == ALARM_ID_ONE)
+ 486:Src/pcf85263.c ****     {
+ 487:Src/pcf85263.c ****         //alarm_status |= LOW_FIVE_BITS_ENABLE;        /*0x 0001 1111*/
+ 488:Src/pcf85263.c ****         alarm_status |= 0x01;
+ 489:Src/pcf85263.c ****         ret = pcf85263_write_data(PCF8563_ALARM_ENABLES, &alarm_status, L_ONE);     /*Start alarm f
+ 490:Src/pcf85263.c ****         if (ret != V_ZERO)
+ 491:Src/pcf85263.c ****         {
+ 492:Src/pcf85263.c ****             return RTC_OP_COMMUNICATION_FAILURE;
+ 493:Src/pcf85263.c ****         }
+ 494:Src/pcf85263.c ****         //ret = pcf85263_write_data(PCF8563_ALARM_SECONDS, set_alarm, L_FIVE);        /*Write time 
+ 495:Src/pcf85263.c ****         ret = pcf85263_write_data(PCF8563_ALARM_SECONDS, set_alarm, L_ONE);
+ 496:Src/pcf85263.c ****         if (ret == V_ZERO)
+ 497:Src/pcf85263.c ****         {
+ 498:Src/pcf85263.c ****             //return RTC_OP_SUCCESS;
+ 499:Src/pcf85263.c ****         }
+ 500:Src/pcf85263.c ****         else
+ 501:Src/pcf85263.c ****         {
+ 502:Src/pcf85263.c ****             return RTC_OP_COMMUNICATION_FAILURE;
+ 503:Src/pcf85263.c ****         }
+ 504:Src/pcf85263.c ****     }
+ 505:Src/pcf85263.c ****     else if (alarm_id == ALARM_ID_TWO)
+ 506:Src/pcf85263.c ****     {
+ 507:Src/pcf85263.c ****         alarm_status |= ALARM_VALUES;    /*0x0110 0000*/
+ 508:Src/pcf85263.c ****         //alarm_status |= 0xE0;
+ 509:Src/pcf85263.c ****         ret = pcf85263_write_data(PCF8563_ALARM_ENABLES, &alarm_status, L_ONE);   /*Start alarm fun
+ 510:Src/pcf85263.c ****         if (ret != V_ZERO)
+ 511:Src/pcf85263.c ****         {
+ 512:Src/pcf85263.c ****             return RTC_OP_COMMUNICATION_FAILURE;
+ 513:Src/pcf85263.c ****         }
+ 514:Src/pcf85263.c **** 
+ 515:Src/pcf85263.c ****         ret = pcf85263_write_data(PCF8563_ALARM2_MINUTES, &set_alarm[V_ONE], L_TWO);        /*Write
+ 516:Src/pcf85263.c ****         //ret = pcf85263_write_data(PCF8563_ALARM_MINUTES, &set_alarm[V_ONE], L_THREE);
+ 517:Src/pcf85263.c ****         if (ret == V_ZERO)
+ 518:Src/pcf85263.c ****         {
+ 519:Src/pcf85263.c ****             //return RTC_OP_SUCCESS;
+ 520:Src/pcf85263.c ****         }
+ 521:Src/pcf85263.c ****         else
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 37
+
+
+ 522:Src/pcf85263.c ****         {
+ 523:Src/pcf85263.c ****             return RTC_OP_COMMUNICATION_FAILURE;
+ 524:Src/pcf85263.c ****         }
+ 525:Src/pcf85263.c ****     }
+ 526:Src/pcf85263.c ****     return RTC_OP_SUCCESS;
+ 527:Src/pcf85263.c **** }
+ 1299              		.loc 1 527 1 view .LVU394
+ 1300 0092 06B0     		add	sp, sp, #24
+ 1301              	.LCFI23:
+ 1302              		.cfi_remember_state
+ 1303              		.cfi_def_cfa_offset 16
+ 1304              		@ sp needed
+ 1305 0094 70BD     		pop	{r4, r5, r6, pc}
+ 1306              	.LVL132:
+ 1307              	.L103:
+ 1308              	.LCFI24:
+ 1309              		.cfi_restore_state
+ 427:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 1310              		.loc 1 427 9 is_stmt 1 view .LVU395
+ 1311 0096 2B48     		ldr	r0, .L111+8
+ 1312              	.LVL133:
+ 427:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 1313              		.loc 1 427 9 is_stmt 0 view .LVU396
+ 1314 0098 FFF7FEFF 		bl	puts
+ 1315              	.LVL134:
+ 428:Src/pcf85263.c ****     }    
+ 1316              		.loc 1 428 9 is_stmt 1 view .LVU397
+ 445:Src/pcf85263.c ****     {
+ 1317              		.loc 1 445 5 view .LVU398
+ 1318 009c F5E7     		b	.L87
+ 1319              	.LVL135:
+ 1320              	.L104:
+ 432:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 1321              		.loc 1 432 9 view .LVU399
+ 1322 009e 2A48     		ldr	r0, .L111+12
+ 1323              	.LVL136:
+ 432:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 1324              		.loc 1 432 9 is_stmt 0 view .LVU400
+ 1325 00a0 FFF7FEFF 		bl	puts
+ 1326              	.LVL137:
+ 433:Src/pcf85263.c ****     } 
+ 1327              		.loc 1 433 9 is_stmt 1 view .LVU401
+ 445:Src/pcf85263.c ****     {
+ 1328              		.loc 1 445 5 view .LVU402
+ 1329 00a4 F1E7     		b	.L87
+ 1330              	.LVL138:
+ 1331              	.L105:
+ 437:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 1332              		.loc 1 437 9 view .LVU403
+ 1333 00a6 2948     		ldr	r0, .L111+16
+ 1334 00a8 FFF7FEFF 		bl	puts
+ 1335              	.LVL139:
+ 438:Src/pcf85263.c ****     }    
+ 1336              		.loc 1 438 9 view .LVU404
+ 445:Src/pcf85263.c ****     {
+ 1337              		.loc 1 445 5 view .LVU405
+ 1338 00ac EDE7     		b	.L87
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 38
+
+
+ 1339              	.LVL140:
+ 1340              	.L106:
+ 442:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 1341              		.loc 1 442 9 view .LVU406
+ 1342 00ae 2848     		ldr	r0, .L111+20
+ 1343 00b0 FFF7FEFF 		bl	puts
+ 1344              	.LVL141:
+ 443:Src/pcf85263.c ****     }     
+ 1345              		.loc 1 443 9 view .LVU407
+ 445:Src/pcf85263.c ****     {
+ 1346              		.loc 1 445 5 view .LVU408
+ 1347 00b4 E9E7     		b	.L87
+ 1348              	.LVL142:
+ 1349              	.L107:
+ 473:Src/pcf85263.c ****     if (err_code != RTC_OP_SUCCESS)
+ 1350              		.loc 1 473 5 view .LVU409
+ 473:Src/pcf85263.c ****     if (err_code != RTC_OP_SUCCESS)
+ 1351              		.loc 1 473 16 is_stmt 0 view .LVU410
+ 1352 00b6 3046     		mov	r0, r6
+ 1353 00b8 FFF7FEFF 		bl	pcf85263_config_inta
+ 1354              	.LVL143:
+ 474:Src/pcf85263.c ****     {
+ 1355              		.loc 1 474 5 is_stmt 1 view .LVU411
+ 474:Src/pcf85263.c ****     {
+ 1356              		.loc 1 474 8 is_stmt 0 view .LVU412
+ 1357 00bc 0028     		cmp	r0, #0
+ 1358 00be E8D1     		bne	.L93
+ 479:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 1359              		.loc 1 479 5 is_stmt 1 view .LVU413
+ 479:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 1360              		.loc 1 479 11 is_stmt 0 view .LVU414
+ 1361 00c0 0122     		movs	r2, #1
+ 1362 00c2 0DF11701 		add	r1, sp, #23
+ 1363 00c6 1020     		movs	r0, #16
+ 1364              	.LVL144:
+ 479:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 1365              		.loc 1 479 11 view .LVU415
+ 1366 00c8 FFF7FEFF 		bl	pcf85263_read_data
+ 1367              	.LVL145:
+ 480:Src/pcf85263.c ****     {
+ 1368              		.loc 1 480 5 is_stmt 1 view .LVU416
+ 480:Src/pcf85263.c ****     {
+ 1369              		.loc 1 480 8 is_stmt 0 view .LVU417
+ 1370 00cc A0BB     		cbnz	r0, .L96
+ 485:Src/pcf85263.c ****     {
+ 1371              		.loc 1 485 5 is_stmt 1 view .LVU418
+ 485:Src/pcf85263.c ****     {
+ 1372              		.loc 1 485 8 is_stmt 0 view .LVU419
+ 1373 00ce 012E     		cmp	r6, #1
+ 1374 00d0 10D0     		beq	.L108
+ 505:Src/pcf85263.c ****     {
+ 1375              		.loc 1 505 10 is_stmt 1 view .LVU420
+ 505:Src/pcf85263.c ****     {
+ 1376              		.loc 1 505 13 is_stmt 0 view .LVU421
+ 1377 00d2 022E     		cmp	r6, #2
+ 1378 00d4 DDD1     		bne	.L93
+ 507:Src/pcf85263.c ****         //alarm_status |= 0xE0;
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 39
+
+
+ 1379              		.loc 1 507 9 is_stmt 1 view .LVU422
+ 507:Src/pcf85263.c ****         //alarm_status |= 0xE0;
+ 1380              		.loc 1 507 22 is_stmt 0 view .LVU423
+ 1381 00d6 9DF81730 		ldrb	r3, [sp, #23]	@ zero_extendqisi2
+ 1382 00da 43F06003 		orr	r3, r3, #96
+ 1383 00de 8DF81730 		strb	r3, [sp, #23]
+ 509:Src/pcf85263.c ****         if (ret != V_ZERO)
+ 1384              		.loc 1 509 9 is_stmt 1 view .LVU424
+ 509:Src/pcf85263.c ****         if (ret != V_ZERO)
+ 1385              		.loc 1 509 15 is_stmt 0 view .LVU425
+ 1386 00e2 0122     		movs	r2, #1
+ 1387 00e4 0DF11701 		add	r1, sp, #23
+ 1388 00e8 1020     		movs	r0, #16
+ 1389              	.LVL146:
+ 509:Src/pcf85263.c ****         if (ret != V_ZERO)
+ 1390              		.loc 1 509 15 view .LVU426
+ 1391 00ea FFF7FEFF 		bl	pcf85263_write_data
+ 1392              	.LVL147:
+ 510:Src/pcf85263.c ****         {
+ 1393              		.loc 1 510 9 is_stmt 1 view .LVU427
+ 510:Src/pcf85263.c ****         {
+ 1394              		.loc 1 510 12 is_stmt 0 view .LVU428
+ 1395 00ee C8B1     		cbz	r0, .L109
+ 512:Src/pcf85263.c ****         }
+ 1396              		.loc 1 512 20 view .LVU429
+ 1397 00f0 0120     		movs	r0, #1
+ 1398              	.LVL148:
+ 512:Src/pcf85263.c ****         }
+ 1399              		.loc 1 512 20 view .LVU430
+ 1400 00f2 CEE7     		b	.L93
+ 1401              	.LVL149:
+ 1402              	.L108:
+ 488:Src/pcf85263.c ****         ret = pcf85263_write_data(PCF8563_ALARM_ENABLES, &alarm_status, L_ONE);     /*Start alarm f
+ 1403              		.loc 1 488 9 is_stmt 1 view .LVU431
+ 488:Src/pcf85263.c ****         ret = pcf85263_write_data(PCF8563_ALARM_ENABLES, &alarm_status, L_ONE);     /*Start alarm f
+ 1404              		.loc 1 488 22 is_stmt 0 view .LVU432
+ 1405 00f4 9DF81730 		ldrb	r3, [sp, #23]	@ zero_extendqisi2
+ 1406 00f8 43F00103 		orr	r3, r3, #1
+ 1407 00fc 8DF81730 		strb	r3, [sp, #23]
+ 489:Src/pcf85263.c ****         if (ret != V_ZERO)
+ 1408              		.loc 1 489 9 is_stmt 1 view .LVU433
+ 489:Src/pcf85263.c ****         if (ret != V_ZERO)
+ 1409              		.loc 1 489 15 is_stmt 0 view .LVU434
+ 1410 0100 0122     		movs	r2, #1
+ 1411 0102 0DF11701 		add	r1, sp, #23
+ 1412 0106 1020     		movs	r0, #16
+ 1413              	.LVL150:
+ 489:Src/pcf85263.c ****         if (ret != V_ZERO)
+ 1414              		.loc 1 489 15 view .LVU435
+ 1415 0108 FFF7FEFF 		bl	pcf85263_write_data
+ 1416              	.LVL151:
+ 490:Src/pcf85263.c ****         {
+ 1417              		.loc 1 490 9 is_stmt 1 view .LVU436
+ 490:Src/pcf85263.c ****         {
+ 1418              		.loc 1 490 12 is_stmt 0 view .LVU437
+ 1419 010c 08B1     		cbz	r0, .L110
+ 492:Src/pcf85263.c ****         }
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 40
+
+
+ 1420              		.loc 1 492 20 view .LVU438
+ 1421 010e 0120     		movs	r0, #1
+ 1422              	.LVL152:
+ 492:Src/pcf85263.c ****         }
+ 1423              		.loc 1 492 20 view .LVU439
+ 1424 0110 BFE7     		b	.L93
+ 1425              	.LVL153:
+ 1426              	.L110:
+ 495:Src/pcf85263.c ****         if (ret == V_ZERO)
+ 1427              		.loc 1 495 9 is_stmt 1 view .LVU440
+ 495:Src/pcf85263.c ****         if (ret == V_ZERO)
+ 1428              		.loc 1 495 15 is_stmt 0 view .LVU441
+ 1429 0112 0122     		movs	r2, #1
+ 1430 0114 04A9     		add	r1, sp, #16
+ 1431 0116 0820     		movs	r0, #8
+ 1432              	.LVL154:
+ 495:Src/pcf85263.c ****         if (ret == V_ZERO)
+ 1433              		.loc 1 495 15 view .LVU442
+ 1434 0118 FFF7FEFF 		bl	pcf85263_write_data
+ 1435              	.LVL155:
+ 496:Src/pcf85263.c ****         {
+ 1436              		.loc 1 496 9 is_stmt 1 view .LVU443
+ 496:Src/pcf85263.c ****         {
+ 1437              		.loc 1 496 12 is_stmt 0 view .LVU444
+ 1438 011c 0028     		cmp	r0, #0
+ 1439 011e B8D0     		beq	.L93
+ 502:Src/pcf85263.c ****         }
+ 1440              		.loc 1 502 20 view .LVU445
+ 1441 0120 0120     		movs	r0, #1
+ 1442              	.LVL156:
+ 502:Src/pcf85263.c ****         }
+ 1443              		.loc 1 502 20 view .LVU446
+ 1444 0122 B6E7     		b	.L93
+ 1445              	.LVL157:
+ 1446              	.L109:
+ 515:Src/pcf85263.c ****         //ret = pcf85263_write_data(PCF8563_ALARM_MINUTES, &set_alarm[V_ONE], L_THREE);
+ 1447              		.loc 1 515 9 is_stmt 1 view .LVU447
+ 515:Src/pcf85263.c ****         //ret = pcf85263_write_data(PCF8563_ALARM_MINUTES, &set_alarm[V_ONE], L_THREE);
+ 1448              		.loc 1 515 15 is_stmt 0 view .LVU448
+ 1449 0124 0222     		movs	r2, #2
+ 1450 0126 0DF11101 		add	r1, sp, #17
+ 1451 012a 0D20     		movs	r0, #13
+ 1452              	.LVL158:
+ 515:Src/pcf85263.c ****         //ret = pcf85263_write_data(PCF8563_ALARM_MINUTES, &set_alarm[V_ONE], L_THREE);
+ 1453              		.loc 1 515 15 view .LVU449
+ 1454 012c FFF7FEFF 		bl	pcf85263_write_data
+ 1455              	.LVL159:
+ 517:Src/pcf85263.c ****         {
+ 1456              		.loc 1 517 9 is_stmt 1 view .LVU450
+ 517:Src/pcf85263.c ****         {
+ 1457              		.loc 1 517 12 is_stmt 0 view .LVU451
+ 1458 0130 0028     		cmp	r0, #0
+ 1459 0132 AED0     		beq	.L93
+ 523:Src/pcf85263.c ****         }
+ 1460              		.loc 1 523 20 view .LVU452
+ 1461 0134 0120     		movs	r0, #1
+ 1462              	.LVL160:
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 41
+
+
+ 523:Src/pcf85263.c ****         }
+ 1463              		.loc 1 523 20 view .LVU453
+ 1464 0136 ACE7     		b	.L93
+ 1465              	.LVL161:
+ 1466              	.L96:
+ 482:Src/pcf85263.c ****     }
+ 1467              		.loc 1 482 16 view .LVU454
+ 1468 0138 0120     		movs	r0, #1
+ 1469              	.LVL162:
+ 482:Src/pcf85263.c ****     }
+ 1470              		.loc 1 482 16 view .LVU455
+ 1471 013a AAE7     		b	.L93
+ 1472              	.L112:
+ 1473              		.align	2
+ 1474              	.L111:
+ 1475 013c 34000000 		.word	.LC3
+ 1476 0140 3C000000 		.word	.LC15
+ 1477 0144 48000000 		.word	.LC4
+ 1478 0148 00000000 		.word	.LC12
+ 1479 014c 14000000 		.word	.LC13
+ 1480 0150 28000000 		.word	.LC14
+ 1481              		.cfi_endproc
+ 1482              	.LFE324:
+ 1484              		.section	.rodata.pcf85263_clear_alarm_flag.str1.4,"aMS",%progbits,1
+ 1485              		.align	2
+ 1486              	.LC16:
+ 1487 0000 616C6172 		.ascii	"alarm flag clear\000"
+ 1487      6D20666C 
+ 1487      61672063 
+ 1487      6C656172 
+ 1487      00
+ 1488 0011 000000   		.align	2
+ 1489              	.LC17:
+ 1490 0014 616C6172 		.ascii	"alarm flag = %d\012\000"
+ 1490      6D20666C 
+ 1490      6167203D 
+ 1490      2025640A 
+ 1490      00
+ 1491              		.section	.text.pcf85263_clear_alarm_flag,"ax",%progbits
+ 1492              		.align	1
+ 1493              		.global	pcf85263_clear_alarm_flag
+ 1494              		.syntax unified
+ 1495              		.thumb
+ 1496              		.thumb_func
+ 1497              		.fpu fpv4-sp-d16
+ 1499              	pcf85263_clear_alarm_flag:
+ 1500              	.LFB325:
+ 528:Src/pcf85263.c **** 
+ 529:Src/pcf85263.c **** 
+ 530:Src/pcf85263.c **** rtc_op_return_type_t pcf85263_clear_alarm_flag(void)
+ 531:Src/pcf85263.c **** {
+ 1501              		.loc 1 531 1 is_stmt 1 view -0
+ 1502              		.cfi_startproc
+ 1503              		@ args = 0, pretend = 0, frame = 8
+ 1504              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1505 0000 10B5     		push	{r4, lr}
+ 1506              	.LCFI25:
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 42
+
+
+ 1507              		.cfi_def_cfa_offset 8
+ 1508              		.cfi_offset 4, -8
+ 1509              		.cfi_offset 14, -4
+ 1510 0002 82B0     		sub	sp, sp, #8
+ 1511              	.LCFI26:
+ 1512              		.cfi_def_cfa_offset 16
+ 532:Src/pcf85263.c ****     uint8_t rtc_read = V_ZERO;
+ 1513              		.loc 1 532 5 view .LVU457
+ 1514              		.loc 1 532 13 is_stmt 0 view .LVU458
+ 1515 0004 0023     		movs	r3, #0
+ 1516 0006 8DF80730 		strb	r3, [sp, #7]
+ 533:Src/pcf85263.c ****     uint8_t ret = RTC_OP_SUCCESS;
+ 1517              		.loc 1 533 5 is_stmt 1 view .LVU459
+ 1518              	.LVL163:
+ 534:Src/pcf85263.c ****     printf("alarm flag clear\n");
+ 1519              		.loc 1 534 5 view .LVU460
+ 1520 000a 0E48     		ldr	r0, .L117
+ 1521 000c FFF7FEFF 		bl	puts
+ 1522              	.LVL164:
+ 535:Src/pcf85263.c ****     ret = pcf85263_write_data(PCF8563_ADDR_FLAGS, &rtc_read, L_ONE);
+ 1523              		.loc 1 535 5 view .LVU461
+ 1524              		.loc 1 535 11 is_stmt 0 view .LVU462
+ 1525 0010 0122     		movs	r2, #1
+ 1526 0012 0DF10701 		add	r1, sp, #7
+ 1527 0016 2B20     		movs	r0, #43
+ 1528 0018 FFF7FEFF 		bl	pcf85263_write_data
+ 1529              	.LVL165:
+ 536:Src/pcf85263.c ****     HAL_Delay(2);
+ 1530              		.loc 1 536 5 is_stmt 1 view .LVU463
+ 1531 001c 0220     		movs	r0, #2
+ 1532 001e FFF7FEFF 		bl	HAL_Delay
+ 1533              	.LVL166:
+ 537:Src/pcf85263.c ****     ret = pcf85263_read_data(PCF8563_ADDR_FLAGS, &rtc_read, L_ONE);
+ 1534              		.loc 1 537 5 view .LVU464
+ 1535              		.loc 1 537 11 is_stmt 0 view .LVU465
+ 1536 0022 0122     		movs	r2, #1
+ 1537 0024 0DF10701 		add	r1, sp, #7
+ 1538 0028 2B20     		movs	r0, #43
+ 1539 002a FFF7FEFF 		bl	pcf85263_read_data
+ 1540              	.LVL167:
+ 1541 002e 0446     		mov	r4, r0
+ 1542              	.LVL168:
+ 538:Src/pcf85263.c ****     printf("alarm flag = %d\n", rtc_read);
+ 1543              		.loc 1 538 5 is_stmt 1 view .LVU466
+ 1544 0030 9DF80710 		ldrb	r1, [sp, #7]	@ zero_extendqisi2
+ 1545 0034 0448     		ldr	r0, .L117+4
+ 1546 0036 FFF7FEFF 		bl	printf
+ 1547              	.LVL169:
+ 539:Src/pcf85263.c ****     if(ret != V_ZERO)
+ 1548              		.loc 1 539 5 view .LVU467
+ 1549              		.loc 1 539 7 is_stmt 0 view .LVU468
+ 1550 003a 04B1     		cbz	r4, .L114
+ 540:Src/pcf85263.c ****     {
+ 541:Src/pcf85263.c ****         ret = RTC_OP_COMMUNICATION_FAILURE;
+ 1551              		.loc 1 541 13 view .LVU469
+ 1552 003c 0124     		movs	r4, #1
+ 1553              	.LVL170:
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 43
+
+
+ 1554              	.L114:
+ 542:Src/pcf85263.c ****     }
+ 543:Src/pcf85263.c **** 
+ 544:Src/pcf85263.c ****     return ret;
+ 1555              		.loc 1 544 5 is_stmt 1 view .LVU470
+ 545:Src/pcf85263.c **** }
+ 1556              		.loc 1 545 1 is_stmt 0 view .LVU471
+ 1557 003e 2046     		mov	r0, r4
+ 1558 0040 02B0     		add	sp, sp, #8
+ 1559              	.LCFI27:
+ 1560              		.cfi_def_cfa_offset 8
+ 1561              		@ sp needed
+ 1562 0042 10BD     		pop	{r4, pc}
+ 1563              	.LVL171:
+ 1564              	.L118:
+ 1565              		.loc 1 545 1 view .LVU472
+ 1566              		.align	2
+ 1567              	.L117:
+ 1568 0044 00000000 		.word	.LC16
+ 1569 0048 14000000 		.word	.LC17
+ 1570              		.cfi_endproc
+ 1571              	.LFE325:
+ 1573              		.section	.rodata.pcf85263_read_alarm.str1.4,"aMS",%progbits,1
+ 1574              		.align	2
+ 1575              	.LC19:
+ 1576 0000 72656164 		.ascii	"read alarm 1\000"
+ 1576      20616C61 
+ 1576      726D2031 
+ 1576      00
+ 1577 000d 000000   		.align	2
+ 1578              	.LC20:
+ 1579 0010 72656164 		.ascii	"read alarm 2\000"
+ 1579      20616C61 
+ 1579      726D2032 
+ 1579      00
+ 1580 001d 000000   		.align	2
+ 1581              	.LC21:
+ 1582 0020 616C6172 		.ascii	"alarm time : \000"
+ 1582      6D207469 
+ 1582      6D65203A 
+ 1582      2000
+ 1583 002e 0000     		.align	2
+ 1584              	.LC22:
+ 1585 0030 0A2000   		.ascii	"\012 \000"
+ 1586              		.section	.text.pcf85263_read_alarm,"ax",%progbits
+ 1587              		.align	1
+ 1588              		.global	pcf85263_read_alarm
+ 1589              		.syntax unified
+ 1590              		.thumb
+ 1591              		.thumb_func
+ 1592              		.fpu fpv4-sp-d16
+ 1594              	pcf85263_read_alarm:
+ 1595              	.LVL172:
+ 1596              	.LFB326:
+ 546:Src/pcf85263.c **** 
+ 547:Src/pcf85263.c **** /***************************************************************
+ 548:Src/pcf85263.c **** *@brief  This api is the underlying driver interface to get Alarm1 or Alarm2 register value
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 44
+
+
+ 549:Src/pcf85263.c **** *        related to the alarm time
+ 550:Src/pcf85263.c **** *@param 
+ 551:Src/pcf85263.c **** *      [in]    alarm_id
+ 552:Src/pcf85263.c **** *      [out]   date_time
+ 553:Src/pcf85263.c **** *@return
+ 554:Src/pcf85263.c **** *       RTC_OP_SUCCESS                 
+ 555:Src/pcf85263.c **** *       RTC_OP_COMMUNICATION_FAILURE  
+ 556:Src/pcf85263.c **** **************************************************************/
+ 557:Src/pcf85263.c **** rtc_op_return_type_t pcf85263_read_alarm(uint32_t alarm_id)
+ 558:Src/pcf85263.c **** {
+ 1597              		.loc 1 558 1 is_stmt 1 view -0
+ 1598              		.cfi_startproc
+ 1599              		@ args = 0, pretend = 0, frame = 8
+ 1600              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1601              		.loc 1 558 1 is_stmt 0 view .LVU474
+ 1602 0000 30B5     		push	{r4, r5, lr}
+ 1603              	.LCFI28:
+ 1604              		.cfi_def_cfa_offset 12
+ 1605              		.cfi_offset 4, -12
+ 1606              		.cfi_offset 5, -8
+ 1607              		.cfi_offset 14, -4
+ 1608 0002 83B0     		sub	sp, sp, #12
+ 1609              	.LCFI29:
+ 1610              		.cfi_def_cfa_offset 24
+ 1611 0004 0346     		mov	r3, r0
+ 559:Src/pcf85263.c ****     uint8_t ret = I_ZERO;
+ 1612              		.loc 1 559 5 is_stmt 1 view .LVU475
+ 1613              	.LVL173:
+ 560:Src/pcf85263.c ****     uint8_t read_alarm[V_EIGHT] = {I_ZERO,I_ZERO,I_ZERO,I_ZERO,I_ZERO,I_ZERO,I_ZERO,I_ZERO};
+ 1614              		.loc 1 560 5 view .LVU476
+ 1615              		.loc 1 560 13 is_stmt 0 view .LVU477
+ 1616 0006 3A4A     		ldr	r2, .L132
+ 1617 0008 92E80300 		ldm	r2, {r0, r1}
+ 1618              	.LVL174:
+ 1619              		.loc 1 560 13 view .LVU478
+ 1620 000c 02AA     		add	r2, sp, #8
+ 1621 000e 02E90300 		stmdb	r2, {r0, r1}
+ 561:Src/pcf85263.c **** 
+ 562:Src/pcf85263.c ****     if (alarm_id == ALARM_ID_ONE)
+ 1622              		.loc 1 562 5 is_stmt 1 view .LVU479
+ 1623              		.loc 1 562 8 is_stmt 0 view .LVU480
+ 1624 0012 012B     		cmp	r3, #1
+ 1625 0014 05D0     		beq	.L130
+ 563:Src/pcf85263.c ****     {
+ 564:Src/pcf85263.c ****         printf("read alarm 1\n");
+ 565:Src/pcf85263.c ****         ret = pcf85263_read_data(PCF8563_ALARM_SECONDS, &read_alarm[V_ZERO], L_EIGHT);
+ 566:Src/pcf85263.c ****         //ret = pcf85263_read_data(PCF8563_ALARM_ENABLES, &alarm_status, L_ONE);
+ 567:Src/pcf85263.c ****         if (ret != V_ZERO)
+ 568:Src/pcf85263.c ****         {
+ 569:Src/pcf85263.c ****             return RTC_OP_COMMUNICATION_FAILURE;
+ 570:Src/pcf85263.c ****         }
+ 571:Src/pcf85263.c ****     }
+ 572:Src/pcf85263.c ****     else if (alarm_id == ALARM_ID_TWO)
+ 1626              		.loc 1 572 10 is_stmt 1 view .LVU481
+ 1627              		.loc 1 572 13 is_stmt 0 view .LVU482
+ 1628 0016 022B     		cmp	r3, #2
+ 1629 0018 0FD0     		beq	.L131
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 45
+
+
+ 573:Src/pcf85263.c ****     {
+ 574:Src/pcf85263.c ****         printf("read alarm 2\n");
+ 575:Src/pcf85263.c ****         ret = pcf85263_read_data(PCF8563_ALARM2_MINUTES, &read_alarm[V_ONE], L_TWO);
+ 576:Src/pcf85263.c ****         if (ret != V_ZERO)
+ 577:Src/pcf85263.c ****         {
+ 578:Src/pcf85263.c ****             return RTC_OP_COMMUNICATION_FAILURE;
+ 579:Src/pcf85263.c ****         }
+ 580:Src/pcf85263.c ****     }
+ 581:Src/pcf85263.c ****     else
+ 582:Src/pcf85263.c ****     {
+ 583:Src/pcf85263.c ****         return RTC_OP_COMMUNICATION_FAILURE;
+ 1630              		.loc 1 583 16 view .LVU483
+ 1631 001a 0125     		movs	r5, #1
+ 1632              	.LVL175:
+ 1633              	.L121:
+ 584:Src/pcf85263.c ****     }
+ 585:Src/pcf85263.c **** 
+ 586:Src/pcf85263.c ****     read_alarm[V_ZERO] &= LOW_SEVEN_BITS_ENABLE;           /*second*/
+ 587:Src/pcf85263.c ****     read_alarm[V_ONE] &= LOW_SEVEN_BITS_ENABLE;           /*Minute*/
+ 588:Src/pcf85263.c ****     // read_alarm[V_TWO] &= LOW_SIX_BITS_ENABLE;           /*hour*/
+ 589:Src/pcf85263.c ****     // read_alarm[V_THREE] &= LOW_SIX_BITS_ENABLE;           /*day*/
+ 590:Src/pcf85263.c ****     // read_alarm[V_FOUR] &= LOW_SIX_BITS_ENABLE;           /*month*/
+ 591:Src/pcf85263.c **** 
+ 592:Src/pcf85263.c ****     read_alarm[V_ZERO] = bcd_to_bin(read_alarm[V_ZERO]);
+ 593:Src/pcf85263.c ****     read_alarm[V_ONE] = bcd_to_bin(read_alarm[V_ONE]);
+ 594:Src/pcf85263.c ****     read_alarm[V_TWO] = bcd_to_bin(read_alarm[V_TWO]);
+ 595:Src/pcf85263.c ****     read_alarm[V_THREE] = bcd_to_bin(read_alarm[V_THREE]);
+ 596:Src/pcf85263.c ****     read_alarm[V_FOUR] = bcd_to_bin(read_alarm[V_FOUR]);
+ 597:Src/pcf85263.c ****     read_alarm[V_FIVE] = bcd_to_bin(read_alarm[V_FIVE]);
+ 598:Src/pcf85263.c ****     read_alarm[V_SIX] = bcd_to_bin(read_alarm[V_SIX]);
+ 599:Src/pcf85263.c ****     read_alarm[V_SEVEN] = bcd_to_bin(read_alarm[V_SEVEN]);    
+ 600:Src/pcf85263.c ****     //date_time->year  = V_ZERO;
+ 601:Src/pcf85263.c ****     printf("alarm time : ");
+ 602:Src/pcf85263.c ****     for(uint8_t i = 0; i < 8; i++)
+ 603:Src/pcf85263.c ****     {
+ 604:Src/pcf85263.c ****         printf("%d ", read_alarm[i]);
+ 605:Src/pcf85263.c ****     }
+ 606:Src/pcf85263.c ****     printf("\n ");    
+ 607:Src/pcf85263.c ****     if (ret == V_ZERO)
+ 608:Src/pcf85263.c ****     {
+ 609:Src/pcf85263.c ****         return RTC_OP_SUCCESS;
+ 610:Src/pcf85263.c ****     }
+ 611:Src/pcf85263.c ****     else
+ 612:Src/pcf85263.c ****     {
+ 613:Src/pcf85263.c ****         return RTC_OP_COMMUNICATION_FAILURE;
+ 614:Src/pcf85263.c ****     }
+ 615:Src/pcf85263.c **** }
+ 1634              		.loc 1 615 1 view .LVU484
+ 1635 001c 2846     		mov	r0, r5
+ 1636 001e 03B0     		add	sp, sp, #12
+ 1637              	.LCFI30:
+ 1638              		.cfi_remember_state
+ 1639              		.cfi_def_cfa_offset 12
+ 1640              		@ sp needed
+ 1641 0020 30BD     		pop	{r4, r5, pc}
+ 1642              	.LVL176:
+ 1643              	.L130:
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 46
+
+
+ 1644              	.LCFI31:
+ 1645              		.cfi_restore_state
+ 564:Src/pcf85263.c ****         ret = pcf85263_read_data(PCF8563_ALARM_SECONDS, &read_alarm[V_ZERO], L_EIGHT);
+ 1646              		.loc 1 564 9 is_stmt 1 view .LVU485
+ 1647 0022 3448     		ldr	r0, .L132+4
+ 1648 0024 FFF7FEFF 		bl	puts
+ 1649              	.LVL177:
+ 565:Src/pcf85263.c ****         //ret = pcf85263_read_data(PCF8563_ALARM_ENABLES, &alarm_status, L_ONE);
+ 1650              		.loc 1 565 9 view .LVU486
+ 565:Src/pcf85263.c ****         //ret = pcf85263_read_data(PCF8563_ALARM_ENABLES, &alarm_status, L_ONE);
+ 1651              		.loc 1 565 15 is_stmt 0 view .LVU487
+ 1652 0028 0822     		movs	r2, #8
+ 1653 002a 6946     		mov	r1, sp
+ 1654 002c 1046     		mov	r0, r2
+ 1655 002e FFF7FEFF 		bl	pcf85263_read_data
+ 1656              	.LVL178:
+ 567:Src/pcf85263.c ****         {
+ 1657              		.loc 1 567 9 is_stmt 1 view .LVU488
+ 567:Src/pcf85263.c ****         {
+ 1658              		.loc 1 567 12 is_stmt 0 view .LVU489
+ 1659 0032 0546     		mov	r5, r0
+ 1660 0034 68B1     		cbz	r0, .L122
+ 569:Src/pcf85263.c ****         }
+ 1661              		.loc 1 569 20 view .LVU490
+ 1662 0036 0125     		movs	r5, #1
+ 1663 0038 F0E7     		b	.L121
+ 1664              	.LVL179:
+ 1665              	.L131:
+ 574:Src/pcf85263.c ****         ret = pcf85263_read_data(PCF8563_ALARM2_MINUTES, &read_alarm[V_ONE], L_TWO);
+ 1666              		.loc 1 574 9 is_stmt 1 view .LVU491
+ 1667 003a 2F48     		ldr	r0, .L132+8
+ 1668 003c FFF7FEFF 		bl	puts
+ 1669              	.LVL180:
+ 575:Src/pcf85263.c ****         if (ret != V_ZERO)
+ 1670              		.loc 1 575 9 view .LVU492
+ 575:Src/pcf85263.c ****         if (ret != V_ZERO)
+ 1671              		.loc 1 575 15 is_stmt 0 view .LVU493
+ 1672 0040 0222     		movs	r2, #2
+ 1673 0042 0DF10101 		add	r1, sp, #1
+ 1674 0046 0D20     		movs	r0, #13
+ 1675 0048 FFF7FEFF 		bl	pcf85263_read_data
+ 1676              	.LVL181:
+ 576:Src/pcf85263.c ****         {
+ 1677              		.loc 1 576 9 is_stmt 1 view .LVU494
+ 576:Src/pcf85263.c ****         {
+ 1678              		.loc 1 576 12 is_stmt 0 view .LVU495
+ 1679 004c 0546     		mov	r5, r0
+ 1680 004e 0028     		cmp	r0, #0
+ 1681 0050 4BD1     		bne	.L127
+ 1682              	.L122:
+ 1683              	.LVL182:
+ 586:Src/pcf85263.c ****     read_alarm[V_ONE] &= LOW_SEVEN_BITS_ENABLE;           /*Minute*/
+ 1684              		.loc 1 586 5 is_stmt 1 view .LVU496
+ 586:Src/pcf85263.c ****     read_alarm[V_ONE] &= LOW_SEVEN_BITS_ENABLE;           /*Minute*/
+ 1685              		.loc 1 586 24 is_stmt 0 view .LVU497
+ 1686 0052 9DF80000 		ldrb	r0, [sp]	@ zero_extendqisi2
+ 587:Src/pcf85263.c ****     // read_alarm[V_TWO] &= LOW_SIX_BITS_ENABLE;           /*hour*/
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 47
+
+
+ 1687              		.loc 1 587 5 is_stmt 1 view .LVU498
+ 587:Src/pcf85263.c ****     // read_alarm[V_TWO] &= LOW_SIX_BITS_ENABLE;           /*hour*/
+ 1688              		.loc 1 587 23 is_stmt 0 view .LVU499
+ 1689 0056 9DF80140 		ldrb	r4, [sp, #1]	@ zero_extendqisi2
+ 1690 005a 04F07F04 		and	r4, r4, #127
+ 592:Src/pcf85263.c ****     read_alarm[V_ONE] = bcd_to_bin(read_alarm[V_ONE]);
+ 1691              		.loc 1 592 5 is_stmt 1 view .LVU500
+ 592:Src/pcf85263.c ****     read_alarm[V_ONE] = bcd_to_bin(read_alarm[V_ONE]);
+ 1692              		.loc 1 592 26 is_stmt 0 view .LVU501
+ 1693 005e 00F07F00 		and	r0, r0, #127
+ 1694 0062 FFF7FEFF 		bl	bcd_to_bin
+ 1695              	.LVL183:
+ 592:Src/pcf85263.c ****     read_alarm[V_ONE] = bcd_to_bin(read_alarm[V_ONE]);
+ 1696              		.loc 1 592 24 view .LVU502
+ 1697 0066 8DF80000 		strb	r0, [sp]
+ 593:Src/pcf85263.c ****     read_alarm[V_TWO] = bcd_to_bin(read_alarm[V_TWO]);
+ 1698              		.loc 1 593 5 is_stmt 1 view .LVU503
+ 593:Src/pcf85263.c ****     read_alarm[V_TWO] = bcd_to_bin(read_alarm[V_TWO]);
+ 1699              		.loc 1 593 25 is_stmt 0 view .LVU504
+ 1700 006a 2046     		mov	r0, r4
+ 1701 006c FFF7FEFF 		bl	bcd_to_bin
+ 1702              	.LVL184:
+ 593:Src/pcf85263.c ****     read_alarm[V_TWO] = bcd_to_bin(read_alarm[V_TWO]);
+ 1703              		.loc 1 593 23 view .LVU505
+ 1704 0070 8DF80100 		strb	r0, [sp, #1]
+ 594:Src/pcf85263.c ****     read_alarm[V_THREE] = bcd_to_bin(read_alarm[V_THREE]);
+ 1705              		.loc 1 594 5 is_stmt 1 view .LVU506
+ 594:Src/pcf85263.c ****     read_alarm[V_THREE] = bcd_to_bin(read_alarm[V_THREE]);
+ 1706              		.loc 1 594 25 is_stmt 0 view .LVU507
+ 1707 0074 9DF80200 		ldrb	r0, [sp, #2]	@ zero_extendqisi2
+ 1708 0078 FFF7FEFF 		bl	bcd_to_bin
+ 1709              	.LVL185:
+ 594:Src/pcf85263.c ****     read_alarm[V_THREE] = bcd_to_bin(read_alarm[V_THREE]);
+ 1710              		.loc 1 594 23 view .LVU508
+ 1711 007c 8DF80200 		strb	r0, [sp, #2]
+ 595:Src/pcf85263.c ****     read_alarm[V_FOUR] = bcd_to_bin(read_alarm[V_FOUR]);
+ 1712              		.loc 1 595 5 is_stmt 1 view .LVU509
+ 595:Src/pcf85263.c ****     read_alarm[V_FOUR] = bcd_to_bin(read_alarm[V_FOUR]);
+ 1713              		.loc 1 595 27 is_stmt 0 view .LVU510
+ 1714 0080 9DF80300 		ldrb	r0, [sp, #3]	@ zero_extendqisi2
+ 1715 0084 FFF7FEFF 		bl	bcd_to_bin
+ 1716              	.LVL186:
+ 595:Src/pcf85263.c ****     read_alarm[V_FOUR] = bcd_to_bin(read_alarm[V_FOUR]);
+ 1717              		.loc 1 595 25 view .LVU511
+ 1718 0088 8DF80300 		strb	r0, [sp, #3]
+ 596:Src/pcf85263.c ****     read_alarm[V_FIVE] = bcd_to_bin(read_alarm[V_FIVE]);
+ 1719              		.loc 1 596 5 is_stmt 1 view .LVU512
+ 596:Src/pcf85263.c ****     read_alarm[V_FIVE] = bcd_to_bin(read_alarm[V_FIVE]);
+ 1720              		.loc 1 596 26 is_stmt 0 view .LVU513
+ 1721 008c 9DF80400 		ldrb	r0, [sp, #4]	@ zero_extendqisi2
+ 1722 0090 FFF7FEFF 		bl	bcd_to_bin
+ 1723              	.LVL187:
+ 596:Src/pcf85263.c ****     read_alarm[V_FIVE] = bcd_to_bin(read_alarm[V_FIVE]);
+ 1724              		.loc 1 596 24 view .LVU514
+ 1725 0094 8DF80400 		strb	r0, [sp, #4]
+ 597:Src/pcf85263.c ****     read_alarm[V_SIX] = bcd_to_bin(read_alarm[V_SIX]);
+ 1726              		.loc 1 597 5 is_stmt 1 view .LVU515
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 48
+
+
+ 597:Src/pcf85263.c ****     read_alarm[V_SIX] = bcd_to_bin(read_alarm[V_SIX]);
+ 1727              		.loc 1 597 26 is_stmt 0 view .LVU516
+ 1728 0098 9DF80500 		ldrb	r0, [sp, #5]	@ zero_extendqisi2
+ 1729 009c FFF7FEFF 		bl	bcd_to_bin
+ 1730              	.LVL188:
+ 597:Src/pcf85263.c ****     read_alarm[V_SIX] = bcd_to_bin(read_alarm[V_SIX]);
+ 1731              		.loc 1 597 24 view .LVU517
+ 1732 00a0 8DF80500 		strb	r0, [sp, #5]
+ 598:Src/pcf85263.c ****     read_alarm[V_SEVEN] = bcd_to_bin(read_alarm[V_SEVEN]);    
+ 1733              		.loc 1 598 5 is_stmt 1 view .LVU518
+ 598:Src/pcf85263.c ****     read_alarm[V_SEVEN] = bcd_to_bin(read_alarm[V_SEVEN]);    
+ 1734              		.loc 1 598 25 is_stmt 0 view .LVU519
+ 1735 00a4 9DF80600 		ldrb	r0, [sp, #6]	@ zero_extendqisi2
+ 1736 00a8 FFF7FEFF 		bl	bcd_to_bin
+ 1737              	.LVL189:
+ 598:Src/pcf85263.c ****     read_alarm[V_SEVEN] = bcd_to_bin(read_alarm[V_SEVEN]);    
+ 1738              		.loc 1 598 23 view .LVU520
+ 1739 00ac 8DF80600 		strb	r0, [sp, #6]
+ 599:Src/pcf85263.c ****     //date_time->year  = V_ZERO;
+ 1740              		.loc 1 599 5 is_stmt 1 view .LVU521
+ 599:Src/pcf85263.c ****     //date_time->year  = V_ZERO;
+ 1741              		.loc 1 599 27 is_stmt 0 view .LVU522
+ 1742 00b0 9DF80700 		ldrb	r0, [sp, #7]	@ zero_extendqisi2
+ 1743 00b4 FFF7FEFF 		bl	bcd_to_bin
+ 1744              	.LVL190:
+ 599:Src/pcf85263.c ****     //date_time->year  = V_ZERO;
+ 1745              		.loc 1 599 25 view .LVU523
+ 1746 00b8 8DF80700 		strb	r0, [sp, #7]
+ 601:Src/pcf85263.c ****     for(uint8_t i = 0; i < 8; i++)
+ 1747              		.loc 1 601 5 is_stmt 1 view .LVU524
+ 1748 00bc 0F48     		ldr	r0, .L132+12
+ 1749 00be FFF7FEFF 		bl	printf
+ 1750              	.LVL191:
+ 602:Src/pcf85263.c ****     {
+ 1751              		.loc 1 602 5 view .LVU525
+ 1752              	.LBB5:
+ 602:Src/pcf85263.c ****     {
+ 1753              		.loc 1 602 9 view .LVU526
+ 602:Src/pcf85263.c ****     {
+ 1754              		.loc 1 602 17 is_stmt 0 view .LVU527
+ 1755 00c2 0024     		movs	r4, #0
+ 602:Src/pcf85263.c ****     {
+ 1756              		.loc 1 602 5 view .LVU528
+ 1757 00c4 08E0     		b	.L123
+ 1758              	.LVL192:
+ 1759              	.L124:
+ 604:Src/pcf85263.c ****     }
+ 1760              		.loc 1 604 9 is_stmt 1 discriminator 3 view .LVU529
+ 604:Src/pcf85263.c ****     }
+ 1761              		.loc 1 604 33 is_stmt 0 discriminator 3 view .LVU530
+ 1762 00c6 02AB     		add	r3, sp, #8
+ 1763 00c8 2344     		add	r3, r3, r4
+ 604:Src/pcf85263.c ****     }
+ 1764              		.loc 1 604 9 discriminator 3 view .LVU531
+ 1765 00ca 13F8081C 		ldrb	r1, [r3, #-8]	@ zero_extendqisi2
+ 1766 00ce 0C48     		ldr	r0, .L132+16
+ 1767 00d0 FFF7FEFF 		bl	printf
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 49
+
+
+ 1768              	.LVL193:
+ 602:Src/pcf85263.c ****     {
+ 1769              		.loc 1 602 31 is_stmt 1 discriminator 3 view .LVU532
+ 602:Src/pcf85263.c ****     {
+ 1770              		.loc 1 602 32 is_stmt 0 discriminator 3 view .LVU533
+ 1771 00d4 0134     		adds	r4, r4, #1
+ 1772              	.LVL194:
+ 602:Src/pcf85263.c ****     {
+ 1773              		.loc 1 602 32 discriminator 3 view .LVU534
+ 1774 00d6 E4B2     		uxtb	r4, r4
+ 1775              	.LVL195:
+ 1776              	.L123:
+ 602:Src/pcf85263.c ****     {
+ 1777              		.loc 1 602 24 is_stmt 1 discriminator 1 view .LVU535
+ 602:Src/pcf85263.c ****     {
+ 1778              		.loc 1 602 5 is_stmt 0 discriminator 1 view .LVU536
+ 1779 00d8 072C     		cmp	r4, #7
+ 1780 00da F4D9     		bls	.L124
+ 1781              	.LBE5:
+ 606:Src/pcf85263.c ****     if (ret == V_ZERO)
+ 1782              		.loc 1 606 5 is_stmt 1 view .LVU537
+ 1783 00dc 0948     		ldr	r0, .L132+20
+ 1784 00de FFF7FEFF 		bl	printf
+ 1785              	.LVL196:
+ 607:Src/pcf85263.c ****     {
+ 1786              		.loc 1 607 5 view .LVU538
+ 607:Src/pcf85263.c ****     {
+ 1787              		.loc 1 607 8 is_stmt 0 view .LVU539
+ 1788 00e2 002D     		cmp	r5, #0
+ 1789 00e4 9AD0     		beq	.L121
+ 613:Src/pcf85263.c ****     }
+ 1790              		.loc 1 613 16 view .LVU540
+ 1791 00e6 0125     		movs	r5, #1
+ 1792              	.LVL197:
+ 613:Src/pcf85263.c ****     }
+ 1793              		.loc 1 613 16 view .LVU541
+ 1794 00e8 98E7     		b	.L121
+ 1795              	.LVL198:
+ 1796              	.L127:
+ 578:Src/pcf85263.c ****         }
+ 1797              		.loc 1 578 20 view .LVU542
+ 1798 00ea 0125     		movs	r5, #1
+ 1799 00ec 96E7     		b	.L121
+ 1800              	.L133:
+ 1801 00ee 00BF     		.align	2
+ 1802              	.L132:
+ 1803 00f0 08000000 		.word	.LANCHOR0+8
+ 1804 00f4 00000000 		.word	.LC19
+ 1805 00f8 10000000 		.word	.LC20
+ 1806 00fc 20000000 		.word	.LC21
+ 1807 0100 28000000 		.word	.LC11
+ 1808 0104 30000000 		.word	.LC22
+ 1809              		.cfi_endproc
+ 1810              	.LFE326:
+ 1812              		.section	.rodata.pcf85263_set_sw_mode_alarm.str1.4,"aMS",%progbits,1
+ 1813              		.align	2
+ 1814              	.LC23:
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 50
+
+
+ 1815 0000 73746F70 		.ascii	"stop watch mode enable\000"
+ 1815      20776174 
+ 1815      6368206D 
+ 1815      6F646520 
+ 1815      656E6162 
+ 1816 0017 00       		.align	2
+ 1817              	.LC24:
+ 1818 0018 25642025 		.ascii	"%d %d %d:%d:%d\012\000"
+ 1818      64202564 
+ 1818      3A25643A 
+ 1818      25640A00 
+ 1819              		.align	2
+ 1820              	.LC25:
+ 1821 0028 616C6172 		.ascii	"alarm 1 started\000"
+ 1821      6D203120 
+ 1821      73746172 
+ 1821      74656400 
+ 1822              		.align	2
+ 1823              	.LC26:
+ 1824 0038 616C6172 		.ascii	"alarm 2 started\000"
+ 1824      6D203220 
+ 1824      73746172 
+ 1824      74656400 
+ 1825              		.section	.text.pcf85263_set_sw_mode_alarm,"ax",%progbits
+ 1826              		.align	1
+ 1827              		.global	pcf85263_set_sw_mode_alarm
+ 1828              		.syntax unified
+ 1829              		.thumb
+ 1830              		.thumb_func
+ 1831              		.fpu fpv4-sp-d16
+ 1833              	pcf85263_set_sw_mode_alarm:
+ 1834              	.LVL199:
+ 1835              	.LFB327:
+ 616:Src/pcf85263.c **** /***************************************************************
+ 617:Src/pcf85263.c **** * @brief  
+ 618:Src/pcf85263.c **** *           In stop-watch mode, Alarm 1 can be configured from seconds to 999999 hours. Alarm 2 
+ 619:Src/pcf85263.c **** *           operates on minutes up to 9999 hours.
+ 620:Src/pcf85263.c **** * @param[in]
+ 621:Src/pcf85263.c **** *           alarm_id
+ 622:Src/pcf85263.c **** *           count_time
+ 623:Src/pcf85263.c **** * @return
+ 624:Src/pcf85263.c **** *           RTC_OP_SUCCESS                
+ 625:Src/pcf85263.c **** *           RTC_OP_COMMUNICATION_FAILURE  
+ 626:Src/pcf85263.c **** *           RTC_OP_INVALID_DATE_TIME
+ 627:Src/pcf85263.c **** **************************************************************/
+ 628:Src/pcf85263.c **** rtc_op_return_type_t pcf85263_set_sw_mode_alarm(uint32_t alarm_id , RTC_COUNT_TIME_T count_time)
+ 629:Src/pcf85263.c **** {
+ 1836              		.loc 1 629 1 is_stmt 1 view -0
+ 1837              		.cfi_startproc
+ 1838              		@ args = 0, pretend = 0, frame = 16
+ 1839              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1840              		.loc 1 629 1 is_stmt 0 view .LVU544
+ 1841 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 1842              	.LCFI32:
+ 1843              		.cfi_def_cfa_offset 20
+ 1844              		.cfi_offset 4, -20
+ 1845              		.cfi_offset 5, -16
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 51
+
+
+ 1846              		.cfi_offset 6, -12
+ 1847              		.cfi_offset 7, -8
+ 1848              		.cfi_offset 14, -4
+ 1849 0002 87B0     		sub	sp, sp, #28
+ 1850              	.LCFI33:
+ 1851              		.cfi_def_cfa_offset 48
+ 1852 0004 0646     		mov	r6, r0
+ 1853 0006 02AB     		add	r3, sp, #8
+ 1854 0008 83E80600 		stm	r3, {r1, r2}
+ 630:Src/pcf85263.c ****     uint8_t ret = RTC_OP_SUCCESS;
+ 1855              		.loc 1 630 5 is_stmt 1 view .LVU545
+ 1856              	.LVL200:
+ 631:Src/pcf85263.c ****     uint8_t m_rtc_mode_bit = SW_MODE;   
+ 1857              		.loc 1 631 5 view .LVU546
+ 1858              		.loc 1 631 13 is_stmt 0 view .LVU547
+ 1859 000c 1023     		movs	r3, #16
+ 1860 000e 8DF81730 		strb	r3, [sp, #23]
+ 632:Src/pcf85263.c ****     uint8_t m_rtc_mode_read = 0;    
+ 1861              		.loc 1 632 5 is_stmt 1 view .LVU548
+ 1862              		.loc 1 632 13 is_stmt 0 view .LVU549
+ 1863 0012 0023     		movs	r3, #0
+ 1864 0014 8DF81630 		strb	r3, [sp, #22]
+ 633:Src/pcf85263.c ****     ret = pcf85263_write_data(PCF8563_ADDR_FUN, &m_rtc_mode_bit, L_ONE);    /*stop watch mode enabl
+ 1865              		.loc 1 633 5 is_stmt 1 view .LVU550
+ 1866              		.loc 1 633 11 is_stmt 0 view .LVU551
+ 1867 0018 0122     		movs	r2, #1
+ 1868 001a 0DF11701 		add	r1, sp, #23
+ 1869 001e 2820     		movs	r0, #40
+ 1870              	.LVL201:
+ 1871              		.loc 1 633 11 view .LVU552
+ 1872 0020 FFF7FEFF 		bl	pcf85263_write_data
+ 1873              	.LVL202:
+ 1874 0024 0446     		mov	r4, r0
+ 1875              	.LVL203:
+ 634:Src/pcf85263.c ****     printf("stop watch mode enable\n");
+ 1876              		.loc 1 634 5 is_stmt 1 view .LVU553
+ 1877 0026 5D48     		ldr	r0, .L163
+ 1878 0028 FFF7FEFF 		bl	puts
+ 1879              	.LVL204:
+ 635:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 1880              		.loc 1 635 5 view .LVU554
+ 1881              		.loc 1 635 8 is_stmt 0 view .LVU555
+ 1882 002c 002C     		cmp	r4, #0
+ 1883 002e 40F0B080 		bne	.L147
+ 636:Src/pcf85263.c ****     {
+ 637:Src/pcf85263.c ****         return RTC_OP_COMMUNICATION_FAILURE;
+ 638:Src/pcf85263.c ****     }
+ 639:Src/pcf85263.c **** 
+ 640:Src/pcf85263.c ****     if (count_time.second > SECOND_MAX)
+ 1884              		.loc 1 640 5 is_stmt 1 view .LVU556
+ 1885              		.loc 1 640 19 is_stmt 0 view .LVU557
+ 1886 0032 9DF80A00 		ldrb	r0, [sp, #10]	@ zero_extendqisi2
+ 1887              		.loc 1 640 8 view .LVU558
+ 1888 0036 3B28     		cmp	r0, #59
+ 1889 0038 34D8     		bhi	.L153
+ 641:Src/pcf85263.c ****     {
+ 642:Src/pcf85263.c ****         printf("rtc second invalid\n");
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 52
+
+
+ 643:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 644:Src/pcf85263.c ****     }
+ 645:Src/pcf85263.c ****     else if (count_time.minute > MINUTE_MAX)
+ 1890              		.loc 1 645 10 is_stmt 1 view .LVU559
+ 1891              		.loc 1 645 24 is_stmt 0 view .LVU560
+ 1892 003a 9DF80B50 		ldrb	r5, [sp, #11]	@ zero_extendqisi2
+ 1893              		.loc 1 645 13 view .LVU561
+ 1894 003e 3B2D     		cmp	r5, #59
+ 1895 0040 3AD8     		bhi	.L154
+ 646:Src/pcf85263.c ****     {
+ 647:Src/pcf85263.c ****         printf("rtc minute invalid\n");
+ 648:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 649:Src/pcf85263.c ****     }    
+ 650:Src/pcf85263.c ****     else if (count_time.ten > TEN_MAX)
+ 1896              		.loc 1 650 10 is_stmt 1 view .LVU562
+ 1897              		.loc 1 650 24 is_stmt 0 view .LVU563
+ 1898 0042 9DF80C30 		ldrb	r3, [sp, #12]	@ zero_extendqisi2
+ 1899              		.loc 1 650 13 view .LVU564
+ 1900 0046 632B     		cmp	r3, #99
+ 1901 0048 3BD8     		bhi	.L155
+ 651:Src/pcf85263.c ****     {    
+ 652:Src/pcf85263.c ****         printf("rtc hour ten invalid\n");
+ 653:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 654:Src/pcf85263.c ****     } 
+ 655:Src/pcf85263.c ****     else if (count_time.kilo > KILO_MAX)
+ 1902              		.loc 1 655 10 is_stmt 1 view .LVU565
+ 1903              		.loc 1 655 24 is_stmt 0 view .LVU566
+ 1904 004a 9DF80D20 		ldrb	r2, [sp, #13]	@ zero_extendqisi2
+ 1905              		.loc 1 655 13 view .LVU567
+ 1906 004e 632A     		cmp	r2, #99
+ 1907 0050 3CD8     		bhi	.L156
+ 656:Src/pcf85263.c ****     {    
+ 657:Src/pcf85263.c ****         printf("rtc hour kilo invalid\n");
+ 658:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 659:Src/pcf85263.c ****     }    
+ 660:Src/pcf85263.c ****     else if (count_time.hundredkilo > H_KILO_MAX)
+ 1908              		.loc 1 660 10 is_stmt 1 view .LVU568
+ 1909              		.loc 1 660 24 is_stmt 0 view .LVU569
+ 1910 0052 9DF80E10 		ldrb	r1, [sp, #14]	@ zero_extendqisi2
+ 1911              		.loc 1 660 13 view .LVU570
+ 1912 0056 6329     		cmp	r1, #99
+ 1913 0058 3DD8     		bhi	.L157
+ 661:Src/pcf85263.c ****     {    
+ 662:Src/pcf85263.c ****         printf("rtc hour hundredkilo invalid\n");
+ 663:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 664:Src/pcf85263.c ****     }   
+ 665:Src/pcf85263.c ****     if(ret == RTC_OP_INVALID_DATE_TIME)
+ 1914              		.loc 1 665 5 is_stmt 1 view .LVU571
+ 1915              		.loc 1 665 7 is_stmt 0 view .LVU572
+ 1916 005a 022C     		cmp	r4, #2
+ 1917 005c 26D0     		beq	.L137
+ 666:Src/pcf85263.c ****     {
+ 667:Src/pcf85263.c ****         printf("ERR:pcf85263_set_alarm:RTC_OP_INVALID_DATE_TIME\r\n");
+ 668:Src/pcf85263.c ****         return ret;
+ 669:Src/pcf85263.c ****     }   
+ 670:Src/pcf85263.c ****     rtc_op_return_type_t err_code;
+ 1918              		.loc 1 670 5 is_stmt 1 view .LVU573
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 53
+
+
+ 671:Src/pcf85263.c **** 
+ 672:Src/pcf85263.c ****     uint8_t alarm_status = I_ZERO;             /*Configure alarm interrupt*/
+ 1919              		.loc 1 672 5 view .LVU574
+ 1920              		.loc 1 672 13 is_stmt 0 view .LVU575
+ 1921 005e 0027     		movs	r7, #0
+ 1922 0060 8DF81570 		strb	r7, [sp, #21]
+ 673:Src/pcf85263.c ****     uint8_t set_alarm[V_FIVE];
+ 1923              		.loc 1 673 5 is_stmt 1 view .LVU576
+ 674:Src/pcf85263.c **** 
+ 675:Src/pcf85263.c ****     memset(set_alarm, V_ZERO, V_FIVE);
+ 1924              		.loc 1 675 5 view .LVU577
+ 676:Src/pcf85263.c ****     set_alarm[V_ZERO] = count_time.second;
+ 1925              		.loc 1 676 5 view .LVU578
+ 677:Src/pcf85263.c ****     set_alarm[V_ONE] = count_time.minute;
+ 1926              		.loc 1 677 5 view .LVU579
+ 678:Src/pcf85263.c ****     set_alarm[V_TWO] = count_time.ten;
+ 1927              		.loc 1 678 5 view .LVU580
+ 1928              		.loc 1 678 22 is_stmt 0 view .LVU581
+ 1929 0064 8DF81230 		strb	r3, [sp, #18]
+ 679:Src/pcf85263.c ****     set_alarm[V_THREE] = count_time.kilo;
+ 1930              		.loc 1 679 5 is_stmt 1 view .LVU582
+ 1931              		.loc 1 679 24 is_stmt 0 view .LVU583
+ 1932 0068 8DF81320 		strb	r2, [sp, #19]
+ 680:Src/pcf85263.c ****     set_alarm[V_FOUR] = count_time.hundredkilo;
+ 1933              		.loc 1 680 5 is_stmt 1 view .LVU584
+ 1934              		.loc 1 680 23 is_stmt 0 view .LVU585
+ 1935 006c 8DF81410 		strb	r1, [sp, #20]
+ 681:Src/pcf85263.c **** 
+ 682:Src/pcf85263.c ****     set_alarm[V_ZERO] &= LOW_SEVEN_BITS_ENABLE;           
+ 1936              		.loc 1 682 5 is_stmt 1 view .LVU586
+ 1937              		.loc 1 682 23 is_stmt 0 view .LVU587
+ 1938 0070 00F07F07 		and	r7, r0, #127
+ 1939 0074 8DF81070 		strb	r7, [sp, #16]
+ 683:Src/pcf85263.c ****     set_alarm[V_ONE] &= LOW_SEVEN_BITS_ENABLE;                  
+ 1940              		.loc 1 683 5 is_stmt 1 view .LVU588
+ 1941              		.loc 1 683 22 is_stmt 0 view .LVU589
+ 1942 0078 05F07F07 		and	r7, r5, #127
+ 1943 007c 8DF81170 		strb	r7, [sp, #17]
+ 684:Src/pcf85263.c ****     printf("%d %d %d:%d:%d\n",count_time.hundredkilo,count_time.kilo,count_time.ten,count_time.minu
+ 1944              		.loc 1 684 5 is_stmt 1 view .LVU590
+ 1945 0080 0190     		str	r0, [sp, #4]
+ 1946 0082 0095     		str	r5, [sp]
+ 1947 0084 4648     		ldr	r0, .L163+4
+ 1948 0086 FFF7FEFF 		bl	printf
+ 1949              	.LVL205:
+ 685:Src/pcf85263.c ****     for(uint8_t i = V_ZERO; i < V_FIVE; i++) /*change to bcd code*/
+ 1950              		.loc 1 685 5 view .LVU591
+ 1951              	.LBB6:
+ 1952              		.loc 1 685 9 view .LVU592
+ 1953              	.L143:
+ 1954              		.loc 1 685 29 discriminator 1 view .LVU593
+ 1955              		.loc 1 685 5 is_stmt 0 discriminator 1 view .LVU594
+ 1956 008a 042C     		cmp	r4, #4
+ 1957 008c 28D8     		bhi	.L158
+ 686:Src/pcf85263.c ****     {
+ 687:Src/pcf85263.c ****         set_alarm[i] = bin_to_bcd(set_alarm[i]);
+ 1958              		.loc 1 687 9 is_stmt 1 discriminator 3 view .LVU595
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 54
+
+
+ 1959              		.loc 1 687 24 is_stmt 0 discriminator 3 view .LVU596
+ 1960 008e 06AB     		add	r3, sp, #24
+ 1961 0090 1D19     		adds	r5, r3, r4
+ 1962 0092 15F8080C 		ldrb	r0, [r5, #-8]	@ zero_extendqisi2
+ 1963 0096 FFF7FEFF 		bl	bin_to_bcd
+ 1964              	.LVL206:
+ 1965              		.loc 1 687 22 discriminator 3 view .LVU597
+ 1966 009a 05F8080C 		strb	r0, [r5, #-8]
+ 685:Src/pcf85263.c ****     for(uint8_t i = V_ZERO; i < V_FIVE; i++) /*change to bcd code*/
+ 1967              		.loc 1 685 41 is_stmt 1 discriminator 3 view .LVU598
+ 685:Src/pcf85263.c ****     for(uint8_t i = V_ZERO; i < V_FIVE; i++) /*change to bcd code*/
+ 1968              		.loc 1 685 42 is_stmt 0 discriminator 3 view .LVU599
+ 1969 009e 0134     		adds	r4, r4, #1
+ 1970              	.LVL207:
+ 685:Src/pcf85263.c ****     for(uint8_t i = V_ZERO; i < V_FIVE; i++) /*change to bcd code*/
+ 1971              		.loc 1 685 42 discriminator 3 view .LVU600
+ 1972 00a0 E4B2     		uxtb	r4, r4
+ 1973              	.LVL208:
+ 685:Src/pcf85263.c ****     for(uint8_t i = V_ZERO; i < V_FIVE; i++) /*change to bcd code*/
+ 1974              		.loc 1 685 42 discriminator 3 view .LVU601
+ 1975 00a2 F2E7     		b	.L143
+ 1976              	.LVL209:
+ 1977              	.L153:
+ 685:Src/pcf85263.c ****     for(uint8_t i = V_ZERO; i < V_FIVE; i++) /*change to bcd code*/
+ 1978              		.loc 1 685 42 discriminator 3 view .LVU602
+ 1979              	.LBE6:
+ 642:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 1980              		.loc 1 642 9 is_stmt 1 view .LVU603
+ 1981 00a4 3F48     		ldr	r0, .L163+8
+ 1982 00a6 FFF7FEFF 		bl	puts
+ 1983              	.LVL210:
+ 643:Src/pcf85263.c ****     }
+ 1984              		.loc 1 643 9 view .LVU604
+ 665:Src/pcf85263.c ****     {
+ 1985              		.loc 1 665 5 view .LVU605
+ 643:Src/pcf85263.c ****     }
+ 1986              		.loc 1 643 13 is_stmt 0 view .LVU606
+ 1987 00aa 0224     		movs	r4, #2
+ 1988              	.LVL211:
+ 1989              	.L137:
+ 667:Src/pcf85263.c ****         return ret;
+ 1990              		.loc 1 667 9 is_stmt 1 view .LVU607
+ 1991 00ac 3E48     		ldr	r0, .L163+12
+ 1992 00ae FFF7FEFF 		bl	puts
+ 1993              	.LVL212:
+ 668:Src/pcf85263.c ****     }   
+ 1994              		.loc 1 668 9 view .LVU608
+ 1995              	.L135:
+ 688:Src/pcf85263.c ****     }
+ 689:Src/pcf85263.c **** 
+ 690:Src/pcf85263.c ****     err_code = pcf85263_config_inta(alarm_id);                                       /*Configure in
+ 691:Src/pcf85263.c ****     if (err_code != RTC_OP_SUCCESS)
+ 692:Src/pcf85263.c ****     {
+ 693:Src/pcf85263.c ****         return err_code;
+ 694:Src/pcf85263.c ****     }
+ 695:Src/pcf85263.c **** 
+ 696:Src/pcf85263.c ****     ret = pcf85263_read_data(PCF8563_ALARM_ENABLES, &alarm_status, L_ONE);        /*read alarm conf
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 55
+
+
+ 697:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 698:Src/pcf85263.c ****     {
+ 699:Src/pcf85263.c ****         return RTC_OP_COMMUNICATION_FAILURE;
+ 700:Src/pcf85263.c ****     }
+ 701:Src/pcf85263.c **** 
+ 702:Src/pcf85263.c ****     if (alarm_id == ALARM_ID_ONE)
+ 703:Src/pcf85263.c ****     {
+ 704:Src/pcf85263.c ****         printf("alarm 1 started\n");
+ 705:Src/pcf85263.c ****         //alarm_status |= LOW_FIVE_BITS_ENABLE;        /*0x 0001 1111*/
+ 706:Src/pcf85263.c ****         alarm_status |= LOW_TWO_BITS_ENABLE;         /*0x 0000 0111*/
+ 707:Src/pcf85263.c ****         ret = pcf85263_write_data(PCF8563_ALARM_ENABLES, &alarm_status, L_ONE);     /*Start alarm f
+ 708:Src/pcf85263.c ****         if (ret != V_ZERO)
+ 709:Src/pcf85263.c ****         {
+ 710:Src/pcf85263.c ****             return RTC_OP_COMMUNICATION_FAILURE;
+ 711:Src/pcf85263.c ****         }
+ 712:Src/pcf85263.c ****         //ret = pcf85263_write_data(PCF8563_ALARM_SECONDS, set_alarm, L_FIVE);        /*Write time 
+ 713:Src/pcf85263.c ****         ret = pcf85263_write_data(PCF8563_SECOND_ALM1, &set_alarm[V_ZERO], L_TWO);
+ 714:Src/pcf85263.c ****         if (ret == V_ZERO)
+ 715:Src/pcf85263.c ****         {
+ 716:Src/pcf85263.c ****             //return RTC_OP_SUCCESS;
+ 717:Src/pcf85263.c ****         }
+ 718:Src/pcf85263.c ****         else
+ 719:Src/pcf85263.c ****         {
+ 720:Src/pcf85263.c ****             return RTC_OP_COMMUNICATION_FAILURE;
+ 721:Src/pcf85263.c ****         }
+ 722:Src/pcf85263.c ****     }
+ 723:Src/pcf85263.c ****     else if (alarm_id == ALARM_ID_TWO)
+ 724:Src/pcf85263.c ****     {
+ 725:Src/pcf85263.c ****         printf("alarm 2 started\n");
+ 726:Src/pcf85263.c ****     //    alarm_status |= ALARM_VALUES;    /*0x0110 0000*/
+ 727:Src/pcf85263.c ****         alarm_status |= 0x20;
+ 728:Src/pcf85263.c ****         ret = pcf85263_write_data(PCF8563_ALARM_ENABLES, &alarm_status, L_ONE);   /*Start alarm fun
+ 729:Src/pcf85263.c ****         if (ret != V_ZERO)
+ 730:Src/pcf85263.c ****         {
+ 731:Src/pcf85263.c ****             return RTC_OP_COMMUNICATION_FAILURE;
+ 732:Src/pcf85263.c ****         }
+ 733:Src/pcf85263.c **** 
+ 734:Src/pcf85263.c ****         ret = pcf85263_write_data(PCF8563_MINUTE_ALM2, &set_alarm[V_ONE], L_ONE);        /*Write ti
+ 735:Src/pcf85263.c ****         //ret = pcf85263_write_data(PCF8563_ALARM_MINUTES, &set_alarm[V_ONE], L_THREE);
+ 736:Src/pcf85263.c ****         if (ret == V_ZERO)
+ 737:Src/pcf85263.c ****         {
+ 738:Src/pcf85263.c ****             //return RTC_OP_SUCCESS;
+ 739:Src/pcf85263.c ****         }
+ 740:Src/pcf85263.c ****         else
+ 741:Src/pcf85263.c ****         {
+ 742:Src/pcf85263.c ****             return RTC_OP_COMMUNICATION_FAILURE;
+ 743:Src/pcf85263.c ****         }
+ 744:Src/pcf85263.c ****     }
+ 745:Src/pcf85263.c **** 
+ 746:Src/pcf85263.c ****     ret = pcf85263_read_data(PCF8563_ADDR_FUN, &m_rtc_mode_read, L_ONE);    /*read rtc mode */
+ 747:Src/pcf85263.c ****     printf("m_rtc_mode_read = %d\n", m_rtc_mode_read);
+ 748:Src/pcf85263.c ****     pcf85263_read_alarm(L_ONE);
+ 749:Src/pcf85263.c **** 
+ 750:Src/pcf85263.c ****     return RTC_OP_SUCCESS;    
+ 751:Src/pcf85263.c **** }...
+ 1996              		.loc 1 751 1 is_stmt 0 view .LVU609
+ 1997 00b2 2046     		mov	r0, r4
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 56
+
+
+ 1998 00b4 07B0     		add	sp, sp, #28
+ 1999              	.LCFI34:
+ 2000              		.cfi_remember_state
+ 2001              		.cfi_def_cfa_offset 20
+ 2002              		@ sp needed
+ 2003 00b6 F0BD     		pop	{r4, r5, r6, r7, pc}
+ 2004              	.LVL213:
+ 2005              	.L154:
+ 2006              	.LCFI35:
+ 2007              		.cfi_restore_state
+ 647:Src/pcf85263.c ****         printf("rtc minute invalid\n");
+ 2008              		.loc 1 647 9 is_stmt 1 view .LVU610
+ 2009 00b8 3C48     		ldr	r0, .L163+16
+ 2010 00ba FFF7FEFF 		bl	puts
+ 2011              	.LVL214:
+ 648:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 2012              		.loc 1 648 9 view .LVU611
+ 665:Src/pcf85263.c ****     if(ret == RTC_OP_INVALID_DATE_TIME)
+ 2013              		.loc 1 665 5 view .LVU612
+ 648:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 2014              		.loc 1 648 13 is_stmt 0 view .LVU613
+ 2015 00be 0224     		movs	r4, #2
+ 2016 00c0 F4E7     		b	.L137
+ 2017              	.LVL215:
+ 2018              	.L155:
+ 652:Src/pcf85263.c ****         printf("rtc hour ten invalid\n");
+ 2019              		.loc 1 652 9 is_stmt 1 view .LVU614
+ 2020 00c2 3B48     		ldr	r0, .L163+20
+ 2021 00c4 FFF7FEFF 		bl	puts
+ 2022              	.LVL216:
+ 653:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 2023              		.loc 1 653 9 view .LVU615
+ 665:Src/pcf85263.c ****     if(ret == RTC_OP_INVALID_DATE_TIME)
+ 2024              		.loc 1 665 5 view .LVU616
+ 653:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 2025              		.loc 1 653 13 is_stmt 0 view .LVU617
+ 2026 00c8 0224     		movs	r4, #2
+ 2027 00ca EFE7     		b	.L137
+ 2028              	.LVL217:
+ 2029              	.L156:
+ 657:Src/pcf85263.c ****         printf("rtc hour kilo invalid\n");
+ 2030              		.loc 1 657 9 is_stmt 1 view .LVU618
+ 2031 00cc 3948     		ldr	r0, .L163+24
+ 2032 00ce FFF7FEFF 		bl	puts
+ 2033              	.LVL218:
+ 658:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 2034              		.loc 1 658 9 view .LVU619
+ 665:Src/pcf85263.c ****     if(ret == RTC_OP_INVALID_DATE_TIME)
+ 2035              		.loc 1 665 5 view .LVU620
+ 658:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 2036              		.loc 1 658 13 is_stmt 0 view .LVU621
+ 2037 00d2 0224     		movs	r4, #2
+ 2038 00d4 EAE7     		b	.L137
+ 2039              	.LVL219:
+ 2040              	.L157:
+ 662:Src/pcf85263.c ****         printf("rtc hour hundredkilo invalid\n");
+ 2041              		.loc 1 662 9 is_stmt 1 view .LVU622
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 57
+
+
+ 2042 00d6 3848     		ldr	r0, .L163+28
+ 2043 00d8 FFF7FEFF 		bl	puts
+ 2044              	.LVL220:
+ 663:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 2045              		.loc 1 663 9 view .LVU623
+ 665:Src/pcf85263.c ****     if(ret == RTC_OP_INVALID_DATE_TIME)
+ 2046              		.loc 1 665 5 view .LVU624
+ 663:Src/pcf85263.c ****         ret = RTC_OP_INVALID_DATE_TIME;
+ 2047              		.loc 1 663 13 is_stmt 0 view .LVU625
+ 2048 00dc 0224     		movs	r4, #2
+ 2049 00de E5E7     		b	.L137
+ 2050              	.LVL221:
+ 2051              	.L158:
+ 690:Src/pcf85263.c ****     err_code = pcf85263_config_inta(alarm_id);                                       /*Configure in
+ 2052              		.loc 1 690 5 is_stmt 1 view .LVU626
+ 690:Src/pcf85263.c ****     err_code = pcf85263_config_inta(alarm_id);                                       /*Configure in
+ 2053              		.loc 1 690 16 is_stmt 0 view .LVU627
+ 2054 00e0 3046     		mov	r0, r6
+ 2055 00e2 FFF7FEFF 		bl	pcf85263_config_inta
+ 2056              	.LVL222:
+ 691:Src/pcf85263.c ****     if (err_code != RTC_OP_SUCCESS)
+ 2057              		.loc 1 691 5 is_stmt 1 view .LVU628
+ 691:Src/pcf85263.c ****     if (err_code != RTC_OP_SUCCESS)
+ 2058              		.loc 1 691 8 is_stmt 0 view .LVU629
+ 2059 00e6 0446     		mov	r4, r0
+ 2060              	.LVL223:
+ 691:Src/pcf85263.c ****     if (err_code != RTC_OP_SUCCESS)
+ 2061              		.loc 1 691 8 view .LVU630
+ 2062 00e8 0028     		cmp	r0, #0
+ 2063 00ea E2D1     		bne	.L135
+ 696:Src/pcf85263.c ****     ret = pcf85263_read_data(PCF8563_ALARM_ENABLES, &alarm_status, L_ONE);        /*read alarm conf
+ 2064              		.loc 1 696 5 is_stmt 1 view .LVU631
+ 696:Src/pcf85263.c ****     ret = pcf85263_read_data(PCF8563_ALARM_ENABLES, &alarm_status, L_ONE);        /*read alarm conf
+ 2065              		.loc 1 696 11 is_stmt 0 view .LVU632
+ 2066 00ec 0122     		movs	r2, #1
+ 2067 00ee 0DF11501 		add	r1, sp, #21
+ 2068 00f2 1020     		movs	r0, #16
+ 2069              	.LVL224:
+ 696:Src/pcf85263.c ****     ret = pcf85263_read_data(PCF8563_ALARM_ENABLES, &alarm_status, L_ONE);        /*read alarm conf
+ 2070              		.loc 1 696 11 view .LVU633
+ 2071 00f4 FFF7FEFF 		bl	pcf85263_read_data
+ 2072              	.LVL225:
+ 697:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 2073              		.loc 1 697 5 is_stmt 1 view .LVU634
+ 697:Src/pcf85263.c ****     if (ret != V_ZERO)
+ 2074              		.loc 1 697 8 is_stmt 0 view .LVU635
+ 2075 00f8 0446     		mov	r4, r0
+ 2076 00fa 0028     		cmp	r0, #0
+ 2077 00fc 4BD1     		bne	.L148
+ 702:Src/pcf85263.c ****     if (alarm_id == ALARM_ID_ONE)
+ 2078              		.loc 1 702 5 is_stmt 1 view .LVU636
+ 702:Src/pcf85263.c ****     if (alarm_id == ALARM_ID_ONE)
+ 2079              		.loc 1 702 8 is_stmt 0 view .LVU637
+ 2080 00fe 012E     		cmp	r6, #1
+ 2081 0100 10D0     		beq	.L159
+ 723:Src/pcf85263.c ****     else if (alarm_id == ALARM_ID_TWO)
+ 2082              		.loc 1 723 10 is_stmt 1 view .LVU638
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 58
+
+
+ 723:Src/pcf85263.c ****     else if (alarm_id == ALARM_ID_TWO)
+ 2083              		.loc 1 723 13 is_stmt 0 view .LVU639
+ 2084 0102 022E     		cmp	r6, #2
+ 2085 0104 29D0     		beq	.L160
+ 2086              	.L146:
+ 746:Src/pcf85263.c ****     ret = pcf85263_read_data(PCF8563_ADDR_FUN, &m_rtc_mode_read, L_ONE);    /*read rtc mode */
+ 2087              		.loc 1 746 5 is_stmt 1 view .LVU640
+ 746:Src/pcf85263.c ****     ret = pcf85263_read_data(PCF8563_ADDR_FUN, &m_rtc_mode_read, L_ONE);    /*read rtc mode */
+ 2088              		.loc 1 746 11 is_stmt 0 view .LVU641
+ 2089 0106 0122     		movs	r2, #1
+ 2090 0108 0DF11601 		add	r1, sp, #22
+ 2091 010c 2820     		movs	r0, #40
+ 2092              	.LVL226:
+ 746:Src/pcf85263.c ****     ret = pcf85263_read_data(PCF8563_ADDR_FUN, &m_rtc_mode_read, L_ONE);    /*read rtc mode */
+ 2093              		.loc 1 746 11 view .LVU642
+ 2094 010e FFF7FEFF 		bl	pcf85263_read_data
+ 2095              	.LVL227:
+ 747:Src/pcf85263.c ****     printf("m_rtc_mode_read = %d\n", m_rtc_mode_read);
+ 2096              		.loc 1 747 5 is_stmt 1 view .LVU643
+ 2097 0112 9DF81610 		ldrb	r1, [sp, #22]	@ zero_extendqisi2
+ 2098 0116 2948     		ldr	r0, .L163+32
+ 2099 0118 FFF7FEFF 		bl	printf
+ 2100              	.LVL228:
+ 748:Src/pcf85263.c ****     pcf85263_read_alarm(L_ONE);
+ 2101              		.loc 1 748 5 view .LVU644
+ 2102 011c 0120     		movs	r0, #1
+ 2103 011e FFF7FEFF 		bl	pcf85263_read_alarm
+ 2104              	.LVL229:
+ 750:Src/pcf85263.c ****     return RTC_OP_SUCCESS;    
+ 2105              		.loc 1 750 5 view .LVU645
+ 750:Src/pcf85263.c ****     return RTC_OP_SUCCESS;    
+ 2106              		.loc 1 750 12 is_stmt 0 view .LVU646
+ 2107 0122 C6E7     		b	.L135
+ 2108              	.LVL230:
+ 2109              	.L159:
+ 704:Src/pcf85263.c ****         printf("alarm 1 started\n");
+ 2110              		.loc 1 704 9 is_stmt 1 view .LVU647
+ 2111 0124 2648     		ldr	r0, .L163+36
+ 2112              	.LVL231:
+ 704:Src/pcf85263.c ****         printf("alarm 1 started\n");
+ 2113              		.loc 1 704 9 is_stmt 0 view .LVU648
+ 2114 0126 FFF7FEFF 		bl	puts
+ 2115              	.LVL232:
+ 706:Src/pcf85263.c ****         alarm_status |= LOW_TWO_BITS_ENABLE;         /*0x 0000 0111*/
+ 2116              		.loc 1 706 9 is_stmt 1 view .LVU649
+ 706:Src/pcf85263.c ****         alarm_status |= LOW_TWO_BITS_ENABLE;         /*0x 0000 0111*/
+ 2117              		.loc 1 706 22 is_stmt 0 view .LVU650
+ 2118 012a 9DF81530 		ldrb	r3, [sp, #21]	@ zero_extendqisi2
+ 2119 012e 43F00303 		orr	r3, r3, #3
+ 2120 0132 8DF81530 		strb	r3, [sp, #21]
+ 707:Src/pcf85263.c ****         ret = pcf85263_write_data(PCF8563_ALARM_ENABLES, &alarm_status, L_ONE);     /*Start alarm f
+ 2121              		.loc 1 707 9 is_stmt 1 view .LVU651
+ 707:Src/pcf85263.c ****         ret = pcf85263_write_data(PCF8563_ALARM_ENABLES, &alarm_status, L_ONE);     /*Start alarm f
+ 2122              		.loc 1 707 15 is_stmt 0 view .LVU652
+ 2123 0136 0122     		movs	r2, #1
+ 2124 0138 0DF11501 		add	r1, sp, #21
+ 2125 013c 1020     		movs	r0, #16
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 59
+
+
+ 2126 013e FFF7FEFF 		bl	pcf85263_write_data
+ 2127              	.LVL233:
+ 708:Src/pcf85263.c ****         if (ret != V_ZERO)
+ 2128              		.loc 1 708 9 is_stmt 1 view .LVU653
+ 708:Src/pcf85263.c ****         if (ret != V_ZERO)
+ 2129              		.loc 1 708 12 is_stmt 0 view .LVU654
+ 2130 0142 08B1     		cbz	r0, .L161
+ 710:Src/pcf85263.c ****             return RTC_OP_COMMUNICATION_FAILURE;
+ 2131              		.loc 1 710 20 view .LVU655
+ 2132 0144 0124     		movs	r4, #1
+ 2133 0146 B4E7     		b	.L135
+ 2134              	.L161:
+ 713:Src/pcf85263.c ****         ret = pcf85263_write_data(PCF8563_SECOND_ALM1, &set_alarm[V_ZERO], L_TWO);
+ 2135              		.loc 1 713 9 is_stmt 1 view .LVU656
+ 713:Src/pcf85263.c ****         ret = pcf85263_write_data(PCF8563_SECOND_ALM1, &set_alarm[V_ZERO], L_TWO);
+ 2136              		.loc 1 713 15 is_stmt 0 view .LVU657
+ 2137 0148 0222     		movs	r2, #2
+ 2138 014a 04A9     		add	r1, sp, #16
+ 2139 014c 0820     		movs	r0, #8
+ 2140              	.LVL234:
+ 713:Src/pcf85263.c ****         ret = pcf85263_write_data(PCF8563_SECOND_ALM1, &set_alarm[V_ZERO], L_TWO);
+ 2141              		.loc 1 713 15 view .LVU658
+ 2142 014e FFF7FEFF 		bl	pcf85263_write_data
+ 2143              	.LVL235:
+ 714:Src/pcf85263.c ****         if (ret == V_ZERO)
+ 2144              		.loc 1 714 9 is_stmt 1 view .LVU659
+ 714:Src/pcf85263.c ****         if (ret == V_ZERO)
+ 2145              		.loc 1 714 12 is_stmt 0 view .LVU660
+ 2146 0152 0028     		cmp	r0, #0
+ 2147 0154 D7D0     		beq	.L146
+ 720:Src/pcf85263.c ****             return RTC_OP_COMMUNICATION_FAILURE;
+ 2148              		.loc 1 720 20 view .LVU661
+ 2149 0156 0124     		movs	r4, #1
+ 2150 0158 ABE7     		b	.L135
+ 2151              	.L160:
+ 725:Src/pcf85263.c ****         printf("alarm 2 started\n");
+ 2152              		.loc 1 725 9 is_stmt 1 view .LVU662
+ 2153 015a 1A48     		ldr	r0, .L163+40
+ 2154              	.LVL236:
+ 725:Src/pcf85263.c ****         printf("alarm 2 started\n");
+ 2155              		.loc 1 725 9 is_stmt 0 view .LVU663
+ 2156 015c FFF7FEFF 		bl	puts
+ 2157              	.LVL237:
+ 727:Src/pcf85263.c ****         alarm_status |= 0x20;
+ 2158              		.loc 1 727 9 is_stmt 1 view .LVU664
+ 727:Src/pcf85263.c ****         alarm_status |= 0x20;
+ 2159              		.loc 1 727 22 is_stmt 0 view .LVU665
+ 2160 0160 9DF81530 		ldrb	r3, [sp, #21]	@ zero_extendqisi2
+ 2161 0164 43F02003 		orr	r3, r3, #32
+ 2162 0168 8DF81530 		strb	r3, [sp, #21]
+ 728:Src/pcf85263.c ****         ret = pcf85263_write_data(PCF8563_ALARM_ENABLES, &alarm_status, L_ONE);   /*Start alarm fun
+ 2163              		.loc 1 728 9 is_stmt 1 view .LVU666
+ 728:Src/pcf85263.c ****         ret = pcf85263_write_data(PCF8563_ALARM_ENABLES, &alarm_status, L_ONE);   /*Start alarm fun
+ 2164              		.loc 1 728 15 is_stmt 0 view .LVU667
+ 2165 016c 0122     		movs	r2, #1
+ 2166 016e 0DF11501 		add	r1, sp, #21
+ 2167 0172 1020     		movs	r0, #16
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 60
+
+
+ 2168 0174 FFF7FEFF 		bl	pcf85263_write_data
+ 2169              	.LVL238:
+ 729:Src/pcf85263.c ****         if (ret != V_ZERO)
+ 2170              		.loc 1 729 9 is_stmt 1 view .LVU668
+ 729:Src/pcf85263.c ****         if (ret != V_ZERO)
+ 2171              		.loc 1 729 12 is_stmt 0 view .LVU669
+ 2172 0178 08B1     		cbz	r0, .L162
+ 731:Src/pcf85263.c ****             return RTC_OP_COMMUNICATION_FAILURE;
+ 2173              		.loc 1 731 20 view .LVU670
+ 2174 017a 0124     		movs	r4, #1
+ 2175 017c 99E7     		b	.L135
+ 2176              	.L162:
+ 734:Src/pcf85263.c ****         ret = pcf85263_write_data(PCF8563_MINUTE_ALM2, &set_alarm[V_ONE], L_ONE);        /*Write ti
+ 2177              		.loc 1 734 9 is_stmt 1 view .LVU671
+ 734:Src/pcf85263.c ****         ret = pcf85263_write_data(PCF8563_MINUTE_ALM2, &set_alarm[V_ONE], L_ONE);        /*Write ti
+ 2178              		.loc 1 734 15 is_stmt 0 view .LVU672
+ 2179 017e 0122     		movs	r2, #1
+ 2180 0180 0DF11101 		add	r1, sp, #17
+ 2181 0184 0D20     		movs	r0, #13
+ 2182              	.LVL239:
+ 734:Src/pcf85263.c ****         ret = pcf85263_write_data(PCF8563_MINUTE_ALM2, &set_alarm[V_ONE], L_ONE);        /*Write ti
+ 2183              		.loc 1 734 15 view .LVU673
+ 2184 0186 FFF7FEFF 		bl	pcf85263_write_data
+ 2185              	.LVL240:
+ 736:Src/pcf85263.c ****         if (ret == V_ZERO)
+ 2186              		.loc 1 736 9 is_stmt 1 view .LVU674
+ 736:Src/pcf85263.c ****         if (ret == V_ZERO)
+ 2187              		.loc 1 736 12 is_stmt 0 view .LVU675
+ 2188 018a 0028     		cmp	r0, #0
+ 2189 018c BBD0     		beq	.L146
+ 742:Src/pcf85263.c ****             return RTC_OP_COMMUNICATION_FAILURE;
+ 2190              		.loc 1 742 20 view .LVU676
+ 2191 018e 0124     		movs	r4, #1
+ 2192 0190 8FE7     		b	.L135
+ 2193              	.LVL241:
+ 2194              	.L147:
+ 637:Src/pcf85263.c ****         return RTC_OP_COMMUNICATION_FAILURE;
+ 2195              		.loc 1 637 16 view .LVU677
+ 2196 0192 0124     		movs	r4, #1
+ 2197              	.LVL242:
+ 637:Src/pcf85263.c ****         return RTC_OP_COMMUNICATION_FAILURE;
+ 2198              		.loc 1 637 16 view .LVU678
+ 2199 0194 8DE7     		b	.L135
+ 2200              	.LVL243:
+ 2201              	.L148:
+ 699:Src/pcf85263.c ****         return RTC_OP_COMMUNICATION_FAILURE;
+ 2202              		.loc 1 699 16 view .LVU679
+ 2203 0196 0124     		movs	r4, #1
+ 2204 0198 8BE7     		b	.L135
+ 2205              	.L164:
+ 2206 019a 00BF     		.align	2
+ 2207              	.L163:
+ 2208 019c 00000000 		.word	.LC23
+ 2209 01a0 18000000 		.word	.LC24
+ 2210 01a4 34000000 		.word	.LC3
+ 2211 01a8 3C000000 		.word	.LC15
+ 2212 01ac 48000000 		.word	.LC4
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 61
+
+
+ 2213 01b0 5C000000 		.word	.LC5
+ 2214 01b4 74000000 		.word	.LC6
+ 2215 01b8 8C000000 		.word	.LC7
+ 2216 01bc 00000000 		.word	.LC1
+ 2217 01c0 28000000 		.word	.LC25
+ 2218 01c4 38000000 		.word	.LC26
+ 2219              		.cfi_endproc
+ 2220              	.LFE327:
+ 2222              		.section	.rodata
+ 2223              		.align	2
+ 2224              		.set	.LANCHOR0,. + 0
+ 2225              	.LC0:
+ 2226 0000 00000000 		.ascii	"\000\000\000\000\000\000"
+ 2226      0000
+ 2227 0006 0000     		.space	2
+ 2228              	.LC18:
+ 2229 0008 00000000 		.ascii	"\000\000\000\000\000\000\000\000"
+ 2229      00000000 
+ 2230              		.text
+ 2231              	.Letext0:
+ 2232              		.file 2 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 2233              		.file 3 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include\
+ 2234              		.file 4 "Drivers/CMSIS/Include/core_cm4.h"
+ 2235              		.file 5 "Drivers/CMSIS/Device/ST/STM32L4xx/Include/system_stm32l4xx.h"
+ 2236              		.file 6 "Drivers/CMSIS/Device/ST/STM32L4xx/Include/stm32l471xx.h"
+ 2237              		.file 7 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_def.h"
+ 2238              		.file 8 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_dma.h"
+ 2239              		.file 9 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_flash.h"
+ 2240              		.file 10 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal_i2c.h"
+ 2241              		.file 11 "Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_hal.h"
+ 2242              		.file 12 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ 2243              		.file 13 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ 2244              		.file 14 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\lib\\gcc\\arm-none-eab
+ 2245              		.file 15 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ 2246              		.file 16 "Inc/main.h"
+ 2247              		.file 17 "Inc/i2c.h"
+ 2248              		.file 18 "Inc/pcf85263.h"
+ 2249              		.file 19 "c:\\program files (x86)\\gnu tools arm embedded\\9 2019-q4-major\\arm-none-eabi\\include
+ 2250              		.file 20 "<built-in>"
+ARM GAS  C:\Users\LY\AppData\Local\Temp\ccFiB49j.s 			page 62
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 pcf85263.c
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:18     .text.bin_to_bcd:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:25     .text.bin_to_bcd:00000000 bin_to_bcd
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:75     .text.bcd_to_bin:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:81     .text.bcd_to_bin:00000000 bcd_to_bin
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:109    .text.pcf85263_write_data:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:116    .text.pcf85263_write_data:00000000 pcf85263_write_data
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:167    .text.pcf85263_write_data:00000024 $d
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:172    .text.pcf85263_read_data:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:179    .text.pcf85263_read_data:00000000 pcf85263_read_data
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:230    .text.pcf85263_read_data:00000024 $d
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:235    .rodata.pcf85263_query_time.str1.4:00000000 $d
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:260    .text.pcf85263_query_time:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:267    .text.pcf85263_query_time:00000000 pcf85263_query_time
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:554    .text.pcf85263_query_time:0000014c $d
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:567    .rodata.pcf85263_set_time.str1.4:00000000 $d
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:577    .text.pcf85263_set_time:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:584    .text.pcf85263_set_time:00000000 pcf85263_set_time
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:915    .text.pcf85263_set_time:0000014c $d
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:928    .text.pcf85263_config_inta:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:935    .text.pcf85263_config_inta:00000000 pcf85263_config_inta
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:1063   .text.pcf85263_check_inta:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:1070   .text.pcf85263_check_inta:00000000 pcf85263_check_inta
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:1136   .rodata.pcf85263_set_alarm.str1.4:00000000 $d
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:1150   .text.pcf85263_set_alarm:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:1157   .text.pcf85263_set_alarm:00000000 pcf85263_set_alarm
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:1475   .text.pcf85263_set_alarm:0000013c $d
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:1485   .rodata.pcf85263_clear_alarm_flag.str1.4:00000000 $d
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:1492   .text.pcf85263_clear_alarm_flag:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:1499   .text.pcf85263_clear_alarm_flag:00000000 pcf85263_clear_alarm_flag
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:1568   .text.pcf85263_clear_alarm_flag:00000044 $d
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:1574   .rodata.pcf85263_read_alarm.str1.4:00000000 $d
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:1587   .text.pcf85263_read_alarm:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:1594   .text.pcf85263_read_alarm:00000000 pcf85263_read_alarm
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:1803   .text.pcf85263_read_alarm:000000f0 $d
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:1813   .rodata.pcf85263_set_sw_mode_alarm.str1.4:00000000 $d
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:1826   .text.pcf85263_set_sw_mode_alarm:00000000 $t
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:1833   .text.pcf85263_set_sw_mode_alarm:00000000 pcf85263_set_sw_mode_alarm
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:2208   .text.pcf85263_set_sw_mode_alarm:0000019c $d
+C:\Users\LY\AppData\Local\Temp\ccFiB49j.s:2223   .rodata:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_I2C_Mem_Write
+hi2c3
+HAL_I2C_Mem_Read
+printf
+HAL_Delay
+puts
+putchar
